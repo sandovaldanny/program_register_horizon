@@ -9,7 +9,7 @@
   --steel:  #007493;     /* Steel Blue */
   --mint:   #BADE8C;     /* Turquoise 7486 C (greenish) */
   --pink:   #EFB6BE;     /* Blue Gray 509 C (pink tone) */
-  --amber:  #E9A94;      /* Nota: este hex parece incompleto; si es #E9A945, me lo confirma */
+  --amber:  #E9A945;     /* Amber */
 
   --shadow: 0 18px 45px rgba(0,0,0,0.22);
   --radius: 18px;
@@ -454,7 +454,4 @@ body{
   font-weight: 900;
 }
 
-.btnPrimary, .btnGhost {
-  cursor: pointer;
-  pointer-events: auto;
-}
+.btnPrimary, .btnGhost { pointer-events: auto; }

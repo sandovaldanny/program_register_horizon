@@ -1,17 +1,30 @@
-## Running React on Replit
+## Mental Health Program Tracker
 
-[React](https://reactjs.org/) is a popular JavaScript library for building user interfaces.
+React + TypeScript (Vite) tracker for monthly mental health program follow-up. Local-first, no backend.
 
-[Vite](https://vitejs.dev/) is a blazing fast frontend build tool that includes features like Hot Module Reloading (HMR), optimized builds, and TypeScript support out of the box.
+### Run
+- `npm run dev`
 
-Using the two in conjunction is one of the fastest ways to build a web app.
+### Features
+- Patient registry with MRN uniqueness, date constraints, and required selects.
+- Monthly scales (PHQ-9, GAD-7, SDS) with strict numeric ranges and "Not collected" state.
+- Attendance & goals tracking with integer validation.
+- Local persistence (LocalStorage) + JSON import/export.
+- Settings screen to manage tiers, coordinators, and SDS max range.
 
-### Getting Started
-- Hit run
-- Edit [App.jsx](#src/App.jsx) and watch it live update!
+### Import / Export
+- Export: use **Import/Export → Export JSON**.
+- Import: upload a previously exported JSON file; validation runs before applying.
 
-By default, Replit runs the `dev` script, but you can configure it by changing the `run` field in the [configuration file](#.replit). Here are the vite docs for [serving production websites](https://vitejs.dev/guide/build.html)
+### Validation rules (high level)
+- MRN required and unique.
+- Age: 0–120 integer.
+- Dates: start date required; expected graduation ≥ start date.
+- Scales:
+  - PHQ-9: 0–27
+  - GAD-7: 0–21
+  - SDS: 0–30 (configurable)
+- Attendance counts: integers ≥ 0.
 
-### Typescript
-
-Just rename any file from `.jsx` to `.tsx`. You can also try our [TypeScript Template](https://replit.com/@replit/React-TypeScript)
+### Notes
+- Month indices used: Initial (0), M2..M12 (no M1). M10 is supported explicitly.
