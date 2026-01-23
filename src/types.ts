@@ -17,6 +17,7 @@ export type MonthlyScore = {
   monthIndex: number
   value: number | null
   notCollected: boolean
+  savedAt?: string
 }
 
 export type AttendanceGoals = {

@@ -9,6 +9,8 @@ const mkDate = (offsetDays: number) => {
   return iso(copy)
 }
 
+const seedStamp = new Date().toISOString()
+
 export const seedState: AppState = {
   schemaVersion: 1,
   settings: {
@@ -49,23 +51,23 @@ export const seedState: AppState = {
     },
   ],
   monthlyScores: [
-    { patientId: 'p-001', scaleType: 'PHQ9', monthIndex: 0, value: 18, notCollected: false },
-    { patientId: 'p-001', scaleType: 'PHQ9', monthIndex: 2, value: 14, notCollected: false },
-    { patientId: 'p-001', scaleType: 'PHQ9', monthIndex: 4, value: 9, notCollected: false },
-    { patientId: 'p-001', scaleType: 'GAD7', monthIndex: 0, value: 16, notCollected: false },
-    { patientId: 'p-001', scaleType: 'GAD7', monthIndex: 2, value: 11, notCollected: false },
-    { patientId: 'p-001', scaleType: 'SDS', monthIndex: 0, value: 20, notCollected: false },
-    { patientId: 'p-001', scaleType: 'SDS', monthIndex: 6, value: 12, notCollected: false },
-    { patientId: 'p-002', scaleType: 'PHQ9', monthIndex: 0, value: 22, notCollected: false },
-    { patientId: 'p-002', scaleType: 'PHQ9', monthIndex: 2, value: 20, notCollected: false },
-    { patientId: 'p-002', scaleType: 'GAD7', monthIndex: 0, value: 14, notCollected: false },
-    { patientId: 'p-002', scaleType: 'GAD7', monthIndex: 5, value: 10, notCollected: false },
-    { patientId: 'p-002', scaleType: 'SDS', monthIndex: 0, value: 24, notCollected: false },
-    { patientId: 'p-003', scaleType: 'PHQ9', monthIndex: 0, value: 12, notCollected: false },
-    { patientId: 'p-003', scaleType: 'PHQ9', monthIndex: 3, value: 10, notCollected: false },
-    { patientId: 'p-003', scaleType: 'GAD7', monthIndex: 0, value: 9, notCollected: false },
-    { patientId: 'p-003', scaleType: 'SDS', monthIndex: 0, value: 17, notCollected: false },
-    { patientId: 'p-003', scaleType: 'SDS', monthIndex: 8, value: 15, notCollected: false },
+    { patientId: 'p-001', scaleType: 'PHQ9', monthIndex: 0, value: 18, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-001', scaleType: 'PHQ9', monthIndex: 2, value: 14, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-001', scaleType: 'PHQ9', monthIndex: 4, value: 9, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-001', scaleType: 'GAD7', monthIndex: 0, value: 16, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-001', scaleType: 'GAD7', monthIndex: 2, value: 11, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-001', scaleType: 'SDS', monthIndex: 0, value: 20, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-001', scaleType: 'SDS', monthIndex: 6, value: 12, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-002', scaleType: 'PHQ9', monthIndex: 0, value: 22, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-002', scaleType: 'PHQ9', monthIndex: 2, value: 20, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-002', scaleType: 'GAD7', monthIndex: 0, value: 14, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-002', scaleType: 'GAD7', monthIndex: 5, value: 10, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-002', scaleType: 'SDS', monthIndex: 0, value: 24, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-003', scaleType: 'PHQ9', monthIndex: 0, value: 12, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-003', scaleType: 'PHQ9', monthIndex: 3, value: 10, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-003', scaleType: 'GAD7', monthIndex: 0, value: 9, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-003', scaleType: 'SDS', monthIndex: 0, value: 17, notCollected: false, savedAt: seedStamp },
+    { patientId: 'p-003', scaleType: 'SDS', monthIndex: 8, value: 15, notCollected: false, savedAt: seedStamp },
   ],
   attendance: [
     {

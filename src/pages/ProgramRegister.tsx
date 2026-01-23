@@ -169,6 +169,13 @@ const formatDate = (value: string) => {
   return value
 }
 
+const formatSavedAt = (value?: string) => {
+  if (!value) return '—'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  return date.toLocaleString()
+}
+
 const getScoresFor = (state: AppState, patientId: string, scaleType: ScaleType) =>
   state.monthlyScores.filter(
     (score) => score.patientId === patientId && score.scaleType === scaleType
@@ -726,6 +733,7 @@ type DraftCell = {
   value: string
   notCollected: boolean
   touched: boolean
+  savedAt?: string
 }
 
 const ScaleGrid = ({
@@ -753,6 +761,7 @@ const ScaleGrid = ({
         value: score && score.value !== null ? String(score.value) : '',
         notCollected: score?.notCollected ?? false,
         touched: false,
+        savedAt: score?.savedAt,
       }
     })
     setDraft(next)
@@ -808,6 +817,7 @@ const ScaleGrid = ({
         monthIndex: month,
         value: parsed === null ? null : parsed,
         notCollected: cell.notCollected,
+        savedAt: new Date().toISOString(),
       }
       onSaveScore(score)
     })
@@ -883,6 +893,7 @@ const ScaleGrid = ({
               <th>Month</th>
               <th>Value</th>
               <th>Not collected</th>
+              <th>Saved at</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -909,6 +920,7 @@ const ScaleGrid = ({
                       }
                       style={{
                         ...baseInputStyle,
+                        width: 120,
                         borderColor: error ? 'var(--pink)' : baseInputStyle.border,
                       }}
                     />
@@ -927,6 +939,9 @@ const ScaleGrid = ({
                       />
                       <span className="note">Not collected</span>
                     </label>
+                  </td>
+                  <td>
+                    <span className="note">{formatSavedAt(cell?.savedAt)}</span>
                   </td>
                   <td>
                     {error ? (
