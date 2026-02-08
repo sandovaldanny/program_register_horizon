@@ -1,4 +1,4 @@
-## Mental Health Program Tracker
+## Mental Health Program
 
 React + TypeScript (Vite) tracker for monthly mental health program follow-up. Local-first, no backend.
 

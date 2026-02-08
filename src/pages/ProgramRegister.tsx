@@ -255,7 +255,7 @@ export default function ProgramRegister() {
         <div className="brand">
           <div className="brandMark">MH</div>
           <div>
-            <div className="brandTitle">Mental Health Program Tracker</div>
+            <div className="brandTitle">Mental Health Program</div>
           </div>
         </div>
         <div className="ctaRow">
