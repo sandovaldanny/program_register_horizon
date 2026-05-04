@@ -3,13 +3,16 @@ import { SCALE_LABELS } from './seed'
 
 export const MONTH_INDEXES = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
-const scaleRanges: Record<ScaleType, { min: number; max: number }> = {
+const scaleRanges: Record<Exclude<ScaleType, 'WHODAS'>, { min: number; max: number }> = {
   PHQ9: { min: 0, max: 27 },
   GAD7: { min: 0, max: 21 },
   SDS: { min: 0, max: 30 },
 }
 
 export const getScaleRange = (scale: ScaleType, settings: Settings) => {
+  if (scale === 'WHODAS') {
+    return { min: 0, max: 0 }
+  }
   if (scale === 'SDS') {
     return { min: 0, max: settings.sdsMax }
   }
@@ -81,6 +84,9 @@ export const validateMonthlyScore = (
   settings: Settings
 ): ValidationResult => {
   const errors: string[] = []
+  if (score.scaleType === 'WHODAS') {
+    return { ok: true, errors }
+  }
   if (!MONTH_INDEXES.includes(score.monthIndex)) {
     errors.push('Invalid month index.')
   }

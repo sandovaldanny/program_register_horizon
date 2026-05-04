@@ -1,4 +1,4 @@
-export type ScaleType = 'PHQ9' | 'GAD7' | 'SDS'
+export type ScaleType = 'PHQ9' | 'GAD7' | 'SDS' | 'WHODAS'
 
 export type Patient = {
   patientId: string

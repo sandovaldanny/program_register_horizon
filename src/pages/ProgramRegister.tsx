@@ -193,6 +193,23 @@ const buildScoreMap = (scores: MonthlyScore[]) => {
 const uniqueList = (values: string[]) =>
   values.map((value) => value.trim()).filter((value, index, arr) => value && arr.indexOf(value) === index)
 
+const WHODAS_OPTIONS = ['none', 'mild', 'moderate', 'severe', 'extreme or cannot do'] as const
+
+const WHODAS_QUESTIONS = [
+  'S1 Standing for long periods such as 30 minutes?',
+  'S2 Taking care of your household responsibilities?',
+  'S3 Learning a new task, for example, learning how to get to a new place?',
+  'S4 How much of a problem did you have joining in community activities (for example, festivities, religious or other activities) in the same way as anyone else can?',
+  'S5 How much have you been emotionally affected by your health problems?',
+  'S6 Concentrating on doing something for ten minutes?',
+  'S7 Walking a long distance such as a kilometre [or equivalent]?',
+  'S8 Washing your whole body?',
+  'S9 Getting dressed?',
+  'S10 Dealing with people you do not know?',
+  'S11 Maintaining a friendship?',
+  'S12 Your day-to-day work?',
+] as const
+
 type ViewKey = 'patients' | 'detail' | 'settings' | 'import'
 
 export default function ProgramRegister() {
@@ -600,10 +617,10 @@ const PatientDetailView = ({
         <div className="sheetHeader">
           <div>
             <div className="sheetTitle">Scales</div>
-            <div className="sheetSubtitle">PHQ-9, GAD-7, SDS — Initial and monthly follow-up.</div>
+            <div className="sheetSubtitle">PHQ-9, GAD-7, whodas 2.0 — Initial and monthly follow-up.</div>
           </div>
           <div className="ctaRow">
-            {(['PHQ9', 'GAD7', 'SDS'] as ScaleType[]).map((scale) => (
+            {(['PHQ9', 'GAD7', 'WHODAS'] as ScaleType[]).map((scale) => (
               <button
                 key={scale}
                 className="btnGhost"
@@ -619,13 +636,17 @@ const PatientDetailView = ({
             ))}
           </div>
         </div>
-        <ScaleGrid
-          patientId={patient.patientId}
-          scaleType={activeScale}
-          settings={state.settings}
-          scores={getScoresFor(state, patient.patientId, activeScale)}
-          onSaveScore={onSaveScore}
-        />
+        {activeScale === 'WHODAS' ? (
+          <WhodasForm patientId={patient.patientId} />
+        ) : (
+          <ScaleGrid
+            patientId={patient.patientId}
+            scaleType={activeScale}
+            settings={state.settings}
+            scores={getScoresFor(state, patient.patientId, activeScale)}
+            onSaveScore={onSaveScore}
+          />
+        )}
       </div>
 
       <div className="sheetCard" style={{ marginTop: 16 }}>
@@ -641,6 +662,70 @@ const PatientDetailView = ({
         />
       </div>
     </section>
+  )
+}
+
+const WhodasForm = ({ patientId }: { patientId: string }) => {
+  const [answers, setAnswers] = useState<Record<string, string>>({})
+  const [savedAt, setSavedAt] = useState<string>('')
+
+  useEffect(() => {
+    setAnswers({})
+    setSavedAt('')
+  }, [patientId])
+
+  return (
+    <div style={cardBodyStyle}>
+      <div className="note">WHODAS 2.0</div>
+      <div className="note">WORLD HEALTH ORGANIZATION DISABILITY ASSESSMENT SCHEDULE 2.0</div>
+      <div style={{ display: 'grid', gap: 12, marginTop: 8 }}>
+        {WHODAS_QUESTIONS.map((question) => (
+          <div
+            key={question}
+            style={{
+              padding: 14,
+              borderRadius: 14,
+              border: '1px solid rgba(22,69,92,0.12)',
+              background: 'rgba(247,251,252,0.82)',
+            }}
+          >
+            <div style={{ fontWeight: 700, color: 'var(--indigo)', marginBottom: 10 }}>{question}</div>
+            <div style={{ ...gridCols(140), gap: 10 }}>
+              {WHODAS_OPTIONS.map((option) => (
+                <label
+                  key={`${question}-${option}`}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '10px 12px',
+                    borderRadius: 12,
+                    border: '1px solid rgba(22,69,92,0.12)',
+                    background:
+                      answers[question] === option ? 'rgba(112,200,195,0.2)' : 'rgba(255,255,255,0.92)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name={question}
+                    checked={answers[question] === option}
+                    onChange={() => setAnswers((prev) => ({ ...prev, [question]: option }))}
+                  />
+                  <span style={{ textTransform: 'lowercase' }}>{option}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="ctaRow">
+        <button className="btnPrimary" onClick={() => setSavedAt(new Date().toISOString())}>
+          Save whodas 2.0
+        </button>
+        {savedAt ? <span className="note">Saved at {formatSavedAt(savedAt)}</span> : null}
+      </div>
+    </div>
   )
 }
 

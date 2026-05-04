@@ -101,4 +101,5 @@ export const SCALE_LABELS: Record<ScaleType, string> = {
   PHQ9: 'PHQ-9',
   GAD7: 'GAD-7',
   SDS: 'SDS',
+  WHODAS: 'whodas 2.0',
 }
