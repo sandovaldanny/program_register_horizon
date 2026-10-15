@@ -1,44 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
-import { Input } from "@/components/ui/Field";
 import { cn } from "@/lib/cn";
 
 /**
- * Multi-select chips from the clinicians catalogue plus a free-text "other"
- * box for names not yet in the catalogue. Submits one comma-separated value.
+ * Multi-select chips from a catalogue (clinicians, diagnoses, care plan).
+ * Submits one comma-separated value under `name`. Catalogue-only: items are
+ * managed in Settings, so there is no free-text fallback here.
  */
 export function ClinicianPicker({
   name,
   label,
   options,
   initial,
-  hint,
   emptyText,
-  otherText,
 }: {
   name: string;
   label: string;
   options: string[];
   initial: string[];
-  hint?: string;
-  emptyText?: string;
-  otherText?: string;
+  emptyText: string;
 }) {
-  const t = useTranslations("form");
-  const empty = emptyText ?? t("noClinicians");
-  const other = otherText ?? t("otherClinician");
   const [selected, setSelected] = useState<string[]>(initial.filter((n) => options.includes(n)));
-  const [otherValue, setOtherValue] = useState(initial.filter((n) => !options.includes(n)).join(", "));
-
   const toggle = (n: string) => setSelected((prev) => (prev.includes(n) ? prev.filter((x) => x !== n) : [...prev, n]));
-  const value = [...selected, ...otherValue.split(",").map((s) => s.trim()).filter(Boolean)].join(", ");
+  const dropped = initial.filter((n) => !options.includes(n));
 
   return (
     <div className="flex flex-col gap-1.5">
       <span className="text-xs font-semibold uppercase tracking-wide text-bluegray">{label}</span>
-      <input type="hidden" name={name} value={value} />
+      <input type="hidden" name={name} value={selected.join(", ")} />
       <div className="flex flex-wrap gap-1.5">
         {options.map((n) => {
           const on = selected.includes(n);
@@ -57,10 +47,13 @@ export function ClinicianPicker({
             </button>
           );
         })}
-        {options.length === 0 ? <span className="text-xs text-bluegray">{empty}</span> : null}
+        {options.length === 0 ? <span className="text-xs text-bluegray">{emptyText}</span> : null}
       </div>
-      <Input value={otherValue} onChange={(e) => setOtherValue(e.target.value)} placeholder={other} className="mt-1" aria-label={other} />
-      {hint ? <p className="text-xs text-bluegray">{hint}</p> : null}
+      {dropped.length > 0 ? (
+        <p className="text-xs text-amber" title={dropped.join(", ")}>
+          ⚠ {dropped.join(", ")}
+        </p>
+      ) : null}
     </div>
   );
 }

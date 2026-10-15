@@ -7,7 +7,7 @@ import { cn } from "@/lib/cn";
 
 const LINKS = [
   { href: "/", key: "dashboard" },
-  { href: "/patients", key: "patients" },
+  { href: "/patients/new", key: "addPatient" },
   { href: "/settings", key: "settings" },
 ] as const;
 
@@ -18,7 +18,7 @@ export function NavLinks() {
   return (
     <>
       {LINKS.map(({ href, key }) => {
-        const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+        const active = href === "/" ? pathname === "/" || (pathname.startsWith("/patients") && !pathname.startsWith("/patients/new")) : pathname.startsWith(href);
         return (
           <Link
             key={href}

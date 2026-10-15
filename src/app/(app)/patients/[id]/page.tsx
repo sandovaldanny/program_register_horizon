@@ -28,7 +28,7 @@ export default async function PatientDetailPage({ params }: PageProps<"/patients
   return (
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-4">
-        <Link href="/patients" className="text-sm font-medium text-steel hover:underline">
+        <Link href="/" className="text-sm font-medium text-steel hover:underline">
           ← {t("backToList")}
         </Link>
         <div className="flex flex-wrap items-start justify-between gap-4">

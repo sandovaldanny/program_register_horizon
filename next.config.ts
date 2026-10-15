@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   // The whole app is per-request dynamic (session cookie + live clinical data),
   // so Cache Components / PPR add complexity without benefit here.
   cacheComponents: false,
+  async redirects() {
+    return [{ source: "/patients", destination: "/", permanent: false }];
+  },
   turbopack: {
     rules: {
       "*.css": {

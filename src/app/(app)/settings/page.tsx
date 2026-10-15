@@ -9,7 +9,7 @@ import { ensureSettings } from "@/db/settings";
 export default async function SettingsPage() {
   const t = await getTranslations("settings");
   const settings = await ensureSettings(getDb());
-  const [clinicians, diagnoses] = await Promise.all([getClinicians(), getCatalog("diagnosis")]);
+  const [clinicians, diagnoses, carePlans] = await Promise.all([getClinicians(), getCatalog("diagnosis"), getCatalog("care_plan")]);
   return (
     <div className="flex flex-col gap-8">
       <header>
@@ -29,6 +29,13 @@ export default async function SettingsPage() {
           <p className="text-sm text-bluegray">{t("catalog.diagnosisSubtitle")}</p>
         </div>
         <CatalogManager kind="diagnosis" items={diagnoses} />
+      </section>
+      <section className="flex max-w-3xl flex-col gap-4">
+        <div>
+          <h2 className="text-xl font-medium text-indigo">{t("catalog.carePlanTitle")}</h2>
+          <p className="text-sm text-bluegray">{t("catalog.carePlanSubtitle")}</p>
+        </div>
+        <CatalogManager kind="care_plan" items={carePlans} />
       </section>
       <section className="flex flex-col gap-4">
         <h2 className="text-xl font-medium text-indigo">{t("rulesTitle")}</h2>

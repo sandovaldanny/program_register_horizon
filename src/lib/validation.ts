@@ -35,7 +35,7 @@ export const patientSchema = z.object({
   displayName: optionalText,
   age: optionalInt(0, 120),
   gender: z.enum(["male", "female", "unknown"]).default("unknown"),
-  status: z.enum(["active", "inactive", "graduated", "transferred"]).default("active"),
+  status: z.enum(["active", "inactive"]).default("active"),
   diagnosis: optionalText,
   carePlan: optionalText,
   therapyProgress: optionalText,

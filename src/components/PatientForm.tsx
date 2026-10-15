@@ -7,7 +7,7 @@ import { ClinicianPicker } from "@/components/ClinicianPicker";
 import { Button } from "@/components/ui/Button";
 import { Field, Input, Select, Textarea } from "@/components/ui/Field";
 import type { CatalogItem, Clinician, Patient } from "@/db/schema";
-import { matchDiagnosis, splitDiagnosis } from "@/lib/diagnosis";
+import { matchLabels, normalizeCarePlan, splitLabels } from "@/lib/diagnosis";
 import { catalogNames } from "@/db/queries-shared";
 import { splitNames } from "@/lib/import/normalize";
 import { CENTER_LABELS } from "@/lib/scope";
@@ -28,13 +28,16 @@ export function PatientForm({
   defaultCenter,
   clinicians,
   diagnoses,
+  carePlans,
 }: {
   patient?: Patient;
   defaultCenter?: "al_falah" | "al_bateen";
   clinicians: Clinician[];
   diagnoses: CatalogItem[];
+  carePlans: CatalogItem[];
 }) {
   const diagnosisOptions = diagnoses.filter((d) => d.active).map((d) => d.label);
+  const carePlanOptions = carePlans.filter((d) => d.active).map((d) => d.label);
   const t = useTranslations("form");
   const tEnum = useTranslations("enums");
   const tc = useTranslations("common");
@@ -76,7 +79,7 @@ export function PatientForm({
         </Field>
         <Field label={t("status")} htmlFor="p-status">
           <Select id="p-status" name="status" defaultValue={patient?.status ?? "active"}>
-            {(["active", "inactive", "graduated", "transferred"] as const).map((s) => (
+            {(["active", "inactive"] as const).map((s) => (
               <option key={s} value={s}>
                 {tEnum(`status.${s}`)}
               </option>
@@ -91,17 +94,22 @@ export function PatientForm({
             name="diagnosis"
             label={t("diagnosis")}
             options={diagnosisOptions}
-            initial={matchDiagnosis(splitDiagnosis(patient?.diagnosis), diagnosisOptions)}
+            initial={matchLabels(splitLabels(patient?.diagnosis), diagnosisOptions)}
             emptyText={t("noDiagnoses")}
-            otherText={t("otherDiagnosis")}
           />
         </div>
-        <Field label={t("carePlan")} htmlFor="p-plan" className="md:col-span-3">
-          <Input id="p-plan" name="carePlan" defaultValue={patient?.carePlan ?? ""} />
-        </Field>
+        <div className="md:col-span-3">
+          <ClinicianPicker
+            name="carePlan"
+            label={t("carePlan")}
+            options={carePlanOptions}
+            initial={matchLabels(normalizeCarePlan(patient?.carePlan), carePlanOptions)}
+            emptyText={t("noCarePlans")}
+          />
+        </div>
         <div className="md:col-span-3 grid gap-5 md:grid-cols-2">
-          <ClinicianPicker name="psychiatrist" label={t("psychiatrist")} options={catalogNames(clinicians, "psychiatrist")} initial={splitNames(patient?.psychiatrist ?? null)} />
-          <ClinicianPicker name="psychologist" label={t("psychologist")} options={catalogNames(clinicians, "psychologist")} initial={splitNames(patient?.psychologist ?? null)} />
+          <ClinicianPicker name="psychiatrist" label={t("psychiatrist")} options={catalogNames(clinicians, "psychiatrist")} initial={splitNames(patient?.psychiatrist ?? null)} emptyText={t("noClinicians")} />
+          <ClinicianPicker name="psychologist" label={t("psychologist")} options={catalogNames(clinicians, "psychologist")} initial={splitNames(patient?.psychologist ?? null)} emptyText={t("noClinicians")} />
         </div>
         <Field label={t("isHorizonPatient")} htmlFor="p-horizon">
           <Select id="p-horizon" name="isHorizonPatient" defaultValue={patient?.isHorizonPatient === null || patient?.isHorizonPatient === undefined ? "" : patient.isHorizonPatient ? "yes" : "no"}>

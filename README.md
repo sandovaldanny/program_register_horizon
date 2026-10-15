@@ -5,7 +5,7 @@ Care-coordination tracker for the Alkalma **Horizon** Anxiety & Depression progr
 - **PHQ-9 / GAD-7 monthly tracking** – every screening is kept; delta and trend always compare baseline → latest.
 - **Alerts** – assessment overdue (no score in the last month, re-raised every month), attendance concern (no session in the last month), worsening, severe, no scores, confirm still active, minimal scores (discuss graduation).
 - **Severity per scale** – PHQ-9 0–4 minimal · 5–9 mild · 10–14 moderate · 15–19 moderately severe · 20+ severe. GAD-7 0–4 minimal · 5–9 mild · 10–14 moderate · 15+ severe. "Severe range" = either scale ≥15. No tiers.
-- **Configurable in Settings** – clinicians catalogue (name, specialty, center), diagnoses pick-list, change thresholds (default PHQ ≥5, GAD ≥4), screening interval, due-soon window, confirm-active and attendance windows.
+- **Configurable in Settings** – clinicians catalogue (name, specialty, center), diagnosis and care-plan pick-lists (catalogue-only in the patient form), change thresholds (default PHQ ≥5, GAD ≥4), screening interval, due-soon window, confirm-active and attendance windows.
 - **Trilingual UI** – English, Spanish, Arabic (RTL).
 - **Export** – CSV / Excel of the filtered caseload with derived columns.
 
@@ -39,7 +39,7 @@ Flags: `--dry-run` (report only), `--reset` (delete that center first), `--skip-
 ## Project layout
 
 ```
-src/app/(app)/            dashboard, patients, patients/[id], settings
+src/app/(app)/            dashboard (KPIs + filterable, sortable caseload), patients/new, patients/[id], settings
 src/app/api/export        CSV / XLSX
 src/lib/metrics           pure, tested: severity, tier, trend, alerts, flags, priority
 src/lib/import            Excel row mappers + normalizers (tested)

@@ -69,7 +69,7 @@ export const catalogItems = pgTable(
 );
 
 export type CatalogItem = typeof catalogItems.$inferSelect;
-export type CatalogKind = "diagnosis";
+export type CatalogKind = "diagnosis" | "care_plan";
 
 export type Clinician = typeof clinicians.$inferSelect;
 export type Specialty = Clinician["specialty"];

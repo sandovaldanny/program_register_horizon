@@ -26,10 +26,10 @@
   "nav": {
     "programme": "Horizon programme",
     "dashboard": "Dashboard",
-    "patients": "Patients",
     "settings": "Settings",
     "center": "Center",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "addPatient": "Add patient"
   },
   "centers": {
     "scope": "Center scope",
@@ -38,7 +38,7 @@
     "al_bateen": "Al Bateen"
   },
   "dashboard": {
-    "title": "Today's caseload",
+    "title": "Today's follow-up",
     "subtitle": "Who needs a call, a screening or a clinician review — ranked by urgency.",
     "addPatient": "Add patient",
     "kpi": {
@@ -54,57 +54,47 @@
       "minimal": "Minimal · discuss graduation",
       "improving": "Improving",
       "severeHint": "PHQ-9 ≥15 or GAD-7 ≥15",
-      "sectionLabel": "Caseload indicators"
+      "sectionLabel": "Follow-up indicators"
     },
-    "worklist": {
-      "title": "Needs attention",
-      "subtitle": "Top 25 by priority. Red = act now, amber = overdue or needs a look.",
-      "viewAll": "View all {count}",
-      "empty": "Nothing needs attention right now."
+    "table": {
+      "title": "Patients",
+      "count": "{shown} of {total}",
+      "empty": "No patients match these filters."
     }
-  },
-  "patients": {
-    "title": "Patients",
-    "count": "{shown} of {total} patients",
-    "exportCsv": "Export CSV",
-    "exportXlsx": "Export Excel",
-    "addPatient": "Add patient",
-    "empty": "No patients match these filters."
   },
   "table": {
     "patient": "Patient",
     "center": "Center",
     "phq": "PHQ-9",
     "gad": "GAD-7",
-    "trend": "Trend",
     "lastScore": "Last score",
     "lastSession": "Last session",
     "flags": "Flags",
     "priority": "Priority",
     "yearsShort": "y",
-    "scoreHint": "baseline → latest (Δ)"
+    "scoreHint": "baseline → latest (Δ)",
+    "priorityHelpTitle": "How priority is calculated",
+    "priorityHelp": "Sum of the weights of the active flags:\nHigh priority 40 · Worsening 30 · Severe range 20 · Assessment overdue 15 · Attendance concern 15 · Confirm still active 10 · No scores 8 · Due soon 5 · Minimal scores 3 · No care plan 2.\nTies go to the longest overdue.",
+    "priorityHelpLabel": "How priority is calculated"
   },
   "filters": {
     "search": "Search",
     "searchPlaceholder": "MRN, name, diagnosis, clinician",
     "alert": "Alert",
     "needsAttention": "Needs attention (any)",
-    "trend": "Trend",
     "clinician": "Clinician",
     "priority": "Follow-up priority",
     "status": "Status",
     "allStatuses": "All statuses",
     "any": "Any",
-    "sort": "Sort by",
-    "sortBy": {
-      "priority": "Priority",
-      "last_score": "Last score date",
-      "mrn": "MRN",
-      "severity": "Severity"
-    },
     "clear": "Clear {count, plural, one {# filter} other {# filters}}",
     "phqSeverity": "PHQ-9 severity",
-    "gadSeverity": "GAD-7 severity"
+    "gadSeverity": "GAD-7 severity",
+    "alertAny": "All alerts",
+    "phqAny": "PHQ-9: any",
+    "gadAny": "GAD-7: any",
+    "clinicianAny": "All clinicians",
+    "priorityAny": "Any priority"
   },
   "flags": {
     "high_priority": "High priority",
@@ -135,9 +125,7 @@
     },
     "status": {
       "active": "Active",
-      "inactive": "Inactive",
-      "graduated": "Graduated",
-      "transferred": "Transferred"
+      "inactive": "Inactive"
     },
     "priority": {
       "routine": "Routine",
@@ -287,9 +275,8 @@
       "followUp": "Follow-up"
     },
     "noClinicians": "No clinicians in the catalogue yet — add them in Settings.",
-    "otherClinician": "Other (comma-separated)",
     "noDiagnoses": "No diagnoses in the catalogue yet — add them in Settings.",
-    "otherDiagnosis": "Other (comma-separated)"
+    "noCarePlans": "No care plan options yet — add them in Settings."
   },
   "settings": {
     "title": "Settings",
@@ -341,7 +328,9 @@
       "errors": {
         "duplicate": "Already exists.",
         "invalid": "Please enter a valid label."
-      }
+      },
+      "carePlanTitle": "Care plan options",
+      "carePlanSubtitle": "Pick-list for the care plan field. Several can be selected."
     }
   }
 }

@@ -26,10 +26,10 @@
   "nav": {
     "programme": "Programa Horizon",
     "dashboard": "Panel",
-    "patients": "Pacientes",
     "settings": "Configuración",
     "center": "Centro",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "addPatient": "Nuevo paciente"
   },
   "centers": {
     "scope": "Alcance por centro",
@@ -38,7 +38,7 @@
     "al_bateen": "Al Bateen"
   },
   "dashboard": {
-    "title": "Caseload de hoy",
+    "title": "Seguimiento de hoy",
     "subtitle": "Quién necesita una llamada, un tamizaje o revisión clínica — ordenado por urgencia.",
     "addPatient": "Nuevo paciente",
     "kpi": {
@@ -54,57 +54,47 @@
       "minimal": "Mínimo · evaluar egreso",
       "improving": "Mejorando",
       "severeHint": "PHQ-9 ≥15 o GAD-7 ≥15",
-      "sectionLabel": "Indicadores del caseload"
+      "sectionLabel": "Indicadores de seguimiento"
     },
-    "worklist": {
-      "title": "Requieren atención",
-      "subtitle": "Top 25 por prioridad. Rojo = actuar ahora, ámbar = vencido o por revisar.",
-      "viewAll": "Ver los {count}",
-      "empty": "Nadie requiere atención en este momento."
+    "table": {
+      "title": "Pacientes",
+      "count": "{shown} de {total}",
+      "empty": "Ningún paciente coincide con estos filtros."
     }
-  },
-  "patients": {
-    "title": "Pacientes",
-    "count": "{shown} de {total} pacientes",
-    "exportCsv": "Exportar CSV",
-    "exportXlsx": "Exportar Excel",
-    "addPatient": "Nuevo paciente",
-    "empty": "Ningún paciente coincide con estos filtros."
   },
   "table": {
     "patient": "Paciente",
     "center": "Centro",
     "phq": "PHQ-9",
     "gad": "GAD-7",
-    "trend": "Tendencia",
     "lastScore": "Último puntaje",
     "lastSession": "Última sesión",
     "flags": "Alertas",
     "priority": "Prioridad",
     "yearsShort": "a",
-    "scoreHint": "baseline → último (Δ)"
+    "scoreHint": "baseline → último (Δ)",
+    "priorityHelpTitle": "Cómo se calcula la prioridad",
+    "priorityHelp": "Suma de los pesos de las alertas activas:\nAlta prioridad 40 · Empeorando 30 · Rango severo 20 · Evaluación vencida 15 · Alerta de asistencia 15 · Confirmar si sigue activo 10 · Sin puntajes 8 · Vence pronto 5 · Puntajes mínimos 3 · Sin plan de cuidado 2.\nEn empate, gana el más vencido.",
+    "priorityHelpLabel": "Cómo se calcula la prioridad"
   },
   "filters": {
     "search": "Buscar",
     "searchPlaceholder": "MRN, nombre, diagnóstico, clínico",
     "alert": "Alerta",
     "needsAttention": "Requiere atención (cualquiera)",
-    "trend": "Tendencia",
     "clinician": "Clínico",
     "priority": "Prioridad de seguimiento",
     "status": "Estado",
     "allStatuses": "Todos los estados",
     "any": "Cualquiera",
-    "sort": "Ordenar por",
-    "sortBy": {
-      "priority": "Prioridad",
-      "last_score": "Fecha último puntaje",
-      "mrn": "MRN",
-      "severity": "Severidad"
-    },
     "clear": "Limpiar {count, plural, one {# filtro} other {# filtros}}",
     "phqSeverity": "Severidad PHQ-9",
-    "gadSeverity": "Severidad GAD-7"
+    "gadSeverity": "Severidad GAD-7",
+    "alertAny": "Todas las alertas",
+    "phqAny": "PHQ-9: todos",
+    "gadAny": "GAD-7: todos",
+    "clinicianAny": "Todos los clínicos",
+    "priorityAny": "Cualquier prioridad"
   },
   "flags": {
     "high_priority": "Alta prioridad",
@@ -135,9 +125,7 @@
     },
     "status": {
       "active": "Activo",
-      "inactive": "Inactivo",
-      "graduated": "Egresado",
-      "transferred": "Transferido"
+      "inactive": "Inactivo"
     },
     "priority": {
       "routine": "Rutina",
@@ -287,9 +275,8 @@
       "followUp": "Seguimiento"
     },
     "noClinicians": "No hay médicos en el catálogo — agrégalos en Configuración.",
-    "otherClinician": "Otro (separados por coma)",
     "noDiagnoses": "No hay diagnósticos en el catálogo — agrégalos en Configuración.",
-    "otherDiagnosis": "Otro (separados por coma)"
+    "noCarePlans": "No hay opciones de plan de cuidado — agrégalas en Configuración."
   },
   "settings": {
     "title": "Configuración",
@@ -341,7 +328,9 @@
       "errors": {
         "duplicate": "Ya existe.",
         "invalid": "Ingresa una etiqueta válida."
-      }
+      },
+      "carePlanTitle": "Opciones de plan de cuidado",
+      "carePlanSubtitle": "Lista para el campo plan de cuidado. Se pueden elegir varias."
     }
   }
 }

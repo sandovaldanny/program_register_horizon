@@ -26,10 +26,10 @@
   "nav": {
     "programme": "برنامج هورايزن",
     "dashboard": "لوحة المتابعة",
-    "patients": "المرضى",
     "settings": "الإعدادات",
     "center": "المركز",
-    "signOut": "تسجيل الخروج"
+    "signOut": "تسجيل الخروج",
+    "addPatient": "إضافة مريض"
   },
   "centers": {
     "scope": "نطاق المركز",
@@ -38,7 +38,7 @@
     "al_bateen": "البطين"
   },
   "dashboard": {
-    "title": "حالات اليوم",
+    "title": "متابعة اليوم",
     "subtitle": "من يحتاج اتصالاً أو فحصاً أو مراجعة طبية — مرتبة حسب الأولوية.",
     "addPatient": "إضافة مريض",
     "kpi": {
@@ -54,57 +54,47 @@
       "minimal": "حد أدنى · مناقشة التخرج",
       "improving": "تحسّن",
       "severeHint": "PHQ-9 ≥15 أو GAD-7 ≥15",
-      "sectionLabel": "مؤشرات الحالات"
+      "sectionLabel": "مؤشرات المتابعة"
     },
-    "worklist": {
-      "title": "بحاجة إلى متابعة",
-      "subtitle": "أعلى 25 حسب الأولوية. أحمر = تصرّف الآن، كهرماني = متأخر أو يحتاج مراجعة.",
-      "viewAll": "عرض الكل ({count})",
-      "empty": "لا توجد حالات تحتاج متابعة الآن."
+    "table": {
+      "title": "المرضى",
+      "count": "{shown} من {total}",
+      "empty": "لا يوجد مرضى مطابقون لهذه المرشحات."
     }
-  },
-  "patients": {
-    "title": "المرضى",
-    "count": "{shown} من {total} مريضاً",
-    "exportCsv": "تصدير CSV",
-    "exportXlsx": "تصدير Excel",
-    "addPatient": "إضافة مريض",
-    "empty": "لا يوجد مرضى مطابقون لهذه المرشحات."
   },
   "table": {
     "patient": "المريض",
     "center": "المركز",
     "phq": "PHQ-9",
     "gad": "GAD-7",
-    "trend": "الاتجاه",
     "lastScore": "آخر درجة",
     "lastSession": "آخر جلسة",
     "flags": "التنبيهات",
     "priority": "الأولوية",
     "yearsShort": "سنة",
-    "scoreHint": "خط الأساس → الأحدث (Δ)"
+    "scoreHint": "خط الأساس → الأحدث (Δ)",
+    "priorityHelpTitle": "كيف تُحسب الأولوية",
+    "priorityHelp": "مجموع أوزان التنبيهات النشطة:\nأولوية عالية 40 · تدهور 30 · نطاق شديد 20 · تقييم متأخر 15 · قلق بشأن الحضور 15 · تأكيد استمرار النشاط 10 · بدون درجات 8 · مستحق قريباً 5 · درجات دنيا 3 · بدون خطة رعاية 2.\nعند التعادل تُقدَّم الحالة الأكثر تأخراً.",
+    "priorityHelpLabel": "كيف تُحسب الأولوية"
   },
   "filters": {
     "search": "بحث",
     "searchPlaceholder": "الرقم الطبي، الاسم، التشخيص، الطبيب",
     "alert": "التنبيه",
     "needsAttention": "بحاجة إلى متابعة (أي نوع)",
-    "trend": "الاتجاه",
     "clinician": "الطبيب / المعالج",
     "priority": "أولوية المتابعة",
     "status": "الحالة",
     "allStatuses": "جميع الحالات",
     "any": "الكل",
-    "sort": "ترتيب حسب",
-    "sortBy": {
-      "priority": "الأولوية",
-      "last_score": "تاريخ آخر درجة",
-      "mrn": "الرقم الطبي",
-      "severity": "الشدة"
-    },
     "clear": "مسح {count, plural, one {مرشح واحد} other {# مرشحات}}",
     "phqSeverity": "شدة PHQ-9",
-    "gadSeverity": "شدة GAD-7"
+    "gadSeverity": "شدة GAD-7",
+    "alertAny": "كل التنبيهات",
+    "phqAny": "PHQ-9: الكل",
+    "gadAny": "GAD-7: الكل",
+    "clinicianAny": "كل الأطباء",
+    "priorityAny": "أي أولوية"
   },
   "flags": {
     "high_priority": "أولوية عالية",
@@ -135,9 +125,7 @@
     },
     "status": {
       "active": "نشط",
-      "inactive": "غير نشط",
-      "graduated": "متخرج",
-      "transferred": "محوَّل"
+      "inactive": "غير نشط"
     },
     "priority": {
       "routine": "روتيني",
@@ -287,9 +275,8 @@
       "followUp": "المتابعة"
     },
     "noClinicians": "لا يوجد أطباء في القائمة بعد — أضفهم في الإعدادات.",
-    "otherClinician": "أخرى (مفصولة بفواصل)",
     "noDiagnoses": "لا توجد تشخيصات في القائمة بعد — أضفها في الإعدادات.",
-    "otherDiagnosis": "أخرى (مفصولة بفواصل)"
+    "noCarePlans": "لا توجد خيارات لخطة الرعاية بعد — أضفها في الإعدادات."
   },
   "settings": {
     "title": "الإعدادات",
@@ -341,7 +328,9 @@
       "errors": {
         "duplicate": "موجود بالفعل.",
         "invalid": "يرجى إدخال تسمية صالحة."
-      }
+      },
+      "carePlanTitle": "خيارات خطة الرعاية",
+      "carePlanSubtitle": "قائمة اختيار لحقل خطة الرعاية. يمكن اختيار أكثر من واحد."
     }
   }
 }

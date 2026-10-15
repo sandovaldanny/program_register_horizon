@@ -9,7 +9,7 @@ export default async function EditPatientPage({ params }: PageProps<"/patients/[
   const detail = await getPatientDetail(id);
   if (!detail) notFound();
   const t = await getTranslations("form");
-  const [clinicians, diagnoses] = await Promise.all([getClinicians(), getCatalog("diagnosis")]);
+  const [clinicians, diagnoses, carePlans] = await Promise.all([getClinicians(), getCatalog("diagnosis"), getCatalog("care_plan")]);
   return (
     <div className="flex max-w-5xl flex-col gap-8">
       <header>
@@ -18,7 +18,7 @@ export default async function EditPatientPage({ params }: PageProps<"/patients/[
         </Link>
         <h1 className="mt-2 text-3xl font-medium text-indigo">{t("editTitle")}</h1>
       </header>
-      <PatientForm patient={detail.patient} clinicians={clinicians} diagnoses={diagnoses} />
+      <PatientForm patient={detail.patient} clinicians={clinicians} diagnoses={diagnoses} carePlans={carePlans} />
     </div>
   );
 }

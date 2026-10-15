@@ -1,17 +1,18 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
-import { Field, Input, Select } from "@/components/ui/Field";
-import { ALERT_FILTERS, type CaseloadFilters as Filters } from "@/lib/filters";
+import { ALERT_FILTERS, STATUS_FILTERS, type CaseloadFilters as Filters } from "@/lib/filters";
+import { cn } from "@/lib/cn";
 
-const SEVERITIES = ["severe", "moderately_severe", "moderate", "mild", "minimal"] as const;
+const PHQ_SEVERITIES = ["severe", "moderately_severe", "moderate", "mild", "minimal"] as const;
 const GAD_SEVERITIES = ["severe", "moderate", "mild", "minimal"] as const;
-const TRENDS = ["worsening", "mixed", "stable", "improving", "first_score"] as const;
 const PRIORITIES = ["high", "mid", "low", "routine"] as const;
-const STATUSES = ["active", "inactive", "graduated", "transferred", "all"] as const;
-const SORTS = ["priority", "severity", "last_score", "mrn"] as const;
+
+const control =
+  "h-9 rounded-control border border-border bg-surface px-3 text-xs text-indigo focus:border-turquoise focus:outline-none";
 
 export function CaseloadFilters({ filters, clinicians }: { filters: Filters; clinicians: string[] }) {
   const t = useTranslations("filters");
@@ -37,103 +38,50 @@ export function CaseloadFilters({ filters, clinicians }: { filters: Filters; cli
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q]);
 
-  const active = Object.entries(filters).filter(([k, v]) => v && !(k === "status" && v === "active") && !(k === "sort" && v === "priority")).length;
+  const active = [filters.q, filters.alert, filters.phqSeverity, filters.gadSeverity, filters.clinician, filters.priority, filters.trend, filters.status !== "active" ? "s" : ""].filter(Boolean).length;
+
+  const select = (id: string, label: string, value: string, key: string, options: Array<[string, string]>, anyLabel = t("any")) => (
+    <label className="flex items-center gap-1.5">
+      <span className="sr-only">{label}</span>
+      <select id={id} aria-label={label} value={value} onChange={(e) => set(key, e.target.value)} className={cn(control, "appearance-none pe-7", value && "border-indigo/40 bg-indigo/5 font-medium")}>
+        <option value="">{anyLabel}</option>
+        {options.map(([v, l]) => (
+          <option key={v} value={v}>
+            {l}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
 
   return (
-    <div className="rounded-card border border-border bg-surface p-5 shadow-card" aria-busy={pending}>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-9">
-        <Field label={t("search")} htmlFor="f-q" className="col-span-2">
-          <Input id="f-q" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("searchPlaceholder")} />
-        </Field>
-        <Field label={t("alert")} htmlFor="f-alert">
-          <Select id="f-alert" value={filters.alert} onChange={(e) => set("alert", e.target.value)}>
-            <option value="">{t("any")}</option>
-            {ALERT_FILTERS.map((a) => (
-              <option key={a} value={a}>
-                {a === "needs_attention" ? t("needsAttention") : tFlags(a)}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label={t("phqSeverity")} htmlFor="f-phq">
-          <Select id="f-phq" value={filters.phqSeverity} onChange={(e) => set("phq", e.target.value)}>
-            <option value="">{t("any")}</option>
-            {SEVERITIES.map((v) => (
-              <option key={v} value={v}>
-                {tEnum(`severity.${v}`)}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label={t("gadSeverity")} htmlFor="f-gad">
-          <Select id="f-gad" value={filters.gadSeverity} onChange={(e) => set("gad", e.target.value)}>
-            <option value="">{t("any")}</option>
-            {GAD_SEVERITIES.map((v) => (
-              <option key={v} value={v}>
-                {tEnum(`severity.${v}`)}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label={t("trend")} htmlFor="f-trend">
-          <Select id="f-trend" value={filters.trend} onChange={(e) => set("trend", e.target.value)}>
-            <option value="">{t("any")}</option>
-            {TRENDS.map((v) => (
-              <option key={v} value={v}>
-                {tEnum(`trend.${v}`)}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label={t("clinician")} htmlFor="f-clinician">
-          <Select id="f-clinician" value={filters.clinician} onChange={(e) => set("clinician", e.target.value)}>
-            <option value="">{t("any")}</option>
-            {clinicians.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label={t("priority")} htmlFor="f-priority">
-          <Select id="f-priority" value={filters.priority} onChange={(e) => set("priority", e.target.value)}>
-            <option value="">{t("any")}</option>
-            {PRIORITIES.map((v) => (
-              <option key={v} value={v}>
-                {tEnum(`priority.${v}`)}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label={t("status")} htmlFor="f-status">
-          <Select id="f-status" value={filters.status} onChange={(e) => set("status", e.target.value === "active" ? "" : e.target.value)}>
-            {STATUSES.map((v) => (
-              <option key={v} value={v}>
-                {v === "all" ? t("allStatuses") : tEnum(`status.${v}`)}
-              </option>
-            ))}
-          </Select>
-        </Field>
-      </div>
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
-        <div className="flex items-center gap-2">
-          <label htmlFor="f-sort" className="text-xs font-semibold uppercase tracking-wide text-bluegray">
-            {t("sort")}
-          </label>
-          <Select id="f-sort" value={filters.sort} onChange={(e) => set("sort", e.target.value === "priority" ? "" : e.target.value)} className="w-auto py-1.5">
-            {SORTS.map((v) => (
-              <option key={v} value={v}>
-                {t(`sortBy.${v}`)}
-              </option>
-            ))}
-          </Select>
-        </div>
-        {active > 0 ? (
-          <button type="button" onClick={() => start(() => router.replace(pathname))} className="font-medium text-steel hover:underline">
-            {t("clear", { count: active })}
-          </button>
-        ) : null}
-      </div>
+    <div className="flex flex-wrap items-center gap-2 px-5 py-3" aria-busy={pending}>
+      <label className="relative flex items-center">
+        <Search className="pointer-events-none absolute start-2.5 h-3.5 w-3.5 text-bluegray" aria-hidden />
+        <span className="sr-only">{t("search")}</span>
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("searchPlaceholder")} className={cn(control, "w-56 ps-8")} />
+      </label>
+      {select("f-alert", t("alert"), filters.alert, "alert", ALERT_FILTERS.map((a) => [a, a === "needs_attention" ? t("needsAttention") : tFlags(a)]), t("alertAny"))}
+      {select("f-phq", t("phqSeverity"), filters.phqSeverity, "phq", PHQ_SEVERITIES.map((v) => [v, tEnum(`severity.${v}`)]), t("phqAny"))}
+      {select("f-gad", t("gadSeverity"), filters.gadSeverity, "gad", GAD_SEVERITIES.map((v) => [v, tEnum(`severity.${v}`)]), t("gadAny"))}
+      {select("f-clinician", t("clinician"), filters.clinician, "clinician", clinicians.map((c) => [c, c]), t("clinicianAny"))}
+      {select("f-priority", t("priority"), filters.priority, "priority", PRIORITIES.map((v) => [v, tEnum(`priority.${v}`)]), t("priorityAny"))}
+      <label className="flex items-center gap-1.5">
+        <span className="sr-only">{t("status")}</span>
+        <select aria-label={t("status")} value={filters.status} onChange={(e) => set("status", e.target.value === "active" ? "" : e.target.value)} className={cn(control, "appearance-none pe-7", filters.status !== "active" && "border-indigo/40 bg-indigo/5 font-medium")}>
+          {STATUS_FILTERS.map((v) => (
+            <option key={v} value={v}>
+              {v === "all" ? t("allStatuses") : tEnum(`status.${v}`)}
+            </option>
+          ))}
+        </select>
+      </label>
+      {active > 0 ? (
+        <button type="button" onClick={() => start(() => router.replace(pathname))} className="inline-flex h-9 items-center gap-1 rounded-control px-2.5 text-xs font-medium text-steel hover:bg-surface-soft">
+          <X className="h-3.5 w-3.5" aria-hidden />
+          {t("clear", { count: active })}
+        </button>
+      ) : null}
     </div>
   );
 }
