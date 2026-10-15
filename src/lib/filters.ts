@@ -2,18 +2,7 @@ import type { CaseloadRow } from "@/db/queries";
 import type { Flag, Severity, Trend } from "@/lib/metrics";
 import { splitNames } from "@/lib/import/normalize";
 
-export const ALERT_FILTERS = [
-  "needs_attention",
-  "assessment_overdue",
-  "assessment_due_soon",
-  "attendance_concern",
-  "worsening",
-  "severe",
-  "no_scores",
-  "confirm_active",
-  "minimal_scores",
-  "high_priority",
-] as const;
+export const ALERT_FILTERS = ["needs_attention", "worsening", "no_score", "no_session", "no_baseline"] as const;
 export type AlertFilter = (typeof ALERT_FILTERS)[number];
 
 const SEVERITIES: Severity[] = ["minimal", "mild", "moderate", "moderately_severe", "severe"];
@@ -34,6 +23,8 @@ export type CaseloadFilters = {
   alert: AlertFilter | "";
   clinician: string;
   priority: (typeof PRIORITIES)[number] | "";
+  /** Not exposed as a control; reachable from the "Graduation candidates" KPI. */
+  graduation: boolean;
   sort: SortKey;
   dir: SortDir;
 };
@@ -64,6 +55,7 @@ export function parseFilters(params: Record<string, string | string[] | undefine
     alert: oneOf(str(params.alert), ALERT_FILTERS, ""),
     clinician: str(params.clinician),
     priority: oneOf(str(params.priority), PRIORITIES, ""),
+    graduation: str(params.graduation) === "1",
     sort,
     dir,
   };
@@ -80,6 +72,7 @@ export function filtersToQuery(f: CaseloadFilters): URLSearchParams {
   if (f.alert) p.set("alert", f.alert);
   if (f.clinician) p.set("clinician", f.clinician);
   if (f.priority) p.set("priority", f.priority);
+  if (f.graduation) p.set("graduation", "1");
   return p;
 }
 
@@ -90,6 +83,7 @@ export function applyFilters(rows: CaseloadRow[], f: CaseloadFilters): CaseloadR
     if (f.phqSeverity && derived.phq.severity !== f.phqSeverity) return false;
     if (f.gadSeverity && derived.gad.severity !== f.gadSeverity) return false;
     if (f.trend && derived.trend !== f.trend) return false;
+    if (f.graduation && !derived.graduationCandidate) return false;
     if (f.priority && patient.followUpPriority !== f.priority) return false;
     if (f.alert === "needs_attention" ? !derived.needsAttention : f.alert && !derived.flags.includes(f.alert as Flag)) return false;
     if (f.clinician) {

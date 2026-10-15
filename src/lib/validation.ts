@@ -94,8 +94,6 @@ export const settingsSchema = z.object({
   phqChangeThreshold: z.coerce.number().int().min(1).max(27),
   gadChangeThreshold: z.coerce.number().int().min(1).max(21),
   checkIntervalMonths: z.coerce.number().int().min(1).max(12),
-  dueSoonDays: z.coerce.number().int().min(0).max(60),
-  confirmActiveDays: z.coerce.number().int().min(1).max(365),
   attendanceConcernDays: z.coerce.number().int().min(1).max(365),
 });
 

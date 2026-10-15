@@ -3,9 +3,9 @@
 Care-coordination tracker for the Alkalma **Horizon** Anxiety & Depression programme (Al Falah and Al Bateen). Built for Care Coordinators and Case Management: open the dashboard and immediately see who needs a call, a screening or a clinician review.
 
 - **PHQ-9 / GAD-7 monthly tracking** – every screening is kept; delta and trend always compare baseline → latest.
-- **Alerts** – assessment overdue (no score in the last month, re-raised every month), attendance concern (no session in the last month), worsening, severe, no scores, confirm still active, minimal scores (discuss graduation).
+- **Four rules** (only active patients): **Worsening** (baseline → latest rose ≥ threshold on either scale), **No score > 1 month** (re-raised every interval), **No session > 1 month**, **No baseline** (no PHQ-9/GAD-7 yet). Priority = Worsening 40 · No score 30 · No session 30 · No baseline 20, +20 for manual High follow-up priority, ties to the longest overdue. Severity, "Improving" and "Graduation candidates" (both scales < 5) are shown as information, not alerts.
 - **Severity per scale** – PHQ-9 0–4 minimal · 5–9 mild · 10–14 moderate · 15–19 moderately severe · 20+ severe. GAD-7 0–4 minimal · 5–9 mild · 10–14 moderate · 15+ severe. "Severe range" = either scale ≥15. No tiers.
-- **Configurable in Settings** – clinicians catalogue (name, specialty, center), diagnosis and care-plan pick-lists (catalogue-only in the patient form), change thresholds (default PHQ ≥5, GAD ≥4), screening interval, due-soon window, confirm-active and attendance windows.
+- **Configurable in Settings** – clinicians catalogue (name, specialty, center), diagnosis and care-plan pick-lists (catalogue-only in the patient form), change thresholds (default PHQ ≥5, GAD ≥4), screening interval and no-session window.
 - **Trilingual UI** – English, Spanish, Arabic (RTL).
 - **Export** – CSV / Excel of the filtered caseload with derived columns.
 

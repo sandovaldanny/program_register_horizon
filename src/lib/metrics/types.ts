@@ -6,29 +6,24 @@ export type ScaleTrend = "improving" | "stable" | "worsening";
 
 export type Trend = ScaleTrend | "mixed" | "first_score";
 
-export type AssessmentStatus = "no_scores" | "ok" | "due_soon" | "overdue" | "confirm_active";
+export type AssessmentStatus = "no_scores" | "ok" | "overdue";
 
 export type AttendanceStatus = "ok" | "concern" | "unknown";
 
-export type Flag =
-  | "high_priority"
-  | "worsening"
-  | "severe"
-  | "assessment_overdue"
-  | "assessment_due_soon"
-  | "confirm_active"
-  | "attendance_concern"
-  | "no_scores"
-  | "minimal_scores"
-  | "care_plan_missing";
+/**
+ * The four care-coordination rules:
+ * - worsening: baseline → latest rose by the configured threshold on either scale
+ * - no_score: more than one interval (default 1 month) since the last PHQ-9 / GAD-7
+ * - no_session: more than N days (default 30) since the last session
+ * - no_baseline: enrolled patient with no PHQ-9 / GAD-7 at all
+ */
+export type Flag = "worsening" | "no_score" | "no_session" | "no_baseline";
 
 /** Subset of the settings row the metrics need. Pure, DB-agnostic. */
 export type MetricSettings = {
   phqChangeThreshold: number;
   gadChangeThreshold: number;
   checkIntervalMonths: number;
-  dueSoonDays: number;
-  confirmActiveDays: number;
   attendanceConcernDays: number;
 };
 
@@ -36,8 +31,6 @@ export const DEFAULT_METRIC_SETTINGS: MetricSettings = {
   phqChangeThreshold: 5,
   gadChangeThreshold: 4,
   checkIntervalMonths: 1,
-  dueSoonDays: 7,
-  confirmActiveDays: 60,
   attendanceConcernDays: 30,
 };
 
@@ -57,7 +50,6 @@ export type PatientInput = {
   status: "active" | "inactive" | "graduated" | "transferred";
   followUpPriority: "routine" | "low" | "mid" | "high";
   lastSessionDate: string | null;
-  carePlan: string | null;
 };
 
 export type ScaleSummary = {
@@ -77,6 +69,8 @@ export type PatientDerived = {
   maxSeverity: Severity | null;
   /** True when PHQ-9 ≥ 15 (moderately severe or severe) or GAD-7 ≥ 15 (severe). */
   severeRange: boolean;
+  /** Latest PHQ-9 and GAD-7 both under 5: candidate for graduation. */
+  graduationCandidate: boolean;
   trend: Trend | null;
   lastScoreDate: string | null;
   nextDueDate: string | null;
@@ -86,7 +80,6 @@ export type PatientDerived = {
   attendanceStatus: AttendanceStatus;
   daysSinceSession: number | null;
   flags: Flag[];
-  /** True when at least one actionable flag is set (see ACTIONABLE_FLAGS). */
   needsAttention: boolean;
   priorityScore: number;
 };

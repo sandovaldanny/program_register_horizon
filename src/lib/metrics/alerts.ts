@@ -6,7 +6,7 @@ export const toIsoDate = (d: Date): string => formatISO(d, { representation: "da
 /**
  * Monthly screening cadence. `nextDue = lastScoreDate + checkIntervalMonths`.
  * Every time a new score is logged the clock restarts, so a patient with no
- * new score re-enters "overdue" one month after each screening.
+ * new score re-enters "overdue" one interval after each screening.
  */
 export function assessmentStatus(
   lastScoreDate: string | null,
@@ -17,14 +17,7 @@ export function assessmentStatus(
 
   const nextDue = addMonths(parseISO(lastScoreDate), settings.checkIntervalMonths);
   const daysPastDue = differenceInCalendarDays(today, nextDue);
-
-  let status: AssessmentStatus;
-  if (daysPastDue > settings.confirmActiveDays) status = "confirm_active";
-  else if (daysPastDue > 0) status = "overdue";
-  else if (daysPastDue >= -settings.dueSoonDays) status = "due_soon";
-  else status = "ok";
-
-  return { status, nextDue: toIsoDate(nextDue), daysPastDue };
+  return { status: daysPastDue > 0 ? "overdue" : "ok", nextDue: toIsoDate(nextDue), daysPastDue };
 }
 
 export function attendanceStatus(

@@ -24,8 +24,6 @@ export function metricSettings(s: Awaited<ReturnType<typeof ensureSettings>>): M
     phqChangeThreshold: s.phqChangeThreshold,
     gadChangeThreshold: s.gadChangeThreshold,
     checkIntervalMonths: s.checkIntervalMonths,
-    dueSoonDays: s.dueSoonDays,
-    confirmActiveDays: s.confirmActiveDays,
     attendanceConcernDays: s.attendanceConcernDays,
   };
 }

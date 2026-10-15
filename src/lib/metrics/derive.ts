@@ -1,10 +1,10 @@
 import { assessmentStatus, attendanceStatus } from "./alerts";
-import { ACTIONABLE_FLAGS, computeFlags, priorityScore } from "./flags";
+import { computeFlags, priorityScore } from "./flags";
 import { isSevereRange, maxSeverity } from "./severity";
 import { combinedTrend, summarizeScale } from "./trend";
-import type { AssessmentPoint, MetricSettings, PatientDerived, PatientInput } from "./types";
+import type { AssessmentPoint, Flag, MetricSettings, PatientDerived, PatientInput } from "./types";
 
-/** Single entry point: everything the dashboard, caseload, detail page and export need. */
+/** Single entry point: everything the dashboard, detail page and export need. */
 export function derivePatient(
   patient: PatientInput,
   assessments: AssessmentPoint[],
@@ -16,7 +16,6 @@ export function derivePatient(
 
   const latestPhq = phq.latest?.score ?? null;
   const latestGad = gad.latest?.score ?? null;
-  const severeRange = isSevereRange(latestPhq, latestGad);
   const trend = combinedTrend(phq.trend, gad.trend, assessments.length > 0);
 
   const lastScoreDate =
@@ -30,19 +29,19 @@ export function derivePatient(
 
   const flags = computeFlags({
     patient,
-    severeRange,
     trend,
     assessmentStatus: assessment.status,
     attendanceStatus: attendance.status,
-    latestPhq,
-    latestGad,
   });
+
+  const latest = [latestPhq, latestGad].filter((v): v is number => v !== null);
 
   return {
     phq,
     gad,
     maxSeverity: maxSeverity(phq.severity, gad.severity),
-    severeRange,
+    severeRange: isSevereRange(latestPhq, latestGad),
+    graduationCandidate: patient.status === "active" && latest.length > 0 && latest.every((v) => v < 5),
     trend,
     lastScoreDate,
     nextDueDate: assessment.nextDue,
@@ -51,8 +50,8 @@ export function derivePatient(
     attendanceStatus: attendance.status,
     daysSinceSession: attendance.daysSince,
     flags,
-    needsAttention: flags.some((f) => ACTIONABLE_FLAGS.includes(f)),
-    priorityScore: priorityScore(flags, assessment.daysPastDue),
+    needsAttention: flags.length > 0,
+    priorityScore: priorityScore(flags, assessment.daysPastDue, patient.followUpPriority),
   };
 }
 
@@ -60,32 +59,28 @@ export type CaseloadKpis = {
   total: number;
   active: number;
   needsAttention: number;
-  overdue: number;
-  dueSoon: number;
-  attendanceConcern: number;
   worsening: number;
+  noScore: number;
+  noSession: number;
+  noBaseline: number;
   improving: number;
-  severe: number;
-  noScores: number;
-  minimal: number;
+  graduationCandidates: number;
 };
 
 export function summarizeCaseload(
   rows: Array<{ status: PatientInput["status"]; derived: PatientDerived }>,
 ): CaseloadKpis {
   const active = rows.filter((r) => r.status === "active");
-  const has = (flag: string) => active.filter((r) => r.derived.flags.includes(flag as never)).length;
+  const has = (flag: Flag) => active.filter((r) => r.derived.flags.includes(flag)).length;
   return {
     total: rows.length,
     active: active.length,
     needsAttention: active.filter((r) => r.derived.needsAttention).length,
-    overdue: has("assessment_overdue"),
-    dueSoon: has("assessment_due_soon"),
-    attendanceConcern: has("attendance_concern"),
     worsening: has("worsening"),
+    noScore: has("no_score"),
+    noSession: has("no_session"),
+    noBaseline: has("no_baseline"),
     improving: active.filter((r) => r.derived.trend === "improving").length,
-    severe: has("severe"),
-    noScores: has("no_scores"),
-    minimal: has("minimal_scores"),
+    graduationCandidates: active.filter((r) => r.derived.graduationCandidate).length,
   };
 }

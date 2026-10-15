@@ -1,18 +1,12 @@
 import { useTranslations } from "next-intl";
-import { Badge } from "@/components/Badge";
+import { Badge, type Tone } from "@/components/Badge";
 import type { Flag } from "@/lib/metrics";
 
-const FLAG_TONE: Record<Flag, "danger" | "warn" | "info" | "neutral"> = {
-  high_priority: "danger",
+const FLAG_TONE: Record<Flag, Tone> = {
   worsening: "danger",
-  severe: "danger",
-  assessment_overdue: "warn",
-  confirm_active: "warn",
-  attendance_concern: "warn",
-  assessment_due_soon: "info",
-  no_scores: "info",
-  minimal_scores: "neutral",
-  care_plan_missing: "neutral",
+  no_score: "warn",
+  no_session: "warn",
+  no_baseline: "info",
 };
 
 export function FlagChips({ flags, max = 4 }: { flags: Flag[]; max?: number }) {

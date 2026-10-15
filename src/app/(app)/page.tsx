@@ -1,17 +1,5 @@
 import Link from "next/link";
-import {
-  AlertTriangle,
-  Bell,
-  CalendarClock,
-  CalendarX,
-  ClipboardList,
-  Download,
-  GraduationCap,
-  TrendingDown,
-  TrendingUp,
-  UserX,
-  Users,
-} from "lucide-react";
+import { Bell, CalendarX, ClipboardList, Download, GraduationCap, TrendingDown, TrendingUp, UserX, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { CaseloadFilters } from "@/components/CaseloadFilters";
 import { KpiTile } from "@/components/KpiTile";
@@ -45,21 +33,15 @@ export default async function DashboardPage({ searchParams }: PageProps<"/">) {
         </Link>
       </header>
 
-      <section aria-label={t("kpi.sectionLabel")} className="flex flex-col gap-3">
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+      <section aria-label={t("kpi.sectionLabel")} className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <KpiTile icon={Users} label={t("kpi.active")} value={kpis.active} hint={t("kpi.ofTotal", { total: kpis.total })} tone="indigo" href="/" />
           <KpiTile icon={Bell} label={t("kpi.needsAttention")} value={kpis.needsAttention} tone="danger" highlight href="/?alert=needs_attention" />
-          <KpiTile icon={CalendarX} label={t("kpi.overdue")} value={kpis.overdue} tone="amber" href="/?alert=assessment_overdue" />
-          <KpiTile icon={UserX} label={t("kpi.attendance")} value={kpis.attendanceConcern} tone="amber" href="/?alert=attendance_concern" />
           <KpiTile icon={TrendingUp} label={t("kpi.worsening")} value={kpis.worsening} tone="danger" href="/?alert=worsening" />
-        </div>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
-          <KpiTile icon={AlertTriangle} label={t("kpi.severe")} value={kpis.severe} hint={t("kpi.severeHint")} tone="danger" href="/?alert=severe" />
-          <KpiTile icon={CalendarClock} label={t("kpi.dueSoon")} value={kpis.dueSoon} tone="steel" href="/?alert=assessment_due_soon" />
-          <KpiTile icon={ClipboardList} label={t("kpi.noScores")} value={kpis.noScores} tone="steel" href="/?alert=no_scores" />
-          <KpiTile icon={GraduationCap} label={t("kpi.minimal")} value={kpis.minimal} tone="turquoise" href="/?alert=minimal_scores" />
+          <KpiTile icon={CalendarX} label={t("kpi.noScore")} value={kpis.noScore} tone="amber" href="/?alert=no_score" />
+          <KpiTile icon={UserX} label={t("kpi.noSession")} value={kpis.noSession} tone="amber" href="/?alert=no_session" />
+          <KpiTile icon={ClipboardList} label={t("kpi.noBaseline")} value={kpis.noBaseline} tone="steel" href="/?alert=no_baseline" />
           <KpiTile icon={TrendingDown} label={t("kpi.improving")} value={kpis.improving} tone="turquoise" href="/?trend=improving" />
-        </div>
+          <KpiTile icon={GraduationCap} label={t("kpi.graduation")} value={kpis.graduationCandidates} hint={t("kpi.graduationHint")} tone="turquoise" href="/?graduation=1" />
       </section>
 
       <section className="rounded-card border border-border bg-surface shadow-card">

@@ -45,15 +45,13 @@
       "active": "Pacientes activos",
       "ofTotal": "de {total} en el registro",
       "needsAttention": "Requieren atención",
-      "overdue": "Evaluación vencida",
-      "attendance": "Alerta de asistencia",
       "worsening": "Empeorando",
-      "severe": "Rango severo",
-      "dueSoon": "Vence esta semana",
-      "noScores": "Sin puntajes",
-      "minimal": "Mínimo · evaluar egreso",
+      "noScore": "Sin score > 1 mes",
+      "noSession": "Sin cita > 1 mes",
+      "noBaseline": "Sin baseline",
       "improving": "Mejorando",
-      "severeHint": "PHQ-9 ≥15 o GAD-7 ≥15",
+      "graduation": "Candidatos a egreso",
+      "graduationHint": "PHQ-9 y GAD-7 ambos < 5",
       "sectionLabel": "Indicadores de seguimiento"
     },
     "table": {
@@ -74,14 +72,14 @@
     "yearsShort": "a",
     "scoreHint": "baseline → último (Δ)",
     "priorityHelpTitle": "Cómo se calcula la prioridad",
-    "priorityHelp": "Suma de los pesos de las alertas activas:\nAlta prioridad 40 · Empeorando 30 · Rango severo 20 · Evaluación vencida 15 · Alerta de asistencia 15 · Confirmar si sigue activo 10 · Sin puntajes 8 · Vence pronto 5 · Puntajes mínimos 3 · Sin plan de cuidado 2.\nEn empate, gana el más vencido.",
+    "priorityHelp": "Suma de las reglas activas: Empeorando 40 · Sin score > 1 mes 30 · Sin cita > 1 mes 30 · Sin baseline 20.\nPrioridad manual 'Alta' suma 20. En empate, gana el más vencido.",
     "priorityHelpLabel": "Cómo se calcula la prioridad"
   },
   "filters": {
     "search": "Buscar",
     "searchPlaceholder": "MRN, nombre, diagnóstico, clínico",
     "alert": "Alerta",
-    "needsAttention": "Requiere atención (cualquiera)",
+    "needsAttention": "Requiere atención (cualquier regla)",
     "clinician": "Clínico",
     "priority": "Prioridad de seguimiento",
     "status": "Estado",
@@ -97,16 +95,10 @@
     "priorityAny": "Cualquier prioridad"
   },
   "flags": {
-    "high_priority": "Alta prioridad",
     "worsening": "Empeorando",
-    "severe": "Severo",
-    "assessment_overdue": "Evaluación vencida",
-    "assessment_due_soon": "Vence pronto",
-    "confirm_active": "Confirmar si sigue activo",
-    "attendance_concern": "Alerta de asistencia",
-    "no_scores": "Sin puntajes",
-    "minimal_scores": "Puntajes mínimos",
-    "care_plan_missing": "Sin plan de cuidado"
+    "no_score": "Sin score > 1 mes",
+    "no_session": "Sin cita > 1 mes",
+    "no_baseline": "Sin baseline"
   },
   "enums": {
     "trend": {
@@ -152,9 +144,7 @@
     "assessmentStatus": {
       "no_scores": "Sin puntajes",
       "ok": "Al día",
-      "due_soon": "Vence pronto",
-      "overdue": "Vencida",
-      "confirm_active": "Confirmar si sigue activo"
+      "overdue": "Vencido"
     },
     "attendanceStatus": {
       "ok": "Asistiendo",
@@ -288,11 +278,10 @@
       "gad": "Cambio GAD-7 (puntos)"
     },
     "cadence": {
-      "title": "Cadencia de tamizaje",
+      "title": "Reglas de seguimiento",
+      "hint": "Cuándo se activan 'Sin score' y 'Sin cita'.",
       "interval": "Meses entre evaluaciones PHQ-9 / GAD-7",
-      "dueSoon": "Ventana \"vence pronto\" (días antes)",
-      "confirmActive": "Días vencidos antes de \"confirmar si sigue activo\"",
-      "attendance": "Días desde la última sesión antes de \"alerta de asistencia\""
+      "attendance": "Días desde la última cita para 'Sin cita'"
     },
     "saved": "Configuración guardada.",
     "clinicians": {

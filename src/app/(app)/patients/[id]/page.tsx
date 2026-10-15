@@ -64,7 +64,7 @@ export default async function PatientDetailPage({ params }: PageProps<"/patients
         <Stat label={t("summary.trend")}>
           {derived.trend ? <Badge tone={trendTone(derived.trend)}>{tEnum(`trend.${derived.trend}`)}</Badge> : "—"}
         </Stat>
-        <Stat label={t("summary.nextDue")} tone={derived.assessmentStatus === "overdue" || derived.assessmentStatus === "confirm_active" ? "danger" : derived.assessmentStatus === "due_soon" ? "warn" : undefined}>
+        <Stat label={t("summary.nextDue")} tone={derived.assessmentStatus === "overdue" ? "danger" : undefined}>
           <span className="ltr-data">{date(derived.nextDueDate)}</span>
           <span className="block text-xs font-normal text-bluegray">{tEnum(`assessmentStatus.${derived.assessmentStatus}`)}</span>
         </Stat>

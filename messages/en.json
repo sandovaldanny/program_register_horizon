@@ -45,15 +45,13 @@
       "active": "Active patients",
       "ofTotal": "of {total} on register",
       "needsAttention": "Needs attention",
-      "overdue": "Assessment overdue",
-      "attendance": "Attendance concern",
       "worsening": "Worsening",
-      "severe": "Severe range",
-      "dueSoon": "Due this week",
-      "noScores": "No scores yet",
-      "minimal": "Minimal · discuss graduation",
+      "noScore": "No score > 1 month",
+      "noSession": "No session > 1 month",
+      "noBaseline": "No baseline",
       "improving": "Improving",
-      "severeHint": "PHQ-9 ≥15 or GAD-7 ≥15",
+      "graduation": "Graduation candidates",
+      "graduationHint": "PHQ-9 and GAD-7 both < 5",
       "sectionLabel": "Follow-up indicators"
     },
     "table": {
@@ -74,14 +72,14 @@
     "yearsShort": "y",
     "scoreHint": "baseline → latest (Δ)",
     "priorityHelpTitle": "How priority is calculated",
-    "priorityHelp": "Sum of the weights of the active flags:\nHigh priority 40 · Worsening 30 · Severe range 20 · Assessment overdue 15 · Attendance concern 15 · Confirm still active 10 · No scores 8 · Due soon 5 · Minimal scores 3 · No care plan 2.\nTies go to the longest overdue.",
+    "priorityHelp": "Sum of the active rules: Worsening 40 · No score > 1 month 30 · No session > 1 month 30 · No baseline 20.\nManual follow-up priority 'High' adds 20. Ties go to the longest overdue.",
     "priorityHelpLabel": "How priority is calculated"
   },
   "filters": {
     "search": "Search",
     "searchPlaceholder": "MRN, name, diagnosis, clinician",
     "alert": "Alert",
-    "needsAttention": "Needs attention (any)",
+    "needsAttention": "Needs attention (any rule)",
     "clinician": "Clinician",
     "priority": "Follow-up priority",
     "status": "Status",
@@ -97,16 +95,10 @@
     "priorityAny": "Any priority"
   },
   "flags": {
-    "high_priority": "High priority",
     "worsening": "Worsening",
-    "severe": "Severe",
-    "assessment_overdue": "Assessment overdue",
-    "assessment_due_soon": "Due soon",
-    "confirm_active": "Confirm still active",
-    "attendance_concern": "Attendance concern",
-    "no_scores": "No scores",
-    "minimal_scores": "Minimal scores",
-    "care_plan_missing": "No care plan"
+    "no_score": "No score > 1 month",
+    "no_session": "No session > 1 month",
+    "no_baseline": "No baseline"
   },
   "enums": {
     "trend": {
@@ -152,9 +144,7 @@
     "assessmentStatus": {
       "no_scores": "No scores yet",
       "ok": "On track",
-      "due_soon": "Due soon",
-      "overdue": "Overdue",
-      "confirm_active": "Confirm still active"
+      "overdue": "Overdue"
     },
     "attendanceStatus": {
       "ok": "Attending",
@@ -288,11 +278,10 @@
       "gad": "GAD-7 change (points)"
     },
     "cadence": {
-      "title": "Screening cadence",
+      "title": "Follow-up rules",
+      "hint": "When to raise 'No score' and 'No session'.",
       "interval": "Months between PHQ-9 / GAD-7 checks",
-      "dueSoon": "\"Due soon\" window (days before)",
-      "confirmActive": "Days past due before \"confirm still active\"",
-      "attendance": "Days since last session before \"attendance concern\""
+      "attendance": "Days since last session before 'No session'"
     },
     "saved": "Settings saved.",
     "clinicians": {

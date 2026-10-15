@@ -29,11 +29,10 @@ export function SettingsForm({ settings }: { settings: Settings }) {
         </div>
       </section>
       <section className="rounded-card border border-border bg-surface p-6 shadow-card">
-        <h2 className="mb-5 text-base font-semibold text-indigo">{t("cadence.title")}</h2>
+        <h2 className="text-base font-semibold text-indigo">{t("cadence.title")}</h2>
+        <p className="mb-5 mt-1 text-sm text-bluegray">{t("cadence.hint")}</p>
         <div className="grid gap-5 md:grid-cols-2">
           {num("checkIntervalMonths", t("cadence.interval"), 1, 12)}
-          {num("dueSoonDays", t("cadence.dueSoon"), 0, 60)}
-          {num("confirmActiveDays", t("cadence.confirmActive"), 1, 365)}
           {num("attendanceConcernDays", t("cadence.attendance"), 1, 365)}
         </div>
       </section>

@@ -102,7 +102,7 @@ export async function PatientTable({
                 <ScoreCell summary={derived.gad} label={derived.gad.severity ? tEnum(`severity.${derived.gad.severity}`) : null} />
               </td>
               <td className={cn(td, "whitespace-nowrap")}>
-                <span className={cn(derived.assessmentStatus === "overdue" || derived.assessmentStatus === "confirm_active" ? "font-semibold text-danger" : "")}>
+                <span className={cn(derived.assessmentStatus === "overdue" ? "font-semibold text-danger" : "")}>
                   {date(derived.lastScoreDate)}
                 </span>
               </td>

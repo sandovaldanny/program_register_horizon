@@ -162,8 +162,6 @@ export const settings = pgTable("settings", {
   phqChangeThreshold: integer("phq_change_threshold").notNull().default(5),
   gadChangeThreshold: integer("gad_change_threshold").notNull().default(4),
   checkIntervalMonths: integer("check_interval_months").notNull().default(1),
-  dueSoonDays: integer("due_soon_days").notNull().default(7),
-  confirmActiveDays: integer("confirm_active_days").notNull().default(60),
   attendanceConcernDays: integer("attendance_concern_days").notNull().default(30),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });

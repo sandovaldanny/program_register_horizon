@@ -13,26 +13,17 @@ describe("assessmentStatus", () => {
       daysPastDue: null,
     });
   });
-  it("well before next due → ok", () => {
+  it("before next due → ok, with the due date and negative days", () => {
     const r = assessmentStatus("2026-10-01", S, d("2026-10-15"));
     expect(r.status).toBe("ok");
     expect(r.nextDue).toBe("2026-11-01");
     expect(r.daysPastDue).toBe(-17);
   });
-  it("inside the due-soon window → due_soon (7 days before)", () => {
-    expect(assessmentStatus("2026-09-15", S, d("2026-10-08")).status).toBe("due_soon");
-    expect(assessmentStatus("2026-09-15", S, d("2026-10-07")).status).toBe("ok");
-  });
-  it("on the due date itself → due_soon, the day after → overdue", () => {
-    expect(assessmentStatus("2026-09-15", S, d("2026-10-15")).status).toBe("due_soon");
+  it("on the due date → ok, the day after → overdue", () => {
+    expect(assessmentStatus("2026-09-15", S, d("2026-10-15")).status).toBe("ok");
     const r = assessmentStatus("2026-09-15", S, d("2026-10-16"));
     expect(r.status).toBe("overdue");
     expect(r.daysPastDue).toBe(1);
-  });
-  it("more than confirmActiveDays past due → confirm_active", () => {
-    // next due = 2026-07-01; 60 days past due is still "overdue", 61 is "confirm_active"
-    expect(assessmentStatus("2026-06-01", S, d("2026-08-30")).status).toBe("overdue");
-    expect(assessmentStatus("2026-06-01", S, d("2026-08-31")).status).toBe("confirm_active");
   });
   it("re-raises every month: a new score restarts the clock", () => {
     expect(assessmentStatus("2026-08-01", S, d("2026-10-15")).status).toBe("overdue");

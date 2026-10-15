@@ -38,7 +38,7 @@ export function CaseloadFilters({ filters, clinicians }: { filters: Filters; cli
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q]);
 
-  const active = [filters.q, filters.alert, filters.phqSeverity, filters.gadSeverity, filters.clinician, filters.priority, filters.trend, filters.status !== "active" ? "s" : ""].filter(Boolean).length;
+  const active = [filters.q, filters.alert, filters.phqSeverity, filters.gadSeverity, filters.clinician, filters.priority, filters.trend, filters.graduation ? "g" : "", filters.status !== "active" ? "s" : ""].filter(Boolean).length;
 
   const select = (id: string, label: string, value: string, key: string, options: Array<[string, string]>, anyLabel = t("any")) => (
     <label className="flex items-center gap-1.5">
