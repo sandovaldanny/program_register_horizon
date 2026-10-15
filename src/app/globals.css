@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Alkalma brand tokens (Brand Guidelines V1.0, Sept 2024)
+   Indigo dominates (50%), Turquoise accents (25%), Blue Gray supports,
+   Azure White is the page background.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-indigo: #16455c;
+  --color-indigo-dark: #0e2e3d;
+  --color-indigo-darker: #07171f;
+  --color-indigo-light: #2a6582;
+  --color-turquoise: #70c8c3;
+  --color-turquoise-dark: #4fa8a3;
+  --color-turquoise-light: #a4ddda;
+  --color-bluegray: #8b9ea5;
+  --color-azure: #f7fbfc;
+  --color-steel: #007493;
+  --color-lime: #bade8c;
+  --color-pink: #efb6be;
+  --color-amber: #e9a941;
+
+  /* soft surfaces derived from the palette */
+  --color-surface: #ffffff;
+  --color-surface-soft: #eef5f8;
+  --color-border: #dce5ea;
+
+  /* semantic status colours (kept inside the palette) */
+  --color-ok: #4fa8a3;
+  --color-warn: #e9a941;
+  --color-danger: #c96a78;
+  --color-danger-soft: #efb6be;
+
+  --font-sans: var(--font-montserrat), "Helvetica Neue", Arial, sans-serif;
+  --font-arabic: var(--font-tajawal), "Helvetica Neue", Arial, sans-serif;
+
+  --radius-card: 16px;
+  --radius-control: 12px;
+
+  --shadow-card: 0 2px 12px rgba(22, 69, 92, 0.06);
+  --shadow-card-hover: 0 6px 24px rgba(22, 69, 92, 0.1);
+
+  --background-image-brand: linear-gradient(135deg, #16455c 0%, #007493 100%);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-azure);
+  color: var(--color-indigo);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+:lang(ar) body,
+html[lang="ar"] body {
+  font-family: var(--font-arabic);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* numbers, MRNs and dates always read left-to-right, even in Arabic */
+.ltr-data {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+/* calm focus ring in brand colour */
+:focus-visible {
+  outline: 2px solid var(--color-turquoise);
+  outline-offset: 2px;
+}
