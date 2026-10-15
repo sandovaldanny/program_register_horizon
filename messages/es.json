@@ -1,6 +1,18 @@
 {
   "common": {
-    "appName": "Horizon Care Tracker"
+    "appName": "Horizon Care Tracker",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Volver",
+    "none": "—",
+    "yes": "Sí",
+    "no": "No",
+    "unknown": "Desconocido",
+    "saving": "Guardando…",
+    "estimated": "Fecha estimada en la importación — por favor confirmar",
+    "estimatedShort": "estimada"
   },
   "auth": {
     "title": "Horizon Care Tracker",
@@ -24,5 +36,267 @@
     "all": "Todos los centros",
     "al_falah": "Al Falah",
     "al_bateen": "Al Bateen"
+  },
+  "dashboard": {
+    "title": "Caseload de hoy",
+    "subtitle": "Quién necesita una llamada, un tamizaje o revisión clínica — ordenado por urgencia.",
+    "addPatient": "Nuevo paciente",
+    "kpi": {
+      "active": "Pacientes activos",
+      "ofTotal": "de {total} en el registro",
+      "needsAttention": "Requieren atención",
+      "overdue": "Evaluación vencida",
+      "attendance": "Alerta de asistencia",
+      "worsening": "Empeorando",
+      "severe": "Tier 3 · severo",
+      "dueSoon": "Vence esta semana",
+      "noScores": "Sin puntajes",
+      "minimal": "Mínimo · evaluar egreso",
+      "improving": "Mejorando"
+    },
+    "worklist": {
+      "title": "Requieren atención",
+      "subtitle": "Top 25 por prioridad. Rojo = actuar ahora, ámbar = vencido o por revisar.",
+      "viewAll": "Ver los {count}",
+      "empty": "Nadie requiere atención en este momento."
+    }
+  },
+  "patients": {
+    "title": "Pacientes",
+    "count": "{shown} de {total} pacientes",
+    "exportCsv": "Exportar CSV",
+    "exportXlsx": "Exportar Excel",
+    "addPatient": "Nuevo paciente",
+    "empty": "Ningún paciente coincide con estos filtros."
+  },
+  "table": {
+    "patient": "Paciente",
+    "center": "Centro",
+    "tier": "Tier",
+    "phq": "PHQ-9",
+    "gad": "GAD-7",
+    "trend": "Tendencia",
+    "lastScore": "Último puntaje",
+    "lastSession": "Última sesión",
+    "flags": "Alertas",
+    "priority": "Prioridad",
+    "yearsShort": "a"
+  },
+  "filters": {
+    "search": "Buscar",
+    "searchPlaceholder": "MRN, nombre, diagnóstico, clínico",
+    "alert": "Alerta",
+    "needsAttention": "Requiere atención (cualquiera)",
+    "tier": "Tier",
+    "noTier": "Sin puntajes",
+    "trend": "Tendencia",
+    "clinician": "Clínico",
+    "priority": "Prioridad de seguimiento",
+    "status": "Estado",
+    "allStatuses": "Todos los estados",
+    "any": "Cualquiera",
+    "sort": "Ordenar por",
+    "sortBy": {
+      "priority": "Prioridad",
+      "tier": "Tier",
+      "last_score": "Fecha último puntaje",
+      "mrn": "MRN"
+    },
+    "clear": "Limpiar {count, plural, one {# filtro} other {# filtros}}"
+  },
+  "flags": {
+    "high_priority": "Alta prioridad",
+    "worsening": "Empeorando",
+    "severe": "Severo",
+    "assessment_overdue": "Evaluación vencida",
+    "assessment_due_soon": "Vence pronto",
+    "confirm_active": "Confirmar si sigue activo",
+    "attendance_concern": "Alerta de asistencia",
+    "no_scores": "Sin puntajes",
+    "minimal_scores": "Puntajes mínimos",
+    "care_plan_missing": "Sin plan de cuidado"
+  },
+  "enums": {
+    "tier": {
+      "tier3": "Tier 3 · severo",
+      "tier2": "Tier 2 · moderado",
+      "tier1": "Tier 1 · leve",
+      "minimal": "Mínimo"
+    },
+    "trend": {
+      "improving": "Mejorando",
+      "stable": "Estable",
+      "worsening": "Empeorando",
+      "mixed": "Mixto",
+      "first_score": "Primer puntaje"
+    },
+    "severity": {
+      "minimal": "Mínima",
+      "mild": "Leve",
+      "moderate": "Moderada",
+      "moderately_severe": "Moderadamente severa",
+      "severe": "Severa"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "graduated": "Egresado",
+      "transferred": "Transferido"
+    },
+    "priority": {
+      "routine": "Rutina",
+      "low": "Baja",
+      "mid": "Media",
+      "high": "Alta"
+    },
+    "gender": {
+      "male": "Masculino",
+      "female": "Femenino",
+      "unknown": "Desconocido"
+    },
+    "medication": {
+      "yes": "Sí",
+      "no": "No",
+      "unknown": "Desconocido"
+    },
+    "attendancePattern": {
+      "consistent": "Consistente",
+      "irregular": "Irregular",
+      "not_attending": "No asiste",
+      "too_early": "Muy pronto para saber"
+    },
+    "assessmentStatus": {
+      "no_scores": "Sin puntajes",
+      "ok": "Al día",
+      "due_soon": "Vence pronto",
+      "overdue": "Vencida",
+      "confirm_active": "Confirmar si sigue activo"
+    },
+    "attendanceStatus": {
+      "ok": "Asistiendo",
+      "concern": "Alerta de asistencia",
+      "unknown": "Sin sesión registrada"
+    },
+    "scale": {
+      "phq9": "PHQ-9",
+      "gad7": "GAD-7"
+    },
+    "noteKind": {
+      "note": "Nota",
+      "action": "Acción",
+      "mdt": "MDT",
+      "import": "Importación"
+    }
+  },
+  "detail": {
+    "backToList": "Todos los pacientes",
+    "editPatient": "Editar paciente",
+    "summary": {
+      "tier": "Tier",
+      "trend": "Tendencia",
+      "nextDue": "Próxima evaluación",
+      "lastSession": "Última sesión",
+      "priorityScore": "Puntaje de prioridad"
+    },
+    "scores": {
+      "title": "PHQ-9 y GAD-7 en el tiempo",
+      "subtitle": "Se conservan todos los tamizajes. El delta siempre compara el baseline con el último puntaje.",
+      "baseline": "Baseline",
+      "latest": "Último",
+      "delta": "Delta",
+      "severity": "Severidad",
+      "history": "{count, plural, one {# tamizaje} other {# tamizajes}}",
+      "empty": "Aún no hay tamizajes. Registra el primer PHQ-9 / GAD-7 abajo.",
+      "legendEstimated": "Punto hueco = fecha estimada en la importación"
+    },
+    "addScore": {
+      "title": "Registrar tamizaje",
+      "scale": "Escala",
+      "score": "Puntaje",
+      "date": "Fecha",
+      "note": "Nota (opcional)",
+      "submit": "Guardar puntaje",
+      "range": "0–{max}"
+    },
+    "assessments": {
+      "title": "Todos los tamizajes",
+      "date": "Fecha",
+      "scale": "Escala",
+      "score": "Puntaje",
+      "severity": "Severidad",
+      "source": "Origen",
+      "actions": "",
+      "confirmDelete": "¿Eliminar este tamizaje?"
+    },
+    "notes": {
+      "title": "Notas y acciones",
+      "add": "Agregar nota",
+      "kind": "Tipo",
+      "body": "Nota",
+      "date": "Fecha",
+      "empty": "Sin notas todavía."
+    },
+    "info": {
+      "title": "Información del paciente",
+      "care": "Equipo y plan de cuidado",
+      "attendance": "Asistencia",
+      "followUp": "Seguimiento"
+    }
+  },
+  "form": {
+    "newTitle": "Nuevo paciente",
+    "editTitle": "Editar paciente",
+    "center": "Centro",
+    "mrn": "MRN",
+    "displayName": "Nombre / alias",
+    "age": "Edad",
+    "gender": "Género",
+    "status": "Estado",
+    "diagnosis": "Diagnóstico",
+    "carePlan": "Plan de cuidado",
+    "therapyProgress": "Progreso terapéutico",
+    "treatmentGoals": "Objetivos de tratamiento",
+    "psychiatrist": "Psiquiatra(s)",
+    "psychologist": "Psicólogo(s)",
+    "namesHint": "Separados por coma",
+    "medication": "Medicación",
+    "medicationAdherence": "Adherencia a medicación",
+    "sessionsCount": "Sesiones",
+    "attendancePct": "Asistencia %",
+    "attendancePattern": "Patrón de asistencia",
+    "lastSessionDate": "Fecha última sesión",
+    "reasonNotAttending": "Motivo si no asiste",
+    "isHorizonPatient": "Paciente Horizon",
+    "followUpPriority": "Prioridad de seguimiento",
+    "ccAction": "Acción CC",
+    "outcome": "Resultado",
+    "create": "Crear paciente",
+    "update": "Guardar cambios",
+    "errors": {
+      "mrnRequired": "El MRN es obligatorio.",
+      "mrnDuplicate": "Ya existe un paciente con este MRN en este centro.",
+      "invalid": "Revisa los campos marcados.",
+      "scoreRange": "El puntaje debe ser un entero entre 0 y {max}.",
+      "dateRequired": "La fecha es obligatoria.",
+      "dateFuture": "La fecha no puede ser futura."
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "subtitle": "Reglas clínicas para tendencia, alertas y prioridad. Los cambios aplican de inmediato para todos.",
+    "thresholds": {
+      "title": "Umbrales de cambio real",
+      "hint": "Un cambio menor a esto cuenta como Estable (diferencia mínima clínicamente importante).",
+      "phq": "Cambio PHQ-9 (puntos)",
+      "gad": "Cambio GAD-7 (puntos)"
+    },
+    "cadence": {
+      "title": "Cadencia de tamizaje",
+      "interval": "Meses entre evaluaciones PHQ-9 / GAD-7",
+      "dueSoon": "Ventana \"vence pronto\" (días antes)",
+      "confirmActive": "Días vencidos antes de \"confirmar si sigue activo\"",
+      "attendance": "Días desde la última sesión antes de \"alerta de asistencia\""
+    },
+    "saved": "Configuración guardada."
   }
 }

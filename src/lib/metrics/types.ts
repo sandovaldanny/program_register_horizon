@@ -85,5 +85,7 @@ export type PatientDerived = {
   attendanceStatus: AttendanceStatus;
   daysSinceSession: number | null;
   flags: Flag[];
+  /** True when at least one actionable flag is set (see ACTIONABLE_FLAGS). */
+  needsAttention: boolean;
   priorityScore: number;
 };

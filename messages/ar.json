@@ -1,6 +1,18 @@
 {
   "common": {
-    "appName": "متتبع رعاية هورايزن"
+    "appName": "متتبع رعاية هورايزن",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "back": "رجوع",
+    "none": "—",
+    "yes": "نعم",
+    "no": "لا",
+    "unknown": "غير معروف",
+    "saving": "جارٍ الحفظ…",
+    "estimated": "تاريخ مُقدَّر عند الاستيراد — يرجى التأكيد",
+    "estimatedShort": "مُقدَّر"
   },
   "auth": {
     "title": "متتبع رعاية هورايزن",
@@ -24,5 +36,267 @@
     "all": "جميع المراكز",
     "al_falah": "الفلاح",
     "al_bateen": "البطين"
+  },
+  "dashboard": {
+    "title": "حالات اليوم",
+    "subtitle": "من يحتاج اتصالاً أو فحصاً أو مراجعة طبية — مرتبة حسب الأولوية.",
+    "addPatient": "إضافة مريض",
+    "kpi": {
+      "active": "المرضى النشطون",
+      "ofTotal": "من أصل {total} في السجل",
+      "needsAttention": "بحاجة إلى متابعة",
+      "overdue": "تقييم متأخر",
+      "attendance": "قلق بشأن الحضور",
+      "worsening": "تدهور",
+      "severe": "المستوى 3 · شديد",
+      "dueSoon": "مستحق هذا الأسبوع",
+      "noScores": "بدون درجات بعد",
+      "minimal": "حد أدنى · مناقشة التخرج",
+      "improving": "تحسّن"
+    },
+    "worklist": {
+      "title": "بحاجة إلى متابعة",
+      "subtitle": "أعلى 25 حسب الأولوية. أحمر = تصرّف الآن، كهرماني = متأخر أو يحتاج مراجعة.",
+      "viewAll": "عرض الكل ({count})",
+      "empty": "لا توجد حالات تحتاج متابعة الآن."
+    }
+  },
+  "patients": {
+    "title": "المرضى",
+    "count": "{shown} من {total} مريضاً",
+    "exportCsv": "تصدير CSV",
+    "exportXlsx": "تصدير Excel",
+    "addPatient": "إضافة مريض",
+    "empty": "لا يوجد مرضى مطابقون لهذه المرشحات."
+  },
+  "table": {
+    "patient": "المريض",
+    "center": "المركز",
+    "tier": "المستوى",
+    "phq": "PHQ-9",
+    "gad": "GAD-7",
+    "trend": "الاتجاه",
+    "lastScore": "آخر درجة",
+    "lastSession": "آخر جلسة",
+    "flags": "التنبيهات",
+    "priority": "الأولوية",
+    "yearsShort": "سنة"
+  },
+  "filters": {
+    "search": "بحث",
+    "searchPlaceholder": "الرقم الطبي، الاسم، التشخيص، الطبيب",
+    "alert": "التنبيه",
+    "needsAttention": "بحاجة إلى متابعة (أي نوع)",
+    "tier": "المستوى",
+    "noTier": "بدون درجات",
+    "trend": "الاتجاه",
+    "clinician": "الطبيب / المعالج",
+    "priority": "أولوية المتابعة",
+    "status": "الحالة",
+    "allStatuses": "جميع الحالات",
+    "any": "الكل",
+    "sort": "ترتيب حسب",
+    "sortBy": {
+      "priority": "الأولوية",
+      "tier": "المستوى",
+      "last_score": "تاريخ آخر درجة",
+      "mrn": "الرقم الطبي"
+    },
+    "clear": "مسح {count, plural, one {مرشح واحد} other {# مرشحات}}"
+  },
+  "flags": {
+    "high_priority": "أولوية عالية",
+    "worsening": "تدهور",
+    "severe": "شديد",
+    "assessment_overdue": "تقييم متأخر",
+    "assessment_due_soon": "مستحق قريباً",
+    "confirm_active": "تأكيد استمرار النشاط",
+    "attendance_concern": "قلق بشأن الحضور",
+    "no_scores": "بدون درجات",
+    "minimal_scores": "درجات دنيا",
+    "care_plan_missing": "بدون خطة رعاية"
+  },
+  "enums": {
+    "tier": {
+      "tier3": "المستوى 3 · شديد",
+      "tier2": "المستوى 2 · متوسط",
+      "tier1": "المستوى 1 · خفيف",
+      "minimal": "حد أدنى"
+    },
+    "trend": {
+      "improving": "تحسّن",
+      "stable": "مستقر",
+      "worsening": "تدهور",
+      "mixed": "مختلط",
+      "first_score": "أول درجة"
+    },
+    "severity": {
+      "minimal": "حد أدنى",
+      "mild": "خفيف",
+      "moderate": "متوسط",
+      "moderately_severe": "متوسط إلى شديد",
+      "severe": "شديد"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "graduated": "متخرج",
+      "transferred": "محوَّل"
+    },
+    "priority": {
+      "routine": "روتيني",
+      "low": "منخفضة",
+      "mid": "متوسطة",
+      "high": "عالية"
+    },
+    "gender": {
+      "male": "ذكر",
+      "female": "أنثى",
+      "unknown": "غير معروف"
+    },
+    "medication": {
+      "yes": "نعم",
+      "no": "لا",
+      "unknown": "غير معروف"
+    },
+    "attendancePattern": {
+      "consistent": "منتظم",
+      "irregular": "غير منتظم",
+      "not_attending": "لا يحضر",
+      "too_early": "من المبكر الحكم"
+    },
+    "assessmentStatus": {
+      "no_scores": "بدون درجات بعد",
+      "ok": "على المسار",
+      "due_soon": "مستحق قريباً",
+      "overdue": "متأخر",
+      "confirm_active": "تأكيد استمرار النشاط"
+    },
+    "attendanceStatus": {
+      "ok": "يحضر",
+      "concern": "قلق بشأن الحضور",
+      "unknown": "لا توجد جلسة مسجلة"
+    },
+    "scale": {
+      "phq9": "PHQ-9",
+      "gad7": "GAD-7"
+    },
+    "noteKind": {
+      "note": "ملاحظة",
+      "action": "إجراء",
+      "mdt": "اجتماع الفريق",
+      "import": "استيراد"
+    }
+  },
+  "detail": {
+    "backToList": "جميع المرضى",
+    "editPatient": "تعديل المريض",
+    "summary": {
+      "tier": "المستوى",
+      "trend": "الاتجاه",
+      "nextDue": "التقييم القادم",
+      "lastSession": "آخر جلسة",
+      "priorityScore": "درجة الأولوية"
+    },
+    "scores": {
+      "title": "PHQ-9 و GAD-7 عبر الزمن",
+      "subtitle": "تُحفظ جميع الفحوصات. يقارن الفرق دائماً بين خط الأساس وآخر درجة.",
+      "baseline": "خط الأساس",
+      "latest": "الأحدث",
+      "delta": "الفرق",
+      "severity": "الشدة",
+      "history": "{count, plural, one {فحص واحد} other {# فحوصات}}",
+      "empty": "لا توجد فحوصات بعد. أضف أول PHQ-9 / GAD-7 أدناه.",
+      "legendEstimated": "نقطة مفرغة = تاريخ مُقدَّر عند الاستيراد"
+    },
+    "addScore": {
+      "title": "تسجيل فحص",
+      "scale": "المقياس",
+      "score": "الدرجة",
+      "date": "التاريخ",
+      "note": "ملاحظة (اختياري)",
+      "submit": "حفظ الدرجة",
+      "range": "0–{max}"
+    },
+    "assessments": {
+      "title": "جميع الفحوصات",
+      "date": "التاريخ",
+      "scale": "المقياس",
+      "score": "الدرجة",
+      "severity": "الشدة",
+      "source": "المصدر",
+      "actions": "",
+      "confirmDelete": "حذف هذا الفحص؟"
+    },
+    "notes": {
+      "title": "الملاحظات والإجراءات",
+      "add": "إضافة ملاحظة",
+      "kind": "النوع",
+      "body": "الملاحظة",
+      "date": "التاريخ",
+      "empty": "لا توجد ملاحظات بعد."
+    },
+    "info": {
+      "title": "معلومات المريض",
+      "care": "فريق وخطة الرعاية",
+      "attendance": "الحضور",
+      "followUp": "المتابعة"
+    }
+  },
+  "form": {
+    "newTitle": "مريض جديد",
+    "editTitle": "تعديل المريض",
+    "center": "المركز",
+    "mrn": "الرقم الطبي",
+    "displayName": "الاسم / الاسم المستعار",
+    "age": "العمر",
+    "gender": "الجنس",
+    "status": "الحالة",
+    "diagnosis": "التشخيص",
+    "carePlan": "خطة الرعاية",
+    "therapyProgress": "تقدم العلاج",
+    "treatmentGoals": "أهداف العلاج",
+    "psychiatrist": "الطبيب النفسي",
+    "psychologist": "الأخصائي النفسي",
+    "namesHint": "مفصولة بفواصل",
+    "medication": "الدواء",
+    "medicationAdherence": "الالتزام بالدواء",
+    "sessionsCount": "الجلسات",
+    "attendancePct": "نسبة الحضور %",
+    "attendancePattern": "نمط الحضور",
+    "lastSessionDate": "تاريخ آخر جلسة",
+    "reasonNotAttending": "سبب عدم الحضور",
+    "isHorizonPatient": "مريض هورايزن",
+    "followUpPriority": "أولوية المتابعة",
+    "ccAction": "إجراء منسق الرعاية",
+    "outcome": "النتيجة",
+    "create": "إنشاء المريض",
+    "update": "حفظ التغييرات",
+    "errors": {
+      "mrnRequired": "الرقم الطبي مطلوب.",
+      "mrnDuplicate": "يوجد مريض بهذا الرقم الطبي في هذا المركز.",
+      "invalid": "يرجى مراجعة الحقول المحددة.",
+      "scoreRange": "يجب أن تكون الدرجة عدداً صحيحاً بين 0 و {max}.",
+      "dateRequired": "التاريخ مطلوب.",
+      "dateFuture": "لا يمكن أن يكون التاريخ في المستقبل."
+    }
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "القواعد السريرية للاتجاه والتنبيهات والأولوية. تُطبّق التغييرات فوراً على الجميع.",
+    "thresholds": {
+      "title": "عتبات التغيير الحقيقي",
+      "hint": "أي تغيير أقل من هذا يُعدّ مستقراً (أقل فرق سريري مهم).",
+      "phq": "تغيير PHQ-9 (نقاط)",
+      "gad": "تغيير GAD-7 (نقاط)"
+    },
+    "cadence": {
+      "title": "وتيرة الفحص",
+      "interval": "الأشهر بين فحوصات PHQ-9 / GAD-7",
+      "dueSoon": "نافذة \"مستحق قريباً\" (أيام قبل الموعد)",
+      "confirmActive": "الأيام بعد الاستحقاق قبل \"تأكيد استمرار النشاط\"",
+      "attendance": "الأيام منذ آخر جلسة قبل \"قلق بشأن الحضور\""
+    },
+    "saved": "تم حفظ الإعدادات."
   }
 }

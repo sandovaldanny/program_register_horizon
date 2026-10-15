@@ -1,5 +1,5 @@
 import { assessmentStatus, attendanceStatus } from "./alerts";
-import { computeFlags, priorityScore } from "./flags";
+import { ACTIONABLE_FLAGS, computeFlags, priorityScore } from "./flags";
 import { tierFromScores } from "./severity";
 import { combinedTrend, summarizeScale } from "./trend";
 import type { AssessmentPoint, MetricSettings, PatientDerived, PatientInput } from "./types";
@@ -50,6 +50,7 @@ export function derivePatient(
     attendanceStatus: attendance.status,
     daysSinceSession: attendance.daysSince,
     flags,
+    needsAttention: flags.some((f) => ACTIONABLE_FLAGS.includes(f)),
     priorityScore: priorityScore(flags, assessment.daysPastDue),
   };
 }
@@ -75,7 +76,7 @@ export function summarizeCaseload(
   return {
     total: rows.length,
     active: active.length,
-    needsAttention: active.filter((r) => r.derived.priorityScore > 0).length,
+    needsAttention: active.filter((r) => r.derived.needsAttention).length,
     overdue: has("assessment_overdue"),
     dueSoon: has("assessment_due_soon"),
     attendanceConcern: has("attendance_concern"),

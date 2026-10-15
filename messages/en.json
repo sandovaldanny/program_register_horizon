@@ -1,6 +1,18 @@
 {
   "common": {
-    "appName": "Horizon Care Tracker"
+    "appName": "Horizon Care Tracker",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "none": "—",
+    "yes": "Yes",
+    "no": "No",
+    "unknown": "Unknown",
+    "saving": "Saving…",
+    "estimated": "Date estimated at import — please confirm",
+    "estimatedShort": "estimated"
   },
   "auth": {
     "title": "Horizon Care Tracker",
@@ -24,5 +36,267 @@
     "all": "All centers",
     "al_falah": "Al Falah",
     "al_bateen": "Al Bateen"
+  },
+  "dashboard": {
+    "title": "Today's caseload",
+    "subtitle": "Who needs a call, a screening or a clinician review — ranked by urgency.",
+    "addPatient": "Add patient",
+    "kpi": {
+      "active": "Active patients",
+      "ofTotal": "of {total} on register",
+      "needsAttention": "Needs attention",
+      "overdue": "Assessment overdue",
+      "attendance": "Attendance concern",
+      "worsening": "Worsening",
+      "severe": "Tier 3 · severe",
+      "dueSoon": "Due this week",
+      "noScores": "No scores yet",
+      "minimal": "Minimal · discuss graduation",
+      "improving": "Improving"
+    },
+    "worklist": {
+      "title": "Needs attention",
+      "subtitle": "Top 25 by priority. Red = act now, amber = overdue or needs a look.",
+      "viewAll": "View all {count}",
+      "empty": "Nothing needs attention right now."
+    }
+  },
+  "patients": {
+    "title": "Patients",
+    "count": "{shown} of {total} patients",
+    "exportCsv": "Export CSV",
+    "exportXlsx": "Export Excel",
+    "addPatient": "Add patient",
+    "empty": "No patients match these filters."
+  },
+  "table": {
+    "patient": "Patient",
+    "center": "Center",
+    "tier": "Tier",
+    "phq": "PHQ-9",
+    "gad": "GAD-7",
+    "trend": "Trend",
+    "lastScore": "Last score",
+    "lastSession": "Last session",
+    "flags": "Flags",
+    "priority": "Priority",
+    "yearsShort": "y"
+  },
+  "filters": {
+    "search": "Search",
+    "searchPlaceholder": "MRN, name, diagnosis, clinician",
+    "alert": "Alert",
+    "needsAttention": "Needs attention (any)",
+    "tier": "Tier",
+    "noTier": "No scores",
+    "trend": "Trend",
+    "clinician": "Clinician",
+    "priority": "Follow-up priority",
+    "status": "Status",
+    "allStatuses": "All statuses",
+    "any": "Any",
+    "sort": "Sort by",
+    "sortBy": {
+      "priority": "Priority",
+      "tier": "Tier",
+      "last_score": "Last score date",
+      "mrn": "MRN"
+    },
+    "clear": "Clear {count, plural, one {# filter} other {# filters}}"
+  },
+  "flags": {
+    "high_priority": "High priority",
+    "worsening": "Worsening",
+    "severe": "Severe",
+    "assessment_overdue": "Assessment overdue",
+    "assessment_due_soon": "Due soon",
+    "confirm_active": "Confirm still active",
+    "attendance_concern": "Attendance concern",
+    "no_scores": "No scores",
+    "minimal_scores": "Minimal scores",
+    "care_plan_missing": "No care plan"
+  },
+  "enums": {
+    "tier": {
+      "tier3": "Tier 3 · severe",
+      "tier2": "Tier 2 · moderate",
+      "tier1": "Tier 1 · mild",
+      "minimal": "Minimal"
+    },
+    "trend": {
+      "improving": "Improving",
+      "stable": "Stable",
+      "worsening": "Worsening",
+      "mixed": "Mixed",
+      "first_score": "First score"
+    },
+    "severity": {
+      "minimal": "Minimal",
+      "mild": "Mild",
+      "moderate": "Moderate",
+      "moderately_severe": "Moderately severe",
+      "severe": "Severe"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "graduated": "Graduated",
+      "transferred": "Transferred"
+    },
+    "priority": {
+      "routine": "Routine",
+      "low": "Low",
+      "mid": "Mid",
+      "high": "High"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female",
+      "unknown": "Unknown"
+    },
+    "medication": {
+      "yes": "Yes",
+      "no": "No",
+      "unknown": "Unknown"
+    },
+    "attendancePattern": {
+      "consistent": "Consistent",
+      "irregular": "Irregular",
+      "not_attending": "Not attending",
+      "too_early": "Too early to tell"
+    },
+    "assessmentStatus": {
+      "no_scores": "No scores yet",
+      "ok": "On track",
+      "due_soon": "Due soon",
+      "overdue": "Overdue",
+      "confirm_active": "Confirm still active"
+    },
+    "attendanceStatus": {
+      "ok": "Attending",
+      "concern": "Attendance concern",
+      "unknown": "No session recorded"
+    },
+    "scale": {
+      "phq9": "PHQ-9",
+      "gad7": "GAD-7"
+    },
+    "noteKind": {
+      "note": "Note",
+      "action": "Action",
+      "mdt": "MDT",
+      "import": "Import"
+    }
+  },
+  "detail": {
+    "backToList": "All patients",
+    "editPatient": "Edit patient",
+    "summary": {
+      "tier": "Tier",
+      "trend": "Trend",
+      "nextDue": "Next check due",
+      "lastSession": "Last session",
+      "priorityScore": "Priority score"
+    },
+    "scores": {
+      "title": "PHQ-9 & GAD-7 over time",
+      "subtitle": "Every screening is kept. Delta always compares baseline with the latest score.",
+      "baseline": "Baseline",
+      "latest": "Latest",
+      "delta": "Delta",
+      "severity": "Severity",
+      "history": "{count, plural, one {# screening} other {# screenings}}",
+      "empty": "No screenings logged yet. Add the first PHQ-9 / GAD-7 below.",
+      "legendEstimated": "Hollow point = date estimated at import"
+    },
+    "addScore": {
+      "title": "Log a screening",
+      "scale": "Scale",
+      "score": "Score",
+      "date": "Date",
+      "note": "Note (optional)",
+      "submit": "Save score",
+      "range": "0–{max}"
+    },
+    "assessments": {
+      "title": "All screenings",
+      "date": "Date",
+      "scale": "Scale",
+      "score": "Score",
+      "severity": "Severity",
+      "source": "Source",
+      "actions": "",
+      "confirmDelete": "Delete this screening?"
+    },
+    "notes": {
+      "title": "Notes & actions",
+      "add": "Add note",
+      "kind": "Type",
+      "body": "Note",
+      "date": "Date",
+      "empty": "No notes yet."
+    },
+    "info": {
+      "title": "Patient information",
+      "care": "Care team & plan",
+      "attendance": "Attendance",
+      "followUp": "Follow-up"
+    }
+  },
+  "form": {
+    "newTitle": "New patient",
+    "editTitle": "Edit patient",
+    "center": "Center",
+    "mrn": "MRN",
+    "displayName": "Name / alias",
+    "age": "Age",
+    "gender": "Gender",
+    "status": "Status",
+    "diagnosis": "Diagnosis",
+    "carePlan": "Care plan",
+    "therapyProgress": "Therapy progress",
+    "treatmentGoals": "Treatment goals",
+    "psychiatrist": "Psychiatrist(s)",
+    "psychologist": "Psychologist(s)",
+    "namesHint": "Comma-separated",
+    "medication": "Medication",
+    "medicationAdherence": "Medication adherence",
+    "sessionsCount": "Sessions",
+    "attendancePct": "Attendance %",
+    "attendancePattern": "Attendance pattern",
+    "lastSessionDate": "Last session date",
+    "reasonNotAttending": "Reason if not attending",
+    "isHorizonPatient": "Horizon patient",
+    "followUpPriority": "Follow-up priority",
+    "ccAction": "CC action",
+    "outcome": "Outcome",
+    "create": "Create patient",
+    "update": "Save changes",
+    "errors": {
+      "mrnRequired": "MRN is required.",
+      "mrnDuplicate": "A patient with this MRN already exists in this center.",
+      "invalid": "Please check the highlighted fields.",
+      "scoreRange": "Score must be a whole number between 0 and {max}.",
+      "dateRequired": "Date is required.",
+      "dateFuture": "Date cannot be in the future."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Clinical rules used for trend, alerts and priority. Changes apply immediately to everyone.",
+    "thresholds": {
+      "title": "Real change thresholds",
+      "hint": "Change smaller than this counts as Stable (minimal clinically important difference).",
+      "phq": "PHQ-9 change (points)",
+      "gad": "GAD-7 change (points)"
+    },
+    "cadence": {
+      "title": "Screening cadence",
+      "interval": "Months between PHQ-9 / GAD-7 checks",
+      "dueSoon": "\"Due soon\" window (days before)",
+      "confirmActive": "Days past due before \"confirm still active\"",
+      "attendance": "Days since last session before \"attendance concern\""
+    },
+    "saved": "Settings saved."
   }
 }

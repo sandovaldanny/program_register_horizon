@@ -102,6 +102,7 @@ describe("derivePatient", () => {
   it("missing care plan → care_plan_missing", () => {
     const d = derivePatient(patient({ carePlan: "  " }), [pt("phq9", 6, "2026-10-01")], S, TODAY);
     expect(d.flags).toContain("care_plan_missing");
+    expect(d.needsAttention).toBe(false);
   });
 
   it("inactive / graduated patients get no time-based flags", () => {

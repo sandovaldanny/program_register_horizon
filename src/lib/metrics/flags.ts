@@ -14,6 +14,9 @@ export const FLAG_ORDER: Flag[] = [
   "care_plan_missing",
 ];
 
+/** Flags that put a patient on the "needs attention" worklist. `care_plan_missing` is informational only. */
+export const ACTIONABLE_FLAGS: Flag[] = FLAG_ORDER.filter((f) => f !== "care_plan_missing");
+
 export const PRIORITY_WEIGHTS: Record<Flag, number> = {
   high_priority: 40,
   worsening: 30,
