@@ -279,6 +279,12 @@
       "scoreRange": "Score must be a whole number between 0 and {max}.",
       "dateRequired": "Date is required.",
       "dateFuture": "Date cannot be in the future."
+    },
+    "sections": {
+      "identity": "Identity",
+      "care": "Care team & plan",
+      "attendance": "Attendance",
+      "followUp": "Follow-up"
     }
   },
   "settings": {
