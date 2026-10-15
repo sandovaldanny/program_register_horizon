@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { AssessmentChart } from "@/components/AssessmentChart";
 import { AssessmentList } from "@/components/AssessmentList";
-import { Badge, priorityTone, severityTone, tierTone, trendTone } from "@/components/Badge";
+import { Badge, priorityTone, severityTone, trendTone } from "@/components/Badge";
 import { FlagChips } from "@/components/FlagChips";
 import { NotesLog } from "@/components/NotesLog";
 import { QuickAddScoreForm } from "@/components/QuickAddScoreForm";
@@ -54,8 +54,12 @@ export default async function PatientDetailPage({ params }: PageProps<"/patients
       </header>
 
       <section className="grid grid-cols-2 gap-4 md:grid-cols-5">
-        <Stat label={t("summary.tier")}>
-          {derived.tier ? <Badge tone={tierTone(derived.tier)}>{tEnum(`tier.${derived.tier}`)}</Badge> : "—"}
+        <Stat label={t("summary.severity")} tone={derived.severeRange ? "danger" : undefined}>
+          <span className="flex flex-wrap gap-1">
+            {derived.phq.severity ? <Badge tone={severityTone(derived.phq.severity)}>PHQ · {tEnum(`severity.${derived.phq.severity}`)}</Badge> : null}
+            {derived.gad.severity ? <Badge tone={severityTone(derived.gad.severity)}>GAD · {tEnum(`severity.${derived.gad.severity}`)}</Badge> : null}
+            {!derived.phq.severity && !derived.gad.severity ? "—" : null}
+          </span>
         </Stat>
         <Stat label={t("summary.trend")}>
           {derived.trend ? <Badge tone={trendTone(derived.trend)}>{tEnum(`trend.${derived.trend}`)}</Badge> : "—"}

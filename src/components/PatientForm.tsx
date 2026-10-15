@@ -3,9 +3,13 @@
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { createPatientAction, updatePatientAction, type PatientFormState } from "@/actions/patients";
+import { ClinicianPicker } from "@/components/ClinicianPicker";
 import { Button } from "@/components/ui/Button";
 import { Field, Input, Select, Textarea } from "@/components/ui/Field";
-import type { Patient } from "@/db/schema";
+import type { CatalogItem, Clinician, Patient } from "@/db/schema";
+import { matchDiagnosis, splitDiagnosis } from "@/lib/diagnosis";
+import { catalogNames } from "@/db/queries-shared";
+import { splitNames } from "@/lib/import/normalize";
 import { CENTER_LABELS } from "@/lib/scope";
 import { REASONS_NOT_ATTENDING } from "@/lib/validation";
 import { cn } from "@/lib/cn";
@@ -19,7 +23,18 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-export function PatientForm({ patient, defaultCenter }: { patient?: Patient; defaultCenter?: "al_falah" | "al_bateen" }) {
+export function PatientForm({
+  patient,
+  defaultCenter,
+  clinicians,
+  diagnoses,
+}: {
+  patient?: Patient;
+  defaultCenter?: "al_falah" | "al_bateen";
+  clinicians: Clinician[];
+  diagnoses: CatalogItem[];
+}) {
+  const diagnosisOptions = diagnoses.filter((d) => d.active).map((d) => d.label);
   const t = useTranslations("form");
   const tEnum = useTranslations("enums");
   const tc = useTranslations("common");
@@ -71,18 +86,23 @@ export function PatientForm({ patient, defaultCenter }: { patient?: Patient; def
       </Section>
 
       <Section title={t("sections.care")}>
-        <Field label={t("diagnosis")} htmlFor="p-dx" className="md:col-span-3">
-          <Input id="p-dx" name="diagnosis" defaultValue={patient?.diagnosis ?? ""} />
-        </Field>
+        <div className="md:col-span-3">
+          <ClinicianPicker
+            name="diagnosis"
+            label={t("diagnosis")}
+            options={diagnosisOptions}
+            initial={matchDiagnosis(splitDiagnosis(patient?.diagnosis), diagnosisOptions)}
+            emptyText={t("noDiagnoses")}
+            otherText={t("otherDiagnosis")}
+          />
+        </div>
         <Field label={t("carePlan")} htmlFor="p-plan" className="md:col-span-3">
           <Input id="p-plan" name="carePlan" defaultValue={patient?.carePlan ?? ""} />
         </Field>
-        <Field label={t("psychiatrist")} htmlFor="p-psy" hint={t("namesHint")}>
-          <Input id="p-psy" name="psychiatrist" defaultValue={patient?.psychiatrist ?? ""} />
-        </Field>
-        <Field label={t("psychologist")} htmlFor="p-psych" hint={t("namesHint")}>
-          <Input id="p-psych" name="psychologist" defaultValue={patient?.psychologist ?? ""} />
-        </Field>
+        <div className="md:col-span-3 grid gap-5 md:grid-cols-2">
+          <ClinicianPicker name="psychiatrist" label={t("psychiatrist")} options={catalogNames(clinicians, "psychiatrist")} initial={splitNames(patient?.psychiatrist ?? null)} />
+          <ClinicianPicker name="psychologist" label={t("psychologist")} options={catalogNames(clinicians, "psychologist")} initial={splitNames(patient?.psychologist ?? null)} />
+        </div>
         <Field label={t("isHorizonPatient")} htmlFor="p-horizon">
           <Select id="p-horizon" name="isHorizonPatient" defaultValue={patient?.isHorizonPatient === null || patient?.isHorizonPatient === undefined ? "" : patient.isHorizonPatient ? "yes" : "no"}>
             <option value="">{tc("unknown")}</option>

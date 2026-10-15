@@ -2,13 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { PatientForm } from "@/components/PatientForm";
-import { getPatientDetail } from "@/db/queries";
+import { getCatalog, getClinicians, getPatientDetail } from "@/db/queries";
 
 export default async function EditPatientPage({ params }: PageProps<"/patients/[id]/edit">) {
   const { id } = await params;
   const detail = await getPatientDetail(id);
   if (!detail) notFound();
   const t = await getTranslations("form");
+  const [clinicians, diagnoses] = await Promise.all([getClinicians(), getCatalog("diagnosis")]);
   return (
     <div className="flex max-w-5xl flex-col gap-8">
       <header>
@@ -17,7 +18,7 @@ export default async function EditPatientPage({ params }: PageProps<"/patients/[
         </Link>
         <h1 className="mt-2 text-3xl font-medium text-indigo">{t("editTitle")}</h1>
       </header>
-      <PatientForm patient={detail.patient} />
+      <PatientForm patient={detail.patient} clinicians={clinicians} diagnoses={diagnoses} />
     </div>
   );
 }

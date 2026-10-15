@@ -1,6 +1,6 @@
 import { assessmentStatus, attendanceStatus } from "./alerts";
 import { ACTIONABLE_FLAGS, computeFlags, priorityScore } from "./flags";
-import { tierFromScores } from "./severity";
+import { isSevereRange, maxSeverity } from "./severity";
 import { combinedTrend, summarizeScale } from "./trend";
 import type { AssessmentPoint, MetricSettings, PatientDerived, PatientInput } from "./types";
 
@@ -16,7 +16,7 @@ export function derivePatient(
 
   const latestPhq = phq.latest?.score ?? null;
   const latestGad = gad.latest?.score ?? null;
-  const tier = tierFromScores(latestPhq, latestGad);
+  const severeRange = isSevereRange(latestPhq, latestGad);
   const trend = combinedTrend(phq.trend, gad.trend, assessments.length > 0);
 
   const lastScoreDate =
@@ -30,7 +30,7 @@ export function derivePatient(
 
   const flags = computeFlags({
     patient,
-    tier,
+    severeRange,
     trend,
     assessmentStatus: assessment.status,
     attendanceStatus: attendance.status,
@@ -41,7 +41,8 @@ export function derivePatient(
   return {
     phq,
     gad,
-    tier,
+    maxSeverity: maxSeverity(phq.severity, gad.severity),
+    severeRange,
     trend,
     lastScoreDate,
     nextDueDate: assessment.nextDue,
@@ -63,6 +64,7 @@ export type CaseloadKpis = {
   dueSoon: number;
   attendanceConcern: number;
   worsening: number;
+  improving: number;
   severe: number;
   noScores: number;
   minimal: number;
@@ -81,6 +83,7 @@ export function summarizeCaseload(
     dueSoon: has("assessment_due_soon"),
     attendanceConcern: has("attendance_concern"),
     worsening: has("worsening"),
+    improving: active.filter((r) => r.derived.trend === "improving").length,
     severe: has("severe"),
     noScores: has("no_scores"),
     minimal: has("minimal_scores"),

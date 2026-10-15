@@ -1,5 +1,6 @@
 import type { CaseloadRow } from "@/db/queries";
-import type { Flag, Tier, Trend } from "@/lib/metrics";
+import type { Flag, Severity, Trend } from "@/lib/metrics";
+import { severityRank } from "@/lib/metrics/severity";
 import { splitNames } from "@/lib/import/normalize";
 
 export const ALERT_FILTERS = [
@@ -16,45 +17,48 @@ export const ALERT_FILTERS = [
 ] as const;
 export type AlertFilter = (typeof ALERT_FILTERS)[number];
 
+const SEVERITIES: Severity[] = ["minimal", "mild", "moderate", "moderately_severe", "severe"];
+const TRENDS: Trend[] = ["improving", "stable", "worsening", "mixed", "first_score"];
+const PRIORITIES = ["routine", "low", "mid", "high"] as const;
+const STATUSES = ["active", "inactive", "graduated", "transferred", "all"] as const;
+const SORTS = ["priority", "mrn", "last_score", "severity"] as const;
+
 export type CaseloadFilters = {
   q: string;
-  status: "active" | "inactive" | "graduated" | "transferred" | "all";
-  tier: Tier | "none" | "";
+  status: (typeof STATUSES)[number];
+  phqSeverity: Severity | "";
+  gadSeverity: Severity | "";
   trend: Trend | "";
   alert: AlertFilter | "";
   clinician: string;
-  priority: "routine" | "low" | "mid" | "high" | "";
-  sort: "priority" | "mrn" | "last_score" | "tier";
+  priority: (typeof PRIORITIES)[number] | "";
+  sort: (typeof SORTS)[number];
 };
 
 const str = (v: string | string[] | undefined) => (typeof v === "string" ? v : "");
+const oneOf = <T extends string>(v: string, list: readonly T[], fallback: T | ""): T | "" =>
+  (list as readonly string[]).includes(v) ? (v as T) : fallback;
 
 export function parseFilters(params: Record<string, string | string[] | undefined>): CaseloadFilters {
-  const status = str(params.status);
-  const sort = str(params.sort);
   return {
     q: str(params.q).trim(),
-    status: (["active", "inactive", "graduated", "transferred", "all"] as const).includes(status as never)
-      ? (status as CaseloadFilters["status"])
-      : "active",
-    tier: str(params.tier) as CaseloadFilters["tier"],
-    trend: str(params.trend) as CaseloadFilters["trend"],
-    alert: (ALERT_FILTERS as readonly string[]).includes(str(params.alert)) ? (str(params.alert) as AlertFilter) : "",
+    status: oneOf(str(params.status), STATUSES, "active") || "active",
+    phqSeverity: oneOf(str(params.phq), SEVERITIES, ""),
+    gadSeverity: oneOf(str(params.gad), SEVERITIES, ""),
+    trend: oneOf(str(params.trend), TRENDS, ""),
+    alert: oneOf(str(params.alert), ALERT_FILTERS, ""),
     clinician: str(params.clinician),
-    priority: str(params.priority) as CaseloadFilters["priority"],
-    sort: (["priority", "mrn", "last_score", "tier"] as const).includes(sort as never)
-      ? (sort as CaseloadFilters["sort"])
-      : "priority",
+    priority: oneOf(str(params.priority), PRIORITIES, ""),
+    sort: oneOf(str(params.sort), SORTS, "priority") || "priority",
   };
 }
-
-const TIER_RANK: Record<Tier, number> = { tier3: 3, tier2: 2, tier1: 1, minimal: 0 };
 
 export function applyFilters(rows: CaseloadRow[], f: CaseloadFilters): CaseloadRow[] {
   const q = f.q.toLowerCase();
   const out = rows.filter(({ patient, derived }) => {
     if (f.status !== "all" && patient.status !== f.status) return false;
-    if (f.tier === "none" ? derived.tier !== null : f.tier && derived.tier !== f.tier) return false;
+    if (f.phqSeverity && derived.phq.severity !== f.phqSeverity) return false;
+    if (f.gadSeverity && derived.gad.severity !== f.gadSeverity) return false;
     if (f.trend && derived.trend !== f.trend) return false;
     if (f.priority && patient.followUpPriority !== f.priority) return false;
     if (f.alert === "needs_attention" ? !derived.needsAttention : f.alert && !derived.flags.includes(f.alert as Flag)) return false;
@@ -71,13 +75,12 @@ export function applyFilters(rows: CaseloadRow[], f: CaseloadFilters): CaseloadR
     return true;
   });
 
+  const sevRank = (r: CaseloadRow) => (r.derived.maxSeverity ? severityRank(r.derived.maxSeverity) : -1);
   const cmp: Record<CaseloadFilters["sort"], (a: CaseloadRow, b: CaseloadRow) => number> = {
     priority: (a, b) => b.derived.priorityScore - a.derived.priorityScore || a.patient.mrn.localeCompare(b.patient.mrn),
     mrn: (a, b) => a.patient.mrn.localeCompare(b.patient.mrn, undefined, { numeric: true }),
     last_score: (a, b) => (a.derived.lastScoreDate ?? "").localeCompare(b.derived.lastScoreDate ?? ""),
-    tier: (a, b) =>
-      (b.derived.tier ? TIER_RANK[b.derived.tier] : -1) - (a.derived.tier ? TIER_RANK[a.derived.tier] : -1) ||
-      b.derived.priorityScore - a.derived.priorityScore,
+    severity: (a, b) => sevRank(b) - sevRank(a) || b.derived.priorityScore - a.derived.priorityScore,
   };
   return out.sort(cmp[f.sort]);
 }

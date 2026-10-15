@@ -48,11 +48,13 @@
       "overdue": "تقييم متأخر",
       "attendance": "قلق بشأن الحضور",
       "worsening": "تدهور",
-      "severe": "المستوى 3 · شديد",
+      "severe": "نطاق شديد",
       "dueSoon": "مستحق هذا الأسبوع",
       "noScores": "بدون درجات بعد",
       "minimal": "حد أدنى · مناقشة التخرج",
-      "improving": "تحسّن"
+      "improving": "تحسّن",
+      "severeHint": "PHQ-9 ≥15 أو GAD-7 ≥15",
+      "sectionLabel": "مؤشرات الحالات"
     },
     "worklist": {
       "title": "بحاجة إلى متابعة",
@@ -72,7 +74,6 @@
   "table": {
     "patient": "المريض",
     "center": "المركز",
-    "tier": "المستوى",
     "phq": "PHQ-9",
     "gad": "GAD-7",
     "trend": "الاتجاه",
@@ -80,15 +81,14 @@
     "lastSession": "آخر جلسة",
     "flags": "التنبيهات",
     "priority": "الأولوية",
-    "yearsShort": "سنة"
+    "yearsShort": "سنة",
+    "scoreHint": "خط الأساس → الأحدث (Δ)"
   },
   "filters": {
     "search": "بحث",
     "searchPlaceholder": "الرقم الطبي، الاسم، التشخيص، الطبيب",
     "alert": "التنبيه",
     "needsAttention": "بحاجة إلى متابعة (أي نوع)",
-    "tier": "المستوى",
-    "noTier": "بدون درجات",
     "trend": "الاتجاه",
     "clinician": "الطبيب / المعالج",
     "priority": "أولوية المتابعة",
@@ -98,11 +98,13 @@
     "sort": "ترتيب حسب",
     "sortBy": {
       "priority": "الأولوية",
-      "tier": "المستوى",
       "last_score": "تاريخ آخر درجة",
-      "mrn": "الرقم الطبي"
+      "mrn": "الرقم الطبي",
+      "severity": "الشدة"
     },
-    "clear": "مسح {count, plural, one {مرشح واحد} other {# مرشحات}}"
+    "clear": "مسح {count, plural, one {مرشح واحد} other {# مرشحات}}",
+    "phqSeverity": "شدة PHQ-9",
+    "gadSeverity": "شدة GAD-7"
   },
   "flags": {
     "high_priority": "أولوية عالية",
@@ -117,12 +119,6 @@
     "care_plan_missing": "بدون خطة رعاية"
   },
   "enums": {
-    "tier": {
-      "tier3": "المستوى 3 · شديد",
-      "tier2": "المستوى 2 · متوسط",
-      "tier1": "المستوى 1 · خفيف",
-      "minimal": "حد أدنى"
-    },
     "trend": {
       "improving": "تحسّن",
       "stable": "مستقر",
@@ -186,17 +182,22 @@
       "action": "إجراء",
       "mdt": "اجتماع الفريق",
       "import": "استيراد"
+    },
+    "specialty": {
+      "psychiatrist": "طبيب نفسي",
+      "psychologist": "أخصائي نفسي",
+      "other": "أخرى"
     }
   },
   "detail": {
     "backToList": "جميع المرضى",
     "editPatient": "تعديل المريض",
     "summary": {
-      "tier": "المستوى",
       "trend": "الاتجاه",
       "nextDue": "التقييم القادم",
       "lastSession": "آخر جلسة",
-      "priorityScore": "درجة الأولوية"
+      "priorityScore": "درجة الأولوية",
+      "severity": "الشدة (الأحدث)"
     },
     "scores": {
       "title": "PHQ-9 و GAD-7 عبر الزمن",
@@ -258,7 +259,6 @@
     "treatmentGoals": "أهداف العلاج",
     "psychiatrist": "الطبيب النفسي",
     "psychologist": "الأخصائي النفسي",
-    "namesHint": "مفصولة بفواصل",
     "medication": "الدواء",
     "medicationAdherence": "الالتزام بالدواء",
     "sessionsCount": "الجلسات",
@@ -285,7 +285,11 @@
       "care": "فريق وخطة الرعاية",
       "attendance": "الحضور",
       "followUp": "المتابعة"
-    }
+    },
+    "noClinicians": "لا يوجد أطباء في القائمة بعد — أضفهم في الإعدادات.",
+    "otherClinician": "أخرى (مفصولة بفواصل)",
+    "noDiagnoses": "لا توجد تشخيصات في القائمة بعد — أضفها في الإعدادات.",
+    "otherDiagnosis": "أخرى (مفصولة بفواصل)"
   },
   "settings": {
     "title": "الإعدادات",
@@ -303,6 +307,41 @@
       "confirmActive": "الأيام بعد الاستحقاق قبل \"تأكيد استمرار النشاط\"",
       "attendance": "الأيام منذ آخر جلسة قبل \"قلق بشأن الحضور\""
     },
-    "saved": "تم حفظ الإعدادات."
+    "saved": "تم حفظ الإعدادات.",
+    "clinicians": {
+      "title": "الأطباء والأخصائيون",
+      "subtitle": "الأطباء والأخصائيون النفسيون المتاحون عند تعيين فريق الرعاية.",
+      "name": "الاسم",
+      "namePlaceholder": "د. الاسم أو الاسم الأول",
+      "specialty": "التخصص",
+      "center": "المركز",
+      "bothCenters": "كلا المركزين",
+      "add": "إضافة",
+      "inactive": "غير نشط",
+      "activate": "تفعيل",
+      "deactivate": "إلغاء التفعيل",
+      "confirmDelete": "حذف {name}؟ يحتفظ المرضى بالاسم كنص.",
+      "empty": "لا يوجد أطباء بعد.",
+      "errors": {
+        "duplicate": "يوجد طبيب بهذا الاسم.",
+        "invalid": "يرجى إدخال اسم صالح."
+      }
+    },
+    "rulesTitle": "القواعد السريرية",
+    "catalog": {
+      "diagnosisTitle": "التشخيصات",
+      "diagnosisSubtitle": "قائمة اختيار تظهر عند إضافة أو تعديل مريض. يمكن اختيار أكثر من واحد.",
+      "label": "التسمية",
+      "add": "إضافة",
+      "inactive": "غير نشط",
+      "activate": "تفعيل",
+      "deactivate": "إلغاء التفعيل",
+      "confirmDelete": "حذف \"{label}\"؟ يحتفظ المرضى به كنص.",
+      "empty": "لا شيء بعد.",
+      "errors": {
+        "duplicate": "موجود بالفعل.",
+        "invalid": "يرجى إدخال تسمية صالحة."
+      }
+    }
   }
 }

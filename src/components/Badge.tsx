@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
-import type { Severity, Tier, Trend } from "@/lib/metrics";
+import type { Severity, Trend } from "@/lib/metrics";
 
-type Tone = "neutral" | "ok" | "warn" | "danger" | "info" | "indigo";
+export type Tone = "neutral" | "ok" | "warn" | "danger" | "info" | "indigo";
 
 const tones: Record<Tone, string> = {
   neutral: "bg-surface-soft text-indigo",
@@ -26,9 +26,6 @@ export function Badge({ tone = "neutral", className, children }: { tone?: Tone; 
     </span>
   );
 }
-
-export const tierTone = (tier: Tier | null): Tone =>
-  tier === "tier3" ? "danger" : tier === "tier2" ? "warn" : tier === "tier1" ? "info" : tier === "minimal" ? "ok" : "neutral";
 
 export const trendTone = (trend: Trend | null): Tone =>
   trend === "improving" ? "ok" : trend === "worsening" ? "danger" : trend === "mixed" ? "warn" : trend === "stable" ? "info" : "neutral";

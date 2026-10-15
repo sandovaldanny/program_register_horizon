@@ -39,6 +39,40 @@ export const followUpPriorityEnum = pgEnum("follow_up_priority", [
 ]);
 export const yesNoUnknownEnum = pgEnum("yes_no_unknown", ["yes", "no", "unknown"]);
 export const noteKindEnum = pgEnum("note_kind", ["note", "action", "mdt", "import"]);
+export const specialtyEnum = pgEnum("specialty", ["psychiatrist", "psychologist", "other"]);
+
+/** Catalogue of clinicians managed in Settings; patients store the chosen names as text. */
+export const clinicians = pgTable(
+  "clinicians",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: text("name").notNull(),
+    specialty: specialtyEnum("specialty").notNull(),
+    center: centerEnum("center"),
+    active: boolean("active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("clinicians_name_idx").on(t.name)],
+);
+
+/** Generic configurable lists (diagnoses today; more kinds later) managed in Settings. */
+export const catalogItems = pgTable(
+  "catalog_items",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    kind: text("kind").notNull(),
+    label: text("label").notNull(),
+    active: boolean("active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("catalog_items_kind_label_idx").on(t.kind, t.label)],
+);
+
+export type CatalogItem = typeof catalogItems.$inferSelect;
+export type CatalogKind = "diagnosis";
+
+export type Clinician = typeof clinicians.$inferSelect;
+export type Specialty = Clinician["specialty"];
 
 export const patients = pgTable(
   "patients",

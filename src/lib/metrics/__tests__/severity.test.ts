@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { gadSeverity, phqSeverity, severityFor, tierFromScores } from "../severity";
+import { gadSeverity, isSevereRange, maxSeverity, phqSeverity, severityFor } from "../severity";
 
 describe("phqSeverity", () => {
   it.each([
@@ -40,26 +40,24 @@ describe("severityFor", () => {
   });
 });
 
-describe("tierFromScores", () => {
-  it("returns null when no scores", () => {
-    expect(tierFromScores(null, null)).toBeNull();
+describe("maxSeverity", () => {
+  it("returns null when nothing present", () => {
+    expect(maxSeverity(null, null)).toBeNull();
   });
-  it("uses the higher of the two scales", () => {
-    expect(tierFromScores(3, 12)).toBe("tier2");
-    expect(tierFromScores(16, 2)).toBe("tier3");
+  it("picks the worst band", () => {
+    expect(maxSeverity("mild", "severe")).toBe("severe");
+    expect(maxSeverity("moderately_severe", "moderate")).toBe("moderately_severe");
+    expect(maxSeverity(null, "minimal")).toBe("minimal");
   });
-  it("works with only one scale present", () => {
-    expect(tierFromScores(null, 7)).toBe("tier1");
-    expect(tierFromScores(4, null)).toBe("minimal");
-  });
-  it.each([
-    [4, "minimal"],
-    [5, "tier1"],
-    [9, "tier1"],
-    [10, "tier2"],
-    [14, "tier2"],
-    [15, "tier3"],
-  ])("boundary %i → %s", (score, expected) => {
-    expect(tierFromScores(score, null)).toBe(expected);
+});
+
+describe("isSevereRange", () => {
+  it("PHQ ≥15 or GAD ≥15 counts as severe range", () => {
+    expect(isSevereRange(15, 3)).toBe(true);
+    expect(isSevereRange(14, 3)).toBe(false);
+    expect(isSevereRange(2, 15)).toBe(true);
+    expect(isSevereRange(2, 14)).toBe(false);
+    expect(isSevereRange(null, null)).toBe(false);
+    expect(isSevereRange(null, 16)).toBe(true);
   });
 });

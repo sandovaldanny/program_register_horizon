@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { Badge, tierTone, trendTone } from "@/components/Badge";
+import { Badge, severityTone, trendTone } from "@/components/Badge";
 import { FlagChips } from "@/components/FlagChips";
 import type { CaseloadRow } from "@/db/queries";
+import type { ScaleSummary } from "@/lib/metrics";
 import { CENTER_LABELS } from "@/lib/scope";
 import { cn } from "@/lib/cn";
 
@@ -35,14 +36,19 @@ export async function PatientTable({
 
   return (
     <div className="overflow-x-auto rounded-card border border-border bg-surface shadow-card">
-      <table className="w-full min-w-[960px] border-collapse text-sm">
+      <table className="w-full min-w-[980px] border-collapse text-sm">
         <thead className="border-b border-border bg-surface-soft/60">
           <tr>
             <th className={th}>{t("patient")}</th>
             {showCenter ? <th className={th}>{t("center")}</th> : null}
-            <th className={th}>{t("tier")}</th>
-            <th className={th}>{t("phq")}</th>
-            <th className={th}>{t("gad")}</th>
+            <th className={th}>
+              {t("phq")}
+              <span className="block text-[10px] font-medium normal-case tracking-normal text-bluegray/80">{t("scoreHint")}</span>
+            </th>
+            <th className={th}>
+              {t("gad")}
+              <span className="block text-[10px] font-medium normal-case tracking-normal text-bluegray/80">{t("scoreHint")}</span>
+            </th>
             <th className={th}>{t("trend")}</th>
             <th className={th}>{t("lastScore")}</th>
             <th className={th}>{t("lastSession")}</th>
@@ -65,13 +71,10 @@ export async function PatientTable({
               </td>
               {showCenter ? <td className={cn(td, "whitespace-nowrap")}>{CENTER_LABELS[patient.center]}</td> : null}
               <td className={td}>
-                {derived.tier ? <Badge tone={tierTone(derived.tier)}>{tEnum(`tier.${derived.tier}`)}</Badge> : <span className="text-bluegray">—</span>}
+                <ScoreCell summary={derived.phq} label={derived.phq.severity ? tEnum(`severity.${derived.phq.severity}`) : null} />
               </td>
-              <td className={cn(td, "ltr-data")}>
-                <ScoreCell baseline={derived.phq.baseline?.score} latest={derived.phq.latest?.score} delta={derived.phq.delta} />
-              </td>
-              <td className={cn(td, "ltr-data")}>
-                <ScoreCell baseline={derived.gad.baseline?.score} latest={derived.gad.latest?.score} delta={derived.gad.delta} />
+              <td className={td}>
+                <ScoreCell summary={derived.gad} label={derived.gad.severity ? tEnum(`severity.${derived.gad.severity}`) : null} />
               </td>
               <td className={td}>
                 {derived.trend ? <Badge tone={trendTone(derived.trend)}>{tEnum(`trend.${derived.trend}`)}</Badge> : <span className="text-bluegray">—</span>}
@@ -96,18 +99,32 @@ export async function PatientTable({
   );
 }
 
-function ScoreCell({ baseline, latest, delta }: { baseline?: number; latest?: number; delta: number | null }) {
-  if (latest === undefined) return <span className="text-bluegray">—</span>;
+/** `baseline → latest` with a delta chip, severity of the latest score underneath. */
+function ScoreCell({ summary, label }: { summary: ScaleSummary; label: string | null }) {
+  const { baseline, latest, delta, severity } = summary;
+  if (!latest) return <span className="text-bluegray">—</span>;
   return (
-    <span className="inline-flex items-baseline gap-1.5 whitespace-nowrap">
-      <span className="font-semibold">{latest}</span>
-      {baseline !== undefined && delta !== null ? (
-        <span className={cn("text-xs", delta < 0 ? "text-turquoise-dark" : delta > 0 ? "text-danger" : "text-bluegray")}>
-          {delta > 0 ? `+${delta}` : delta} <span className="text-bluegray">({baseline})</span>
-        </span>
-      ) : (
-        <span className="text-xs text-bluegray">·</span>
-      )}
-    </span>
+    <div className="flex flex-col gap-1">
+      <span className="ltr-data inline-flex items-center gap-1.5 whitespace-nowrap">
+        {baseline && delta !== null ? (
+          <>
+            <span className="text-bluegray">{baseline.score}</span>
+            <span className="text-bluegray/70">→</span>
+          </>
+        ) : null}
+        <span className="text-base font-semibold text-indigo">{latest.score}</span>
+        {delta !== null ? (
+          <span
+            className={cn(
+              "rounded-full px-1.5 text-[11px] font-semibold",
+              delta < 0 ? "bg-turquoise/25 text-indigo" : delta > 0 ? "bg-danger-soft/60 text-indigo" : "bg-surface-soft text-bluegray",
+            )}
+          >
+            {delta > 0 ? `+${delta}` : delta === 0 ? "±0" : delta}
+          </span>
+        ) : null}
+      </span>
+      {label ? <Badge tone={severityTone(severity)}>{label}</Badge> : null}
+    </div>
   );
 }

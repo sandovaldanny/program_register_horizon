@@ -6,11 +6,12 @@ import { useEffect, useState, useTransition } from "react";
 import { Field, Input, Select } from "@/components/ui/Field";
 import { ALERT_FILTERS, type CaseloadFilters as Filters } from "@/lib/filters";
 
-const TIERS = ["tier3", "tier2", "tier1", "minimal", "none"] as const;
+const SEVERITIES = ["severe", "moderately_severe", "moderate", "mild", "minimal"] as const;
+const GAD_SEVERITIES = ["severe", "moderate", "mild", "minimal"] as const;
 const TRENDS = ["worsening", "mixed", "stable", "improving", "first_score"] as const;
 const PRIORITIES = ["high", "mid", "low", "routine"] as const;
 const STATUSES = ["active", "inactive", "graduated", "transferred", "all"] as const;
-const SORTS = ["priority", "tier", "last_score", "mrn"] as const;
+const SORTS = ["priority", "severity", "last_score", "mrn"] as const;
 
 export function CaseloadFilters({ filters, clinicians }: { filters: Filters; clinicians: string[] }) {
   const t = useTranslations("filters");
@@ -40,7 +41,7 @@ export function CaseloadFilters({ filters, clinicians }: { filters: Filters; cli
 
   return (
     <div className="rounded-card border border-border bg-surface p-5 shadow-card" aria-busy={pending}>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-8">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-9">
         <Field label={t("search")} htmlFor="f-q" className="col-span-2">
           <Input id="f-q" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("searchPlaceholder")} />
         </Field>
@@ -54,12 +55,22 @@ export function CaseloadFilters({ filters, clinicians }: { filters: Filters; cli
             ))}
           </Select>
         </Field>
-        <Field label={t("tier")} htmlFor="f-tier">
-          <Select id="f-tier" value={filters.tier} onChange={(e) => set("tier", e.target.value)}>
+        <Field label={t("phqSeverity")} htmlFor="f-phq">
+          <Select id="f-phq" value={filters.phqSeverity} onChange={(e) => set("phq", e.target.value)}>
             <option value="">{t("any")}</option>
-            {TIERS.map((v) => (
+            {SEVERITIES.map((v) => (
               <option key={v} value={v}>
-                {v === "none" ? t("noTier") : tEnum(`tier.${v}`)}
+                {tEnum(`severity.${v}`)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label={t("gadSeverity")} htmlFor="f-gad">
+          <Select id="f-gad" value={filters.gadSeverity} onChange={(e) => set("gad", e.target.value)}>
+            <option value="">{t("any")}</option>
+            {GAD_SEVERITIES.map((v) => (
+              <option key={v} value={v}>
+                {tEnum(`severity.${v}`)}
               </option>
             ))}
           </Select>

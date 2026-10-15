@@ -1,4 +1,4 @@
-import type { Scale, Severity, Tier } from "./types";
+import type { Scale, Severity } from "./types";
 
 export const SCALE_MAX: Record<Scale, number> = { phq9: 27, gad7: 21 };
 
@@ -23,16 +23,23 @@ export function severityFor(scale: Scale, score: number): Severity {
   return scale === "phq9" ? phqSeverity(score) : gadSeverity(score);
 }
 
+export const SEVERITY_ORDER: Severity[] = ["minimal", "mild", "moderate", "moderately_severe", "severe"];
+
+export const severityRank = (s: Severity): number => SEVERITY_ORDER.indexOf(s);
+
+/** Worst of the given severities, or null if none. */
+export function maxSeverity(...values: Array<Severity | null>): Severity | null {
+  const present = values.filter((v): v is Severity => v !== null);
+  if (present.length === 0) return null;
+  return present.reduce((a, b) => (severityRank(b) > severityRank(a) ? b : a));
+}
+
 /**
- * Horizon tier from the higher of the latest PHQ-9 / GAD-7:
- * <5 minimal, 5–9 tier 1 (mild), 10–14 tier 2 (moderate), 15+ tier 3 (severe).
+ * "Severe range": PHQ-9 moderately severe / severe (≥15) or GAD-7 severe (≥15).
+ * Matches the Horizon rule that a score of 15 or more on either scale needs clinician attention.
  */
-export function tierFromScores(latestPhq: number | null, latestGad: number | null): Tier | null {
-  const values = [latestPhq, latestGad].filter((v): v is number => v !== null);
-  if (values.length === 0) return null;
-  const max = Math.max(...values);
-  if (max <= 4) return "minimal";
-  if (max <= 9) return "tier1";
-  if (max <= 14) return "tier2";
-  return "tier3";
+export function isSevereRange(latestPhq: number | null, latestGad: number | null): boolean {
+  const phq = latestPhq !== null ? phqSeverity(latestPhq) : null;
+  const gad = latestGad !== null ? gadSeverity(latestGad) : null;
+  return phq === "moderately_severe" || phq === "severe" || gad === "severe";
 }

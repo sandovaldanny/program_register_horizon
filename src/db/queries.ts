@@ -1,7 +1,7 @@
 import "server-only";
 import { and, asc, desc, eq, inArray } from "drizzle-orm";
 import { getDb } from "./index";
-import { assessments, notes, patients, type Assessment, type Center, type Patient, type Note } from "./schema";
+import { assessments, catalogItems, clinicians, notes, patients, type Assessment, type CatalogItem, type CatalogKind, type Center, type Clinician, type Patient, type Note } from "./schema";
 import { ensureSettings } from "./settings";
 import { derivePatient, summarizeCaseload, type AssessmentPoint, type CaseloadKpis, type MetricSettings, type PatientDerived } from "@/lib/metrics";
 import { splitNames } from "@/lib/import/normalize";
@@ -113,4 +113,12 @@ export async function mrnExists(center: Center, mrn: string, exceptId?: string):
     .where(and(eq(patients.center, center), eq(patients.mrn, mrn)))
     .limit(2);
   return rows.some((r) => r.id !== exceptId);
+}
+
+export async function getClinicians(): Promise<Clinician[]> {
+  return getDb().select().from(clinicians).orderBy(asc(clinicians.specialty), asc(clinicians.name));
+}
+
+export async function getCatalog(kind: CatalogKind): Promise<CatalogItem[]> {
+  return getDb().select().from(catalogItems).where(eq(catalogItems.kind, kind)).orderBy(asc(catalogItems.label));
 }

@@ -1,48 +1,51 @@
 import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 
-type Tone = "indigo" | "turquoise" | "amber" | "pink" | "steel" | "neutral";
+export type KpiTone = "indigo" | "turquoise" | "amber" | "danger" | "steel" | "neutral";
 
-const accents: Record<Tone, string> = {
-  indigo: "bg-indigo",
-  turquoise: "bg-turquoise",
-  amber: "bg-amber",
-  pink: "bg-danger",
-  steel: "bg-steel",
-  neutral: "bg-bluegray",
+const iconTones: Record<KpiTone, string> = {
+  indigo: "bg-indigo/10 text-indigo",
+  turquoise: "bg-turquoise/25 text-turquoise-dark",
+  amber: "bg-amber/20 text-amber",
+  danger: "bg-danger-soft/50 text-danger",
+  steel: "bg-steel/10 text-steel",
+  neutral: "bg-surface-soft text-bluegray",
 };
 
 export function KpiTile({
+  icon: Icon,
   label,
   value,
   hint,
   tone = "neutral",
   href,
-  emphasis = false,
+  highlight = false,
 }: {
+  icon: LucideIcon;
   label: string;
   value: number | string;
   hint?: string;
-  tone?: Tone;
+  tone?: KpiTone;
   href?: string;
-  emphasis?: boolean;
+  highlight?: boolean;
 }) {
   const body = (
     <div
       className={cn(
-        "flex h-full flex-col gap-2 rounded-card border border-border bg-surface p-5 shadow-card transition-shadow",
-        href && "hover:shadow-card-hover",
-        emphasis && "bg-brand text-white border-transparent",
+        "flex h-full items-center gap-3.5 rounded-card border bg-surface px-4 py-3.5 transition-colors",
+        highlight ? "border-indigo/30 bg-indigo/[0.04]" : "border-border",
+        href && "hover:border-turquoise hover:bg-surface-soft/40",
       )}
     >
-      <div className="flex items-center gap-2">
-        <span className={cn("h-2 w-2 rounded-full", emphasis ? "bg-turquoise" : accents[tone])} />
-        <span className={cn("text-xs font-semibold uppercase tracking-wide", emphasis ? "text-white/80" : "text-bluegray")}>
-          {label}
-        </span>
+      <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full", iconTones[tone])}>
+        <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
+      </span>
+      <div className="min-w-0">
+        <div className="ltr-data text-2xl font-medium leading-none text-indigo">{value}</div>
+        <div className="mt-1 text-xs font-medium leading-tight text-bluegray">{label}</div>
+        {hint ? <div className="mt-0.5 text-[11px] leading-tight text-bluegray/80">{hint}</div> : null}
       </div>
-      <span className={cn("ltr-data text-3xl font-medium leading-none", emphasis ? "text-white" : "text-indigo")}>{value}</span>
-      {hint ? <span className={cn("text-xs", emphasis ? "text-white/70" : "text-bluegray")}>{hint}</span> : null}
     </div>
   );
   return href ? (

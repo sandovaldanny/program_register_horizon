@@ -1,4 +1,16 @@
 import Link from "next/link";
+import {
+  AlertTriangle,
+  Bell,
+  CalendarClock,
+  CalendarX,
+  ClipboardList,
+  GraduationCap,
+  TrendingDown,
+  TrendingUp,
+  UserX,
+  Users,
+} from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { KpiTile } from "@/components/KpiTile";
 import { PatientTable } from "@/components/PatientTable";
@@ -28,20 +40,21 @@ export default async function DashboardPage() {
         </Link>
       </header>
 
-      <section className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
-        <KpiTile label={t("kpi.active")} value={kpis.active} hint={t("kpi.ofTotal", { total: kpis.total })} tone="indigo" href="/patients" />
-        <KpiTile label={t("kpi.needsAttention")} value={kpis.needsAttention} tone="pink" emphasis href="/patients?alert=needs_attention" />
-        <KpiTile label={t("kpi.overdue")} value={kpis.overdue} tone="amber" href="/patients?alert=assessment_overdue" />
-        <KpiTile label={t("kpi.attendance")} value={kpis.attendanceConcern} tone="amber" href="/patients?alert=attendance_concern" />
-        <KpiTile label={t("kpi.worsening")} value={kpis.worsening} tone="pink" href="/patients?alert=worsening" />
-        <KpiTile label={t("kpi.severe")} value={kpis.severe} tone="pink" href="/patients?alert=severe" />
-      </section>
-
-      <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <KpiTile label={t("kpi.dueSoon")} value={kpis.dueSoon} tone="steel" href="/patients?alert=assessment_due_soon" />
-        <KpiTile label={t("kpi.noScores")} value={kpis.noScores} tone="steel" href="/patients?alert=no_scores" />
-        <KpiTile label={t("kpi.minimal")} value={kpis.minimal} tone="turquoise" href="/patients?alert=minimal_scores" />
-        <KpiTile label={t("kpi.improving")} value={caseload.filter((r) => r.patient.status === "active" && r.derived.trend === "improving").length} tone="turquoise" href="/patients?trend=improving" />
+      <section aria-label={t("kpi.sectionLabel")} className="flex flex-col gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+          <KpiTile icon={Users} label={t("kpi.active")} value={kpis.active} hint={t("kpi.ofTotal", { total: kpis.total })} tone="indigo" href="/patients" />
+          <KpiTile icon={Bell} label={t("kpi.needsAttention")} value={kpis.needsAttention} tone="danger" highlight href="/patients?alert=needs_attention" />
+          <KpiTile icon={CalendarX} label={t("kpi.overdue")} value={kpis.overdue} tone="amber" href="/patients?alert=assessment_overdue" />
+          <KpiTile icon={UserX} label={t("kpi.attendance")} value={kpis.attendanceConcern} tone="amber" href="/patients?alert=attendance_concern" />
+          <KpiTile icon={TrendingUp} label={t("kpi.worsening")} value={kpis.worsening} tone="danger" href="/patients?alert=worsening" />
+        </div>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+          <KpiTile icon={AlertTriangle} label={t("kpi.severe")} value={kpis.severe} hint={t("kpi.severeHint")} tone="danger" href="/patients?alert=severe" />
+          <KpiTile icon={CalendarClock} label={t("kpi.dueSoon")} value={kpis.dueSoon} tone="steel" href="/patients?alert=assessment_due_soon" />
+          <KpiTile icon={ClipboardList} label={t("kpi.noScores")} value={kpis.noScores} tone="steel" href="/patients?alert=no_scores" />
+          <KpiTile icon={GraduationCap} label={t("kpi.minimal")} value={kpis.minimal} tone="turquoise" href="/patients?alert=minimal_scores" />
+          <KpiTile icon={TrendingDown} label={t("kpi.improving")} value={kpis.improving} tone="turquoise" href="/patients?trend=improving" />
+        </div>
       </section>
 
       <section className="flex flex-col gap-4">

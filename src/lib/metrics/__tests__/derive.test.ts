@@ -27,7 +27,8 @@ const patient = (overrides: Partial<PatientInput> = {}): PatientInput => ({
 describe("derivePatient", () => {
   it("active patient with no scores → no_scores flag only", () => {
     const d = derivePatient(patient(), [], S, TODAY);
-    expect(d.tier).toBeNull();
+    expect(d.maxSeverity).toBeNull();
+    expect(d.severeRange).toBe(false);
     expect(d.trend).toBeNull();
     expect(d.assessmentStatus).toBe("no_scores");
     expect(d.flags).toEqual(["no_scores"]);
@@ -44,7 +45,8 @@ describe("derivePatient", () => {
     expect(d.phq.delta).toBe(-12);
     expect(d.gad.delta).toBe(-9);
     expect(d.trend).toBe("improving");
-    expect(d.tier).toBe("tier1");
+    expect(d.maxSeverity).toBe("mild");
+    expect(d.severeRange).toBe(false);
     expect(d.lastScoreDate).toBe("2026-10-01");
     expect(d.nextDueDate).toBe("2026-11-01");
     expect(d.flags).toEqual([]);
@@ -59,7 +61,8 @@ describe("derivePatient", () => {
       TODAY,
     );
     expect(d.trend).toBe("worsening");
-    expect(d.tier).toBe("tier3");
+    expect(d.maxSeverity).toBe("severe");
+    expect(d.severeRange).toBe(true);
     expect(d.assessmentStatus).toBe("overdue");
     expect(d.attendanceStatus).toBe("concern");
     expect(d.flags).toEqual(["high_priority", "worsening", "severe", "assessment_overdue", "attendance_concern"]);
@@ -95,7 +98,7 @@ describe("derivePatient", () => {
       S,
       TODAY,
     );
-    expect(d.tier).toBe("minimal");
+    expect(d.maxSeverity).toBe("minimal");
     expect(d.flags).toEqual(["minimal_scores"]);
   });
 

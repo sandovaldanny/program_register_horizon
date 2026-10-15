@@ -48,11 +48,13 @@
       "overdue": "Assessment overdue",
       "attendance": "Attendance concern",
       "worsening": "Worsening",
-      "severe": "Tier 3 · severe",
+      "severe": "Severe range",
       "dueSoon": "Due this week",
       "noScores": "No scores yet",
       "minimal": "Minimal · discuss graduation",
-      "improving": "Improving"
+      "improving": "Improving",
+      "severeHint": "PHQ-9 ≥15 or GAD-7 ≥15",
+      "sectionLabel": "Caseload indicators"
     },
     "worklist": {
       "title": "Needs attention",
@@ -72,7 +74,6 @@
   "table": {
     "patient": "Patient",
     "center": "Center",
-    "tier": "Tier",
     "phq": "PHQ-9",
     "gad": "GAD-7",
     "trend": "Trend",
@@ -80,15 +81,14 @@
     "lastSession": "Last session",
     "flags": "Flags",
     "priority": "Priority",
-    "yearsShort": "y"
+    "yearsShort": "y",
+    "scoreHint": "baseline → latest (Δ)"
   },
   "filters": {
     "search": "Search",
     "searchPlaceholder": "MRN, name, diagnosis, clinician",
     "alert": "Alert",
     "needsAttention": "Needs attention (any)",
-    "tier": "Tier",
-    "noTier": "No scores",
     "trend": "Trend",
     "clinician": "Clinician",
     "priority": "Follow-up priority",
@@ -98,11 +98,13 @@
     "sort": "Sort by",
     "sortBy": {
       "priority": "Priority",
-      "tier": "Tier",
       "last_score": "Last score date",
-      "mrn": "MRN"
+      "mrn": "MRN",
+      "severity": "Severity"
     },
-    "clear": "Clear {count, plural, one {# filter} other {# filters}}"
+    "clear": "Clear {count, plural, one {# filter} other {# filters}}",
+    "phqSeverity": "PHQ-9 severity",
+    "gadSeverity": "GAD-7 severity"
   },
   "flags": {
     "high_priority": "High priority",
@@ -117,12 +119,6 @@
     "care_plan_missing": "No care plan"
   },
   "enums": {
-    "tier": {
-      "tier3": "Tier 3 · severe",
-      "tier2": "Tier 2 · moderate",
-      "tier1": "Tier 1 · mild",
-      "minimal": "Minimal"
-    },
     "trend": {
       "improving": "Improving",
       "stable": "Stable",
@@ -186,17 +182,22 @@
       "action": "Action",
       "mdt": "MDT",
       "import": "Import"
+    },
+    "specialty": {
+      "psychiatrist": "Psychiatrist",
+      "psychologist": "Psychologist",
+      "other": "Other"
     }
   },
   "detail": {
     "backToList": "All patients",
     "editPatient": "Edit patient",
     "summary": {
-      "tier": "Tier",
       "trend": "Trend",
       "nextDue": "Next check due",
       "lastSession": "Last session",
-      "priorityScore": "Priority score"
+      "priorityScore": "Priority score",
+      "severity": "Severity (latest)"
     },
     "scores": {
       "title": "PHQ-9 & GAD-7 over time",
@@ -258,7 +259,6 @@
     "treatmentGoals": "Treatment goals",
     "psychiatrist": "Psychiatrist(s)",
     "psychologist": "Psychologist(s)",
-    "namesHint": "Comma-separated",
     "medication": "Medication",
     "medicationAdherence": "Medication adherence",
     "sessionsCount": "Sessions",
@@ -285,7 +285,11 @@
       "care": "Care team & plan",
       "attendance": "Attendance",
       "followUp": "Follow-up"
-    }
+    },
+    "noClinicians": "No clinicians in the catalogue yet — add them in Settings.",
+    "otherClinician": "Other (comma-separated)",
+    "noDiagnoses": "No diagnoses in the catalogue yet — add them in Settings.",
+    "otherDiagnosis": "Other (comma-separated)"
   },
   "settings": {
     "title": "Settings",
@@ -303,6 +307,41 @@
       "confirmActive": "Days past due before \"confirm still active\"",
       "attendance": "Days since last session before \"attendance concern\""
     },
-    "saved": "Settings saved."
+    "saved": "Settings saved.",
+    "clinicians": {
+      "title": "Clinicians",
+      "subtitle": "Psychiatrists and psychologists available when assigning a care team.",
+      "name": "Name",
+      "namePlaceholder": "Dr. Name or First name",
+      "specialty": "Specialty",
+      "center": "Center",
+      "bothCenters": "Both centers",
+      "add": "Add clinician",
+      "inactive": "Inactive",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "confirmDelete": "Delete {name}? Patients keep the name as text.",
+      "empty": "No clinicians yet.",
+      "errors": {
+        "duplicate": "A clinician with this name already exists.",
+        "invalid": "Please enter a valid name."
+      }
+    },
+    "rulesTitle": "Clinical rules",
+    "catalog": {
+      "diagnosisTitle": "Diagnoses",
+      "diagnosisSubtitle": "Pick-list shown when adding or editing a patient. Several can be selected.",
+      "label": "Label",
+      "add": "Add",
+      "inactive": "Inactive",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "confirmDelete": "Delete \"{label}\"? Patients keep it as text.",
+      "empty": "Nothing yet.",
+      "errors": {
+        "duplicate": "Already exists.",
+        "invalid": "Please enter a valid label."
+      }
+    }
   }
 }

@@ -1,18 +1,39 @@
 import { getTranslations } from "next-intl/server";
+import { CatalogManager } from "@/components/CatalogManager";
+import { CliniciansManager } from "@/components/CliniciansManager";
 import { SettingsForm } from "@/components/SettingsForm";
+import { getCatalog, getClinicians } from "@/db/queries";
 import { getDb } from "@/db";
 import { ensureSettings } from "@/db/settings";
 
 export default async function SettingsPage() {
   const t = await getTranslations("settings");
   const settings = await ensureSettings(getDb());
+  const [clinicians, diagnoses] = await Promise.all([getClinicians(), getCatalog("diagnosis")]);
   return (
     <div className="flex flex-col gap-8">
       <header>
         <h1 className="text-3xl font-medium text-indigo">{t("title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-bluegray">{t("subtitle")}</p>
       </header>
-      <SettingsForm settings={settings} />
+      <section className="flex max-w-3xl flex-col gap-4">
+        <div>
+          <h2 className="text-xl font-medium text-indigo">{t("clinicians.title")}</h2>
+          <p className="text-sm text-bluegray">{t("clinicians.subtitle")}</p>
+        </div>
+        <CliniciansManager items={clinicians} />
+      </section>
+      <section className="flex max-w-3xl flex-col gap-4">
+        <div>
+          <h2 className="text-xl font-medium text-indigo">{t("catalog.diagnosisTitle")}</h2>
+          <p className="text-sm text-bluegray">{t("catalog.diagnosisSubtitle")}</p>
+        </div>
+        <CatalogManager kind="diagnosis" items={diagnoses} />
+      </section>
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl font-medium text-indigo">{t("rulesTitle")}</h2>
+        <SettingsForm settings={settings} />
+      </section>
     </div>
   );
 }

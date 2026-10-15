@@ -68,7 +68,6 @@ export const mapAlBateenRow: RowMapper = (row, headers, opts) => {
   const provenance = [
     `Imported from Care Coordinator Tracker (${AL_BATEEN_SHEET}).`,
     cellText(pick(row, headers, "Trend")) && `Trend (sheet): ${cellText(pick(row, headers, "Trend"))}.`,
-    cellText(pick(row, headers, "Tier")) && `Tier (sheet): ${cellText(pick(row, headers, "Tier"))}.`,
     anomalies.length && `Anomalies: ${anomalies.join("; ")}.`,
   ]
     .filter(Boolean)

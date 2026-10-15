@@ -48,11 +48,13 @@
       "overdue": "Evaluación vencida",
       "attendance": "Alerta de asistencia",
       "worsening": "Empeorando",
-      "severe": "Tier 3 · severo",
+      "severe": "Rango severo",
       "dueSoon": "Vence esta semana",
       "noScores": "Sin puntajes",
       "minimal": "Mínimo · evaluar egreso",
-      "improving": "Mejorando"
+      "improving": "Mejorando",
+      "severeHint": "PHQ-9 ≥15 o GAD-7 ≥15",
+      "sectionLabel": "Indicadores del caseload"
     },
     "worklist": {
       "title": "Requieren atención",
@@ -72,7 +74,6 @@
   "table": {
     "patient": "Paciente",
     "center": "Centro",
-    "tier": "Tier",
     "phq": "PHQ-9",
     "gad": "GAD-7",
     "trend": "Tendencia",
@@ -80,15 +81,14 @@
     "lastSession": "Última sesión",
     "flags": "Alertas",
     "priority": "Prioridad",
-    "yearsShort": "a"
+    "yearsShort": "a",
+    "scoreHint": "baseline → último (Δ)"
   },
   "filters": {
     "search": "Buscar",
     "searchPlaceholder": "MRN, nombre, diagnóstico, clínico",
     "alert": "Alerta",
     "needsAttention": "Requiere atención (cualquiera)",
-    "tier": "Tier",
-    "noTier": "Sin puntajes",
     "trend": "Tendencia",
     "clinician": "Clínico",
     "priority": "Prioridad de seguimiento",
@@ -98,11 +98,13 @@
     "sort": "Ordenar por",
     "sortBy": {
       "priority": "Prioridad",
-      "tier": "Tier",
       "last_score": "Fecha último puntaje",
-      "mrn": "MRN"
+      "mrn": "MRN",
+      "severity": "Severidad"
     },
-    "clear": "Limpiar {count, plural, one {# filtro} other {# filtros}}"
+    "clear": "Limpiar {count, plural, one {# filtro} other {# filtros}}",
+    "phqSeverity": "Severidad PHQ-9",
+    "gadSeverity": "Severidad GAD-7"
   },
   "flags": {
     "high_priority": "Alta prioridad",
@@ -117,12 +119,6 @@
     "care_plan_missing": "Sin plan de cuidado"
   },
   "enums": {
-    "tier": {
-      "tier3": "Tier 3 · severo",
-      "tier2": "Tier 2 · moderado",
-      "tier1": "Tier 1 · leve",
-      "minimal": "Mínimo"
-    },
     "trend": {
       "improving": "Mejorando",
       "stable": "Estable",
@@ -186,17 +182,22 @@
       "action": "Acción",
       "mdt": "MDT",
       "import": "Importación"
+    },
+    "specialty": {
+      "psychiatrist": "Psiquiatra",
+      "psychologist": "Psicólogo/a",
+      "other": "Otro"
     }
   },
   "detail": {
     "backToList": "Todos los pacientes",
     "editPatient": "Editar paciente",
     "summary": {
-      "tier": "Tier",
       "trend": "Tendencia",
       "nextDue": "Próxima evaluación",
       "lastSession": "Última sesión",
-      "priorityScore": "Puntaje de prioridad"
+      "priorityScore": "Puntaje de prioridad",
+      "severity": "Severidad (último)"
     },
     "scores": {
       "title": "PHQ-9 y GAD-7 en el tiempo",
@@ -258,7 +259,6 @@
     "treatmentGoals": "Objetivos de tratamiento",
     "psychiatrist": "Psiquiatra(s)",
     "psychologist": "Psicólogo(s)",
-    "namesHint": "Separados por coma",
     "medication": "Medicación",
     "medicationAdherence": "Adherencia a medicación",
     "sessionsCount": "Sesiones",
@@ -285,7 +285,11 @@
       "care": "Equipo y plan de cuidado",
       "attendance": "Asistencia",
       "followUp": "Seguimiento"
-    }
+    },
+    "noClinicians": "No hay médicos en el catálogo — agrégalos en Configuración.",
+    "otherClinician": "Otro (separados por coma)",
+    "noDiagnoses": "No hay diagnósticos en el catálogo — agrégalos en Configuración.",
+    "otherDiagnosis": "Otro (separados por coma)"
   },
   "settings": {
     "title": "Configuración",
@@ -303,6 +307,41 @@
       "confirmActive": "Días vencidos antes de \"confirmar si sigue activo\"",
       "attendance": "Días desde la última sesión antes de \"alerta de asistencia\""
     },
-    "saved": "Configuración guardada."
+    "saved": "Configuración guardada.",
+    "clinicians": {
+      "title": "Médicos y especialistas",
+      "subtitle": "Psiquiatras y psicólogos disponibles al asignar el equipo de cuidado.",
+      "name": "Nombre",
+      "namePlaceholder": "Dr. Nombre o Nombre",
+      "specialty": "Especialidad",
+      "center": "Centro",
+      "bothCenters": "Ambos centros",
+      "add": "Agregar",
+      "inactive": "Inactivo",
+      "activate": "Activar",
+      "deactivate": "Desactivar",
+      "confirmDelete": "¿Eliminar a {name}? Los pacientes conservan el nombre como texto.",
+      "empty": "Aún no hay médicos.",
+      "errors": {
+        "duplicate": "Ya existe un médico con este nombre.",
+        "invalid": "Ingresa un nombre válido."
+      }
+    },
+    "rulesTitle": "Reglas clínicas",
+    "catalog": {
+      "diagnosisTitle": "Diagnósticos",
+      "diagnosisSubtitle": "Lista para seleccionar al crear o editar un paciente. Se pueden elegir varios.",
+      "label": "Etiqueta",
+      "add": "Agregar",
+      "inactive": "Inactivo",
+      "activate": "Activar",
+      "deactivate": "Desactivar",
+      "confirmDelete": "¿Eliminar \"{label}\"? Los pacientes lo conservan como texto.",
+      "empty": "Nada todavía.",
+      "errors": {
+        "duplicate": "Ya existe.",
+        "invalid": "Ingresa una etiqueta válida."
+      }
+    }
   }
 }

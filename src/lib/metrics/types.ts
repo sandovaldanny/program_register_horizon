@@ -2,8 +2,6 @@ export type Scale = "phq9" | "gad7";
 
 export type Severity = "minimal" | "mild" | "moderate" | "moderately_severe" | "severe";
 
-export type Tier = "minimal" | "tier1" | "tier2" | "tier3";
-
 export type ScaleTrend = "improving" | "stable" | "worsening";
 
 export type Trend = ScaleTrend | "mixed" | "first_score";
@@ -75,7 +73,10 @@ export type ScaleSummary = {
 export type PatientDerived = {
   phq: ScaleSummary;
   gad: ScaleSummary;
-  tier: Tier | null;
+  /** Worst of the two latest severities (by band rank), null without scores. */
+  maxSeverity: Severity | null;
+  /** True when PHQ-9 ≥ 15 (moderately severe or severe) or GAD-7 ≥ 15 (severe). */
+  severeRange: boolean;
   trend: Trend | null;
   lastScoreDate: string | null;
   nextDueDate: string | null;

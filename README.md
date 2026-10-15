@@ -4,8 +4,8 @@ Care-coordination tracker for the Alkalma **Horizon** Anxiety & Depression progr
 
 - **PHQ-9 / GAD-7 monthly tracking** – every screening is kept; delta and trend always compare baseline → latest.
 - **Alerts** – assessment overdue (no score in the last month, re-raised every month), attendance concern (no session in the last month), worsening, severe, no scores, confirm still active, minimal scores (discuss graduation).
-- **Severity & tier** – PHQ-9 0–4 minimal · 5–9 mild · 10–14 moderate · 15–19 moderately severe · 20+ severe. GAD-7 0–4 · 5–9 · 10–14 · 15+. Tier = higher of latest PHQ/GAD (<5 minimal, 5–9 T1, 10–14 T2, 15+ T3).
-- **Configurable rules** – change thresholds (default PHQ ≥5, GAD ≥4), screening interval, due-soon window, confirm-active and attendance windows.
+- **Severity per scale** – PHQ-9 0–4 minimal · 5–9 mild · 10–14 moderate · 15–19 moderately severe · 20+ severe. GAD-7 0–4 minimal · 5–9 mild · 10–14 moderate · 15+ severe. "Severe range" = either scale ≥15. No tiers.
+- **Configurable in Settings** – clinicians catalogue (name, specialty, center), diagnoses pick-list, change thresholds (default PHQ ≥5, GAD ≥4), screening interval, due-soon window, confirm-active and attendance windows.
 - **Trilingual UI** – English, Spanish, Arabic (RTL).
 - **Export** – CSV / Excel of the filtered caseload with derived columns.
 

@@ -1,4 +1,4 @@
-import type { AssessmentStatus, AttendanceStatus, Flag, PatientInput, Tier, Trend } from "./types";
+import type { AssessmentStatus, AttendanceStatus, Flag, PatientInput, Trend } from "./types";
 
 /** Order matters: it is the display order of the chips and the evaluation order. */
 export const FLAG_ORDER: Flag[] = [
@@ -32,7 +32,7 @@ export const PRIORITY_WEIGHTS: Record<Flag, number> = {
 
 export type FlagInput = {
   patient: PatientInput;
-  tier: Tier | null;
+  severeRange: boolean;
   trend: Trend | null;
   assessmentStatus: AssessmentStatus;
   attendanceStatus: AttendanceStatus;
@@ -47,7 +47,7 @@ export function computeFlags(input: FlagInput): Flag[] {
   const set = new Set<Flag>();
   if (input.patient.followUpPriority === "high") set.add("high_priority");
   if (input.trend === "worsening" || input.trend === "mixed") set.add("worsening");
-  if (input.tier === "tier3") set.add("severe");
+  if (input.severeRange) set.add("severe");
 
   switch (input.assessmentStatus) {
     case "overdue":
