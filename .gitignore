@@ -145,3 +145,4 @@ data/
 .next/
 out/
 .vercel
+.playwright-mcp/

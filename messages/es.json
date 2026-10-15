@@ -1,1 +1,28 @@
-{"common":{"appName":"Horizon Care Tracker"}}
+{
+  "common": {
+    "appName": "Horizon Care Tracker"
+  },
+  "auth": {
+    "title": "Horizon Care Tracker",
+    "subtitle": "Programa de Ansiedad y Depresión · coordinación de cuidado",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "signIn": "Ingresar",
+    "signingIn": "Ingresando…",
+    "invalid": "Usuario o contraseña incorrectos."
+  },
+  "nav": {
+    "programme": "Programa Horizon",
+    "dashboard": "Panel",
+    "patients": "Pacientes",
+    "settings": "Configuración",
+    "center": "Centro",
+    "signOut": "Cerrar sesión"
+  },
+  "centers": {
+    "scope": "Alcance por centro",
+    "all": "Todos los centros",
+    "al_falah": "Al Falah",
+    "al_bateen": "Al Bateen"
+  }
+}
