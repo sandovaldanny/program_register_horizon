@@ -39,7 +39,6 @@ export const patientSchema = z.object({
   diagnosis: optionalText,
   carePlan: optionalText,
   therapyProgress: optionalText,
-  treatmentGoals: optionalText,
   psychiatrist: optionalText,
   psychologist: optionalText,
   medication: z.enum(["yes", "no", "unknown"]).default("unknown"),

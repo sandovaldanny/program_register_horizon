@@ -220,6 +220,11 @@
       "care": "Care team & plan",
       "attendance": "Attendance",
       "followUp": "Follow-up"
+    },
+    "goals": {
+      "title": "Individual goals",
+      "subtitle": "Personal goals agreed with the patient, separate from the medical care plan.",
+      "openCount": "{count, plural, =0 {no open goals} one {# open goal} other {# open goals}}"
     }
   },
   "form": {
@@ -234,7 +239,6 @@
     "diagnosis": "Diagnosis",
     "carePlan": "Care plan",
     "therapyProgress": "Therapy progress",
-    "treatmentGoals": "Treatment goals",
     "psychiatrist": "Psychiatrist(s)",
     "psychologist": "Psychologist(s)",
     "medication": "Medication",
@@ -319,7 +323,32 @@
         "invalid": "Please enter a valid label."
       },
       "carePlanTitle": "Care plan options",
-      "carePlanSubtitle": "Pick-list for the care plan field. Several can be selected."
+      "carePlanSubtitle": "Pick-list for the care plan field. Several can be selected.",
+      "goalCategoryTitle": "Goal categories",
+      "goalCategorySubtitle": "Optional categories for individual goals."
     }
+  },
+  "goals": {
+    "title": "Individual goals",
+    "subtitle": "Personal goals agreed with the patient, separate from the medical care plan.",
+    "openCount": "{count, plural, =0 {no open goals} one {# open goal} other {# open goals}}",
+    "titleLabel": "Goal",
+    "titlePlaceholder": "e.g. Attend 4 psychology sessions this month",
+    "titleError": "Enter a short goal (2–200 characters).",
+    "category": "Category",
+    "noCategory": "No category",
+    "targetDate": "Target date",
+    "notes": "Notes",
+    "add": "Add goal",
+    "empty": "No goals yet. Add the first one above.",
+    "due": "Due {date}",
+    "achieved": "Achieved",
+    "dropped": "Dropped",
+    "open": "Open",
+    "markAchieved": "Mark as achieved",
+    "markDropped": "Drop goal",
+    "reopen": "Reopen",
+    "closedCount": "{count, plural, one {# closed goal} other {# closed goals}}",
+    "confirmDelete": "Delete this goal?"
   }
 }

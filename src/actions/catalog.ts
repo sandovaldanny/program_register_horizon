@@ -8,7 +8,7 @@ import { catalogItems, type CatalogKind } from "@/db/schema";
 import { requireSession } from "@/lib/auth/require-session";
 import type { FieldErrors } from "@/lib/validation";
 
-const KINDS: CatalogKind[] = ["diagnosis", "care_plan"];
+const KINDS: CatalogKind[] = ["diagnosis", "care_plan", "goal_category"];
 const labelSchema = z.string().trim().min(2).max(120);
 
 export type CatalogFormState = { errors: FieldErrors; ok?: boolean; savedAt?: number };

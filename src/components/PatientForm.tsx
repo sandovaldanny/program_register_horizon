@@ -133,9 +133,6 @@ export function PatientForm({
         <Field label={t("therapyProgress")} htmlFor="p-prog" className="md:col-span-3">
           <Textarea id="p-prog" name="therapyProgress" defaultValue={patient?.therapyProgress ?? ""} rows={2} />
         </Field>
-        <Field label={t("treatmentGoals")} htmlFor="p-goals" className="md:col-span-3">
-          <Textarea id="p-goals" name="treatmentGoals" defaultValue={patient?.treatmentGoals ?? ""} rows={2} />
-        </Field>
       </Section>
 
       <Section title={t("sections.attendance")}>

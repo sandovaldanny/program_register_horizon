@@ -82,7 +82,6 @@ export const mapAlFalahRow: RowMapper = (row, headers, opts) => {
       diagnosis: cellText(pick(row, headers, "Diagnosis")),
       carePlan: cellText(pick(row, headers, "Care Plan")),
       therapyProgress: cellText(pick(row, headers, "Therapy progress")),
-      treatmentGoals: null,
       psychiatrist: joinNames(specialists.psychiatrist),
       psychologist: joinNames(specialists.psychologist),
       medication: mapYesNo(cellText(pick(row, headers, "Medication"))),

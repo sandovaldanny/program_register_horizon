@@ -1,7 +1,7 @@
 import "server-only";
 import { and, asc, desc, eq, inArray } from "drizzle-orm";
 import { getDb } from "./index";
-import { assessments, catalogItems, clinicians, notes, patients, type Assessment, type CatalogItem, type CatalogKind, type Center, type Clinician, type Patient, type Note } from "./schema";
+import { assessments, catalogItems, clinicians, goals, notes, patients, type Assessment, type CatalogItem, type CatalogKind, type Center, type Clinician, type Goal, type Patient, type Note } from "./schema";
 import { ensureSettings } from "./settings";
 import { derivePatient, summarizeCaseload, type AssessmentPoint, type CaseloadKpis, type MetricSettings, type PatientDerived } from "@/lib/metrics";
 import { splitNames } from "@/lib/import/normalize";
@@ -65,6 +65,7 @@ export type PatientDetail = {
   patient: Patient;
   assessments: Assessment[];
   notes: Note[];
+  goals: Goal[];
   derived: PatientDerived;
   settings: MetricSettings;
 };
@@ -74,18 +75,20 @@ export async function getPatientDetail(id: string, today = new Date()): Promise<
   const [patient] = await db.select().from(patients).where(eq(patients.id, id)).limit(1);
   if (!patient) return null;
   const settings = metricSettings(await ensureSettings(db));
-  const [scores, patientNotes] = await Promise.all([
+  const [scores, patientNotes, patientGoals] = await Promise.all([
     db
       .select()
       .from(assessments)
       .where(eq(assessments.patientId, id))
       .orderBy(asc(assessments.assessedAt), asc(assessments.createdAt)),
     db.select().from(notes).where(eq(notes.patientId, id)).orderBy(desc(notes.occurredAt), desc(notes.createdAt)),
+    db.select().from(goals).where(eq(goals.patientId, id)).orderBy(asc(goals.status), asc(goals.targetDate), asc(goals.createdAt)),
   ]);
   return {
     patient,
     assessments: scores,
     notes: patientNotes,
+    goals: patientGoals,
     derived: derivePatient(patient, scores.map(toPoint), settings, today),
     settings,
   };

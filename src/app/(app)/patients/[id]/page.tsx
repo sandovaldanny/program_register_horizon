@@ -5,9 +5,10 @@ import { AssessmentChart } from "@/components/AssessmentChart";
 import { AssessmentList } from "@/components/AssessmentList";
 import { Badge, priorityTone, severityTone, trendTone } from "@/components/Badge";
 import { FlagChips } from "@/components/FlagChips";
+import { GoalsPanel } from "@/components/GoalsPanel";
 import { NotesLog } from "@/components/NotesLog";
 import { QuickAddScoreForm } from "@/components/QuickAddScoreForm";
-import { getPatientDetail, toPoint } from "@/db/queries";
+import { getCatalog, getPatientDetail, toPoint } from "@/db/queries";
 import type { ScaleSummary } from "@/lib/metrics";
 import { CENTER_LABELS } from "@/lib/scope";
 import { cn } from "@/lib/cn";
@@ -16,7 +17,8 @@ export default async function PatientDetailPage({ params }: PageProps<"/patients
   const { id } = await params;
   const detail = await getPatientDetail(id);
   if (!detail) notFound();
-  const { patient, derived, assessments, notes } = detail;
+  const { patient, derived, assessments, notes, goals } = detail;
+  const goalCategories = (await getCatalog("goal_category")).filter((c) => c.active).map((c) => c.label);
 
   const t = await getTranslations("detail");
   const tEnum = await getTranslations("enums");
@@ -120,6 +122,17 @@ export default async function PatientDetailPage({ params }: PageProps<"/patients
         ) : null}
       </section>
 
+      <section className="rounded-card border border-border bg-surface p-6 shadow-card">
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h2 className="text-xl font-medium text-indigo">{t("goals.title")}</h2>
+            <p className="text-sm text-bluegray">{t("goals.subtitle")}</p>
+          </div>
+          <span className="text-sm text-bluegray">{t("goals.openCount", { count: goals.filter((g) => g.status === "open").length })}</span>
+        </div>
+        <GoalsPanel items={goals} patientId={patient.id} categories={goalCategories} />
+      </section>
+
       <div className="grid gap-8 xl:grid-cols-5">
         <section className="rounded-card border border-border bg-surface p-6 shadow-card xl:col-span-3">
           <h2 className="mb-5 text-xl font-medium text-indigo">{t("notes.title")}</h2>
@@ -134,7 +147,6 @@ export default async function PatientDetailPage({ params }: PageProps<"/patients
             <Info label={tForm("medication")} value={tEnum(`medication.${patient.medication}`)} />
             <Info label={tForm("medicationAdherence")} value={patient.medicationAdherence} />
             <Info label={tForm("therapyProgress")} value={patient.therapyProgress} />
-            <Info label={tForm("treatmentGoals")} value={patient.treatmentGoals} />
             <Info label={tForm("isHorizonPatient")} value={patient.isHorizonPatient === null ? null : patient.isHorizonPatient ? tc("yes") : tc("no")} />
           </InfoCard>
           <InfoCard title={t("info.attendance")}>

@@ -220,6 +220,11 @@
       "care": "فريق وخطة الرعاية",
       "attendance": "الحضور",
       "followUp": "المتابعة"
+    },
+    "goals": {
+      "title": "الأهداف الفردية",
+      "subtitle": "أهداف شخصية متفق عليها مع المريض، منفصلة عن خطة الرعاية الطبية.",
+      "openCount": "{count, plural, =0 {لا أهداف مفتوحة} one {هدف واحد مفتوح} other {# أهداف مفتوحة}}"
     }
   },
   "form": {
@@ -234,7 +239,6 @@
     "diagnosis": "التشخيص",
     "carePlan": "خطة الرعاية",
     "therapyProgress": "تقدم العلاج",
-    "treatmentGoals": "أهداف العلاج",
     "psychiatrist": "الطبيب النفسي",
     "psychologist": "الأخصائي النفسي",
     "medication": "الدواء",
@@ -319,7 +323,32 @@
         "invalid": "يرجى إدخال تسمية صالحة."
       },
       "carePlanTitle": "خيارات خطة الرعاية",
-      "carePlanSubtitle": "قائمة اختيار لحقل خطة الرعاية. يمكن اختيار أكثر من واحد."
+      "carePlanSubtitle": "قائمة اختيار لحقل خطة الرعاية. يمكن اختيار أكثر من واحد.",
+      "goalCategoryTitle": "فئات الأهداف",
+      "goalCategorySubtitle": "فئات اختيارية للأهداف الفردية."
     }
+  },
+  "goals": {
+    "title": "الأهداف الفردية",
+    "subtitle": "أهداف شخصية متفق عليها مع المريض، منفصلة عن خطة الرعاية الطبية.",
+    "openCount": "{count, plural, =0 {لا أهداف مفتوحة} one {هدف واحد مفتوح} other {# أهداف مفتوحة}}",
+    "titleLabel": "الهدف",
+    "titlePlaceholder": "مثال: حضور 4 جلسات نفسية هذا الشهر",
+    "titleError": "أدخل هدفاً قصيراً (2–200 حرفاً).",
+    "category": "الفئة",
+    "noCategory": "بدون فئة",
+    "targetDate": "التاريخ المستهدف",
+    "notes": "ملاحظات",
+    "add": "إضافة هدف",
+    "empty": "لا توجد أهداف بعد. أضف الأول أعلاه.",
+    "due": "الموعد {date}",
+    "achieved": "تحقق",
+    "dropped": "أُلغي",
+    "open": "مفتوح",
+    "markAchieved": "وضع علامة تحقق",
+    "markDropped": "إلغاء الهدف",
+    "reopen": "إعادة فتح",
+    "closedCount": "{count, plural, one {هدف مغلق واحد} other {# أهداف مغلقة}}",
+    "confirmDelete": "حذف هذا الهدف؟"
   }
 }

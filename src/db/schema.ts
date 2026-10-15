@@ -69,7 +69,32 @@ export const catalogItems = pgTable(
 );
 
 export type CatalogItem = typeof catalogItems.$inferSelect;
-export type CatalogKind = "diagnosis" | "care_plan";
+export type CatalogKind = "diagnosis" | "care_plan" | "goal_category";
+
+export const goalStatusEnum = pgEnum("goal_status", ["open", "achieved", "dropped"]);
+
+/** Individual goals agreed with the patient (separate from the medical care plan). */
+export const goals = pgTable(
+  "goals",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    patientId: uuid("patient_id")
+      .notNull()
+      .references(() => patients.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    category: text("category"),
+    targetDate: date("target_date"),
+    status: goalStatusEnum("status").notNull().default("open"),
+    notes: text("notes"),
+    achievedAt: date("achieved_at"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("goals_patient_status_idx").on(t.patientId, t.status)],
+);
+
+export type Goal = typeof goals.$inferSelect;
+export type GoalStatus = Goal["status"];
 
 export type Clinician = typeof clinicians.$inferSelect;
 export type Specialty = Clinician["specialty"];
@@ -88,7 +113,6 @@ export const patients = pgTable(
     diagnosis: text("diagnosis"),
     carePlan: text("care_plan"),
     therapyProgress: text("therapy_progress"),
-    treatmentGoals: text("treatment_goals"),
 
     psychiatrist: text("psychiatrist"),
     psychologist: text("psychologist"),

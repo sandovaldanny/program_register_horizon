@@ -220,6 +220,11 @@
       "care": "Equipo y plan de cuidado",
       "attendance": "Asistencia",
       "followUp": "Seguimiento"
+    },
+    "goals": {
+      "title": "Metas individuales",
+      "subtitle": "Metas personales acordadas con el paciente, aparte del plan de cuidado médico.",
+      "openCount": "{count, plural, =0 {sin metas abiertas} one {# meta abierta} other {# metas abiertas}}"
     }
   },
   "form": {
@@ -234,7 +239,6 @@
     "diagnosis": "Diagnóstico",
     "carePlan": "Plan de cuidado",
     "therapyProgress": "Progreso terapéutico",
-    "treatmentGoals": "Objetivos de tratamiento",
     "psychiatrist": "Psiquiatra(s)",
     "psychologist": "Psicólogo(s)",
     "medication": "Medicación",
@@ -319,7 +323,32 @@
         "invalid": "Ingresa una etiqueta válida."
       },
       "carePlanTitle": "Opciones de plan de cuidado",
-      "carePlanSubtitle": "Lista para el campo plan de cuidado. Se pueden elegir varias."
+      "carePlanSubtitle": "Lista para el campo plan de cuidado. Se pueden elegir varias.",
+      "goalCategoryTitle": "Categorías de metas",
+      "goalCategorySubtitle": "Categorías opcionales para las metas individuales."
     }
+  },
+  "goals": {
+    "title": "Metas individuales",
+    "subtitle": "Metas personales acordadas con el paciente, aparte del plan de cuidado médico.",
+    "openCount": "{count, plural, =0 {sin metas abiertas} one {# meta abierta} other {# metas abiertas}}",
+    "titleLabel": "Meta",
+    "titlePlaceholder": "ej. Asistir a 4 sesiones de psicología este mes",
+    "titleError": "Escribe una meta corta (2–200 caracteres).",
+    "category": "Categoría",
+    "noCategory": "Sin categoría",
+    "targetDate": "Fecha objetivo",
+    "notes": "Notas",
+    "add": "Agregar meta",
+    "empty": "Aún no hay metas. Agrega la primera arriba.",
+    "due": "Vence {date}",
+    "achieved": "Lograda",
+    "dropped": "Descartada",
+    "open": "Abierta",
+    "markAchieved": "Marcar como lograda",
+    "markDropped": "Descartar meta",
+    "reopen": "Reabrir",
+    "closedCount": "{count, plural, one {# meta cerrada} other {# metas cerradas}}",
+    "confirmDelete": "¿Eliminar esta meta?"
   }
 }

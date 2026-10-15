@@ -87,7 +87,6 @@ export const mapAlBateenRow: RowMapper = (row, headers, opts) => {
       diagnosis: null,
       carePlan: null,
       therapyProgress: null,
-      treatmentGoals: cellText(pick(row, headers, "Treatment goals")),
       psychiatrist: joinNames(splitNames(cellText(pick(row, headers, "Psychiatrist")))),
       psychologist: joinNames(splitNames(cellText(pick(row, headers, "Psychologist")))),
       medication: "unknown",
