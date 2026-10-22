@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { AssessmentChart } from "@/components/AssessmentChart";
 import { AssessmentList } from "@/components/AssessmentList";
+import { AttendancePanel } from "@/components/AttendancePanel";
 import { Badge, priorityTone, severityTone, trendTone } from "@/components/Badge";
 import { FlagChips } from "@/components/FlagChips";
 import { EnrolmentPanel } from "@/components/EnrolmentPanel";
@@ -155,25 +156,7 @@ export default async function PatientDetailPage({ params }: PageProps<"/patients
             <Info label={tForm("isHorizonPatient")} value={patient.isHorizonPatient === null ? null : patient.isHorizonPatient ? tc("yes") : tc("no")} />
           </InfoCard>
           <EnrolmentPanel patient={patient} reasons={unenrollReasons} />
-          <InfoCard title={t("info.attendance")}>
-            <div className="sm:col-span-2 flex flex-wrap items-end gap-6 rounded-card bg-surface-soft/60 px-4 py-3">
-              <div>
-                <div className="text-xs font-semibold uppercase tracking-wide text-bluegray">{tForm("sessionsTotal")}</div>
-                <div className="ltr-data mt-0.5 text-2xl font-medium text-indigo">{patient.sessionsCount ?? "—"}</div>
-              </div>
-              <div>
-                <div className="text-xs font-semibold uppercase tracking-wide text-bluegray">{tForm("psychologySessions")}</div>
-                <div className="ltr-data mt-0.5 text-lg font-medium text-turquoise-dark">{patient.psychologySessions ?? "—"}</div>
-              </div>
-              <div>
-                <div className="text-xs font-semibold uppercase tracking-wide text-bluegray">{tForm("psychiatrySessions")}</div>
-                <div className="ltr-data mt-0.5 text-lg font-medium text-steel">{patient.psychiatrySessions ?? "—"}</div>
-              </div>
-            </div>
-            <Info label={tForm("attendancePct")} value={patient.attendancePct ? `${Number(patient.attendancePct)}%` : null} />
-            <Info label={tForm("attendancePattern")} value={patient.attendancePattern ? tEnum(`attendancePattern.${patient.attendancePattern}`) : null} />
-            <Info label={tForm("reasonNotAttending")} value={patient.reasonNotAttending} />
-          </InfoCard>
+          <AttendancePanel patient={patient} />
           <InfoCard title={t("info.followUp")}>
             <Info label={tForm("ccAction")} value={patient.ccAction} />
             <Info label={tForm("outcome")} value={patient.outcome} />

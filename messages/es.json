@@ -237,6 +237,10 @@
       "reenrol": "Re-enrolar paciente",
       "reenrolHint": "Fija hoy como nueva fecha de enrolamiento y limpia el desenrolamiento.",
       "confirmReenrol": "¿Re-enrolar a este paciente? Se borrarán la fecha y la causa de desenrolamiento."
+    },
+    "attendance": {
+      "title": "Atenciones",
+      "totalHint": "El total de sesiones se calcula como psicología + psiquiatría."
     }
   },
   "form": {
@@ -256,7 +260,6 @@
     "medication": "Medicación",
     "medicationAdherence": "Adherencia a medicación",
     "sessionsCount": "Sesiones",
-    "attendancePct": "Asistencia %",
     "attendancePattern": "Patrón de asistencia",
     "lastSessionDate": "Fecha última sesión",
     "reasonNotAttending": "Motivo si no asiste",
@@ -280,7 +283,6 @@
     "sections": {
       "identity": "Identificación",
       "care": "Equipo y plan de cuidado",
-      "attendance": "Asistencia",
       "followUp": "Seguimiento",
       "enrolment": "Enrolamiento"
     },

@@ -11,7 +11,6 @@ import { matchLabels, normalizeCarePlan, splitLabels } from "@/lib/diagnosis";
 import { catalogNames } from "@/db/queries-shared";
 import { splitNames } from "@/lib/import/normalize";
 import { CENTER_LABELS } from "@/lib/scope";
-import { REASONS_NOT_ATTENDING } from "@/lib/validation";
 import { cn } from "@/lib/cn";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -162,39 +161,7 @@ export function PatientForm({
         </Field>
       </Section>
 
-      <Section title={t("sections.attendance")}>
-        <Field label={t("lastSessionDate")} htmlFor="p-last">
-          <Input id="p-last" name="lastSessionDate" type="date" max={today} defaultValue={patient?.lastSessionDate ?? ""} className={cn("ltr-data", errCls("lastSessionDate"))} />
-        </Field>
-        <Field label={t("psychologySessions")} htmlFor="p-psy">
-          <Input id="p-psy" name="psychologySessions" type="number" min={0} defaultValue={patient?.psychologySessions ?? ""} className="ltr-data" />
-        </Field>
-        <Field label={t("psychiatrySessions")} htmlFor="p-psych">
-          <Input id="p-psych" name="psychiatrySessions" type="number" min={0} defaultValue={patient?.psychiatrySessions ?? ""} className="ltr-data" />
-        </Field>
-        <Field label={t("attendancePct")} htmlFor="p-pct">
-          <Input id="p-pct" name="attendancePct" type="number" min={0} max={100} step="0.01" defaultValue={patient?.attendancePct ?? ""} className="ltr-data" />
-        </Field>
-        <Field label={t("attendancePattern")} htmlFor="p-pattern">
-          <Select id="p-pattern" name="attendancePattern" defaultValue={patient?.attendancePattern ?? ""}>
-            <option value="">{tc("unknown")}</option>
-            {(["consistent", "irregular", "not_attending", "too_early"] as const).map((p) => (
-              <option key={p} value={p}>
-                {tEnum(`attendancePattern.${p}`)}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label={t("reasonNotAttending")} htmlFor="p-reason" className="md:col-span-2">
-          <Input id="p-reason" name="reasonNotAttending" list="reasons" defaultValue={patient?.reasonNotAttending ?? ""} />
-          <datalist id="reasons">
-            {REASONS_NOT_ATTENDING.map((r) => (
-              <option key={r} value={r} />
-            ))}
-          </datalist>
-        </Field>
-      </Section>
-
+      {patient ? (
       <Section title={t("sections.followUp")}>
         <Field label={t("followUpPriority")} htmlFor="p-priority">
           <Select id="p-priority" name="followUpPriority" defaultValue={patient?.followUpPriority ?? "routine"}>
@@ -212,6 +179,7 @@ export function PatientForm({
           <Input id="p-outcome" name="outcome" defaultValue={patient?.outcome ?? ""} />
         </Field>
       </Section>
+      ) : null}
 
       {Object.keys(state.errors).length > 0 && !err("mrn") ? <p className="text-sm text-danger">{t("errors.invalid")}</p> : null}
 

@@ -7,7 +7,7 @@ import { getDb } from "@/db";
 import { mrnExists } from "@/db/queries";
 import { patients } from "@/db/schema";
 import { requireSession } from "@/lib/auth/require-session";
-import { fieldErrors, formEntries, patientSchema, unenrollSchema, type FieldErrors } from "@/lib/validation";
+import { attendanceSchema, fieldErrors, formEntries, patientSchema, unenrollSchema, type FieldErrors } from "@/lib/validation";
 
 export type PatientFormState = { errors: FieldErrors; ok?: boolean };
 
@@ -64,4 +64,18 @@ export async function reenrollPatientAction(id: string): Promise<void> {
     .set({ status: "active", enrolledAt: today, unenrolledAt: null, unenrollReason: null, updatedAt: new Date() })
     .where(eq(patients.id, id));
   revalidatePath("/", "layout");
+}
+
+export type AttendanceFormState = { errors: FieldErrors; ok?: boolean; savedAt?: number };
+
+export async function updateAttendanceAction(id: string, _prev: AttendanceFormState, formData: FormData): Promise<AttendanceFormState> {
+  await requireSession();
+  const parsed = attendanceSchema.safeParse(formEntries(formData));
+  if (!parsed.success) return { errors: fieldErrors(parsed.error) };
+  await getDb()
+    .update(patients)
+    .set({ ...parsed.data, updatedAt: new Date() })
+    .where(eq(patients.id, id));
+  revalidatePath("/", "layout");
+  return { errors: {}, ok: true, savedAt: Date.now() };
 }

@@ -237,6 +237,10 @@
       "reenrol": "Re-enrol patient",
       "reenrolHint": "Sets today as the new enrolment date and clears the unenrolment.",
       "confirmReenrol": "Re-enrol this patient? The unenrolment date and reason will be cleared."
+    },
+    "attendance": {
+      "title": "Attendance",
+      "totalHint": "Total sessions is calculated as psychology + psychiatry."
     }
   },
   "form": {
@@ -256,7 +260,6 @@
     "medication": "Medication",
     "medicationAdherence": "Medication adherence",
     "sessionsCount": "Sessions",
-    "attendancePct": "Attendance %",
     "attendancePattern": "Attendance pattern",
     "lastSessionDate": "Last session date",
     "reasonNotAttending": "Reason if not attending",
@@ -280,7 +283,6 @@
     "sections": {
       "identity": "Identity",
       "care": "Care team & plan",
-      "attendance": "Attendance",
       "followUp": "Follow-up",
       "enrolment": "Enrolment"
     },

@@ -466,7 +466,7 @@ Datos del paciente: clave única por `(centro, MRN)`.
 - **Desenrolar** exige **fecha de desenrolamiento** (no anterior al enrolamiento, no futura) y **causa** del catálogo. La ficha del paciente tiene el formulario "Desenrolar paciente"; el formulario de edición aplica la misma regla al cambiar el estado.
 - Un paciente desenrolado no genera alertas, tiene prioridad 0, queda fuera de todos los KPIs y sale de la tabla por defecto (filtro de estado: Enrolado por defecto · Desenrolado · Todos).
 - **Re-enrolar** fija hoy como nueva fecha de enrolamiento y limpia fecha y causa de desenrolamiento.
-- **Sesiones**: se registran sesiones de psicología y de psiquiatría; el total siempre es la suma. A los pacientes existentes se les repartió el total importado de forma aleatoria (datos demo).
+- **Sesiones**: se registran sesiones de psicología y de psiquiatría; el total siempre es la suma. La asistencia (sesiones, fecha de última cita, patrón, razón si no asiste) se edita desde la ficha del paciente, no desde los formularios de alta / edición. El alta solo pide identidad, enrolamiento y equipo de cuidado. A los pacientes existentes se les repartió el total importado de forma aleatoria (datos demo).
 
 ```ts
 // src/lib/validation.ts

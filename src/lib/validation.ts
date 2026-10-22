@@ -46,25 +46,6 @@ const patientBaseSchema = z.object({
   psychologist: optionalText,
   medication: z.enum(["yes", "no", "unknown"]).default("unknown"),
   medicationAdherence: optionalText,
-  psychologySessions: optionalInt(0, 10000),
-  psychiatrySessions: optionalInt(0, 10000),
-  attendancePct: z
-    .union([z.literal(""), z.coerce.number().min(0).max(100)])
-    .transform((v) => (v === "" ? null : v.toFixed(2)))
-    .nullable()
-    .optional(),
-  attendancePattern: z
-    .union([z.literal(""), z.enum(["consistent", "irregular", "not_attending", "too_early"])])
-    .transform((v) => (v === "" ? null : v))
-    .nullable()
-    .optional(),
-  lastSessionDate: optionalDate,
-  reasonNotAttending: optionalText,
-  isHorizonPatient: z
-    .union([z.literal(""), z.enum(["yes", "no"])])
-    .transform((v) => (v === "" ? null : v === "yes"))
-    .nullable()
-    .optional(),
   followUpPriority: z.enum(["routine", "low", "mid", "high"]).default("routine"),
   ccAction: optionalText,
   outcome: optionalText,
@@ -78,11 +59,27 @@ export const patientSchema = patientBaseSchema
     else if (v.unenrolledAt < v.enrolledAt) ctx.addIssue({ code: "custom", path: ["unenrolledAt"], message: "unenrolledBeforeEnrolled" });
     if (!v.unenrollReason) ctx.addIssue({ code: "custom", path: ["unenrollReason"], message: "unenrollReasonRequired" });
   })
-  .transform((v) => {
-    const sessionsCount = v.psychologySessions === null && v.psychiatrySessions === null ? null : (v.psychologySessions ?? 0) + (v.psychiatrySessions ?? 0);
-    return v.status === "active" ? { ...v, sessionsCount, unenrolledAt: null, unenrollReason: null } : { ...v, sessionsCount };
-  });
+  .transform((v) => (v.status === "active" ? { ...v, unenrolledAt: null, unenrollReason: null } : v));
 export type PatientFormValues = z.infer<typeof patientSchema>;
+
+/** Attendance is edited from the patient page. Total sessions = psychology + psychiatry. */
+export const attendanceSchema = z
+  .object({
+    lastSessionDate: optionalDate,
+    psychologySessions: optionalInt(0, 10000),
+    psychiatrySessions: optionalInt(0, 10000),
+    attendancePattern: z
+      .union([z.literal(""), z.enum(["consistent", "irregular", "not_attending", "too_early"])])
+      .transform((v) => (v === "" ? null : v))
+      .nullable()
+      .optional(),
+    reasonNotAttending: optionalText,
+  })
+  .transform((v) => {
+    const psy = v.psychologySessions ?? null;
+    const psych = v.psychiatrySessions ?? null;
+    return { ...v, psychologySessions: psy, psychiatrySessions: psych, sessionsCount: psy === null && psych === null ? null : (psy ?? 0) + (psych ?? 0) };
+  });
 
 export const unenrollSchema = z.object({
   unenrolledAt: notFuture,

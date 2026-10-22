@@ -33,7 +33,7 @@ Built for Care Coordinators and Case Management: open the dashboard and immediat
 | **Dashboard** | Eight KPI tiles (Active, Needs attention, Worsening, No score, No session, No baseline, Improving, Graduation candidates) above a single caseload table. Each tile filters the table on click. |
 | **Caseload table** | Inline filters (search, alert, PHQ-9 / GAD-7 severity, clinician, manual priority, status), sortable headers, `baseline → latest` with delta chip and severity badge per scale, alert chips, priority with explanatory tooltip. Filters live in the URL and are shareable. |
 | **Center scope** | Switch between Al Falah, Al Bateen or both; persisted per user. |
-| **Patient page** | Timeline chart of every PHQ-9 / GAD-7 with severity bands, full screening history (editable score and date, estimated dates flagged), quick-add score, individual goals, notes log, enrolment card, sessions split by psychology / psychiatry, clinical and attendance details. |
+| **Patient page** | Timeline chart of every PHQ-9 / GAD-7 with severity bands, full screening history (editable score and date, estimated dates flagged), quick-add score, individual goals, notes log, enrolment card, attendance card edited in place (sessions split by psychology / psychiatry, last session, pattern), clinical details. |
 | **Screenings** | Every score is kept as its own dated row. Delta and trend always compare baseline → latest. Dates are editable so imported estimates can be corrected. |
 | **Four alert rules** | Worsening · No score > 1 month · No session > 1 month · No baseline. Only enrolled patients raise alerts. |
 | **Enrolment** | Every patient carries an enrolment date. Unenrolling requires a date and a reason from the catalogue; unenrolled patients drop out of alerts, KPIs and the default list, and can be re-enrolled. |
@@ -125,7 +125,7 @@ npm run dev            # http://localhost:3000
 Quality checks:
 
 ```bash
-npm test               # vitest (100 cases)
+npm test               # vitest (101 cases)
 npm run lint           # eslint
 npm run build          # production build
 ```

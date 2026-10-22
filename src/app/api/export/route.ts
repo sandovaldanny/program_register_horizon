@@ -48,7 +48,6 @@ const COLUMNS: Array<{ key: string; header: string; value: (r: CaseloadRow) => s
   { key: "sessions", header: "Sessions (total)", value: (r) => r.patient.sessionsCount },
   { key: "sessions_psychology", header: "Psychology sessions", value: (r) => r.patient.psychologySessions },
   { key: "sessions_psychiatry", header: "Psychiatry sessions", value: (r) => r.patient.psychiatrySessions },
-  { key: "attendance_pct", header: "Attendance %", value: (r) => r.patient.attendancePct },
   { key: "horizon", header: "Horizon patient", value: (r) => (r.patient.isHorizonPatient === null ? null : r.patient.isHorizonPatient ? "yes" : "no") },
 ];
 

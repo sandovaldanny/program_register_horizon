@@ -237,6 +237,10 @@
       "reenrol": "إعادة تسجيل المريض",
       "reenrolHint": "يحدد اليوم كتاريخ تسجيل جديد ويمسح إلغاء التسجيل.",
       "confirmReenrol": "إعادة تسجيل هذا المريض؟ سيتم مسح تاريخ وسبب إلغاء التسجيل."
+    },
+    "attendance": {
+      "title": "الحضور",
+      "totalHint": "يُحسب إجمالي الجلسات كمجموع جلسات علم النفس والطب النفسي."
     }
   },
   "form": {
@@ -256,7 +260,6 @@
     "medication": "الدواء",
     "medicationAdherence": "الالتزام بالدواء",
     "sessionsCount": "الجلسات",
-    "attendancePct": "نسبة الحضور %",
     "attendancePattern": "نمط الحضور",
     "lastSessionDate": "تاريخ آخر جلسة",
     "reasonNotAttending": "سبب عدم الحضور",
@@ -280,7 +283,6 @@
     "sections": {
       "identity": "الهوية",
       "care": "فريق وخطة الرعاية",
-      "attendance": "الحضور",
       "followUp": "المتابعة",
       "enrolment": "التسجيل"
     },

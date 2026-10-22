@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { patientSchema, unenrollSchema } from "../validation";
+import { attendanceSchema, patientSchema, unenrollSchema } from "../validation";
 
 const base = { center: "al_falah", mrn: "P-1", enrolledAt: "2026-01-10" };
 
@@ -31,18 +31,26 @@ describe("patientSchema — enrolment", () => {
   });
 });
 
-describe("patientSchema — sessions", () => {
+describe("attendanceSchema — sessions", () => {
   it("total = psychology + psychiatry", () => {
-    const r = patientSchema.parse({ ...base, psychologySessions: "7", psychiatrySessions: "3" });
+    const r = attendanceSchema.parse({ psychologySessions: "7", psychiatrySessions: "3" });
     expect(r.sessionsCount).toBe(10);
   });
 
   it("one side missing counts as zero", () => {
-    expect(patientSchema.parse({ ...base, psychologySessions: "4", psychiatrySessions: "" }).sessionsCount).toBe(4);
+    expect(attendanceSchema.parse({ psychologySessions: "4", psychiatrySessions: "" }).sessionsCount).toBe(4);
   });
 
-  it("both blank → total unknown", () => {
-    expect(patientSchema.parse({ ...base, psychologySessions: "", psychiatrySessions: "" }).sessionsCount).toBeNull();
+  it("both blank → total unknown, split cleared", () => {
+    const r = attendanceSchema.parse({ psychologySessions: "", psychiatrySessions: "" });
+    expect(r.sessionsCount).toBeNull();
+    expect(r.psychologySessions).toBeNull();
+  });
+
+  it("pattern and reason are optional", () => {
+    const r = attendanceSchema.parse({ lastSessionDate: "2026-10-01", attendancePattern: "irregular", reasonNotAttending: "" });
+    expect(r.attendancePattern).toBe("irregular");
+    expect(r.reasonNotAttending).toBeNull();
   });
 });
 

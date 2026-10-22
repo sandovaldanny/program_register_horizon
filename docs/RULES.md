@@ -466,7 +466,7 @@ Patient data: unique key `(center, MRN)`.
 - **Unenrolling** requires an **unenrolment date** (not before the enrolment date, not in the future) and a **reason** from the catalogue. The patient page has an "Unenrol patient" form; the edit form enforces the same rule when the status is switched.
 - Unenrolled patients raise no alerts, have priority 0, are excluded from every KPI and leave the default table (status filter: Enrolled by default · Unenrolled · All).
 - **Re-enrolling** sets today as the new enrolment date and clears the unenrolment date and reason.
-- **Sessions** are recorded as psychology sessions and psychiatry sessions; the total is always their sum. Existing patients received a random split of their imported total (demo data).
+- **Sessions** are recorded as psychology sessions and psychiatry sessions; the total is always their sum. Attendance (sessions, last session date, pattern, reason if not attending) is edited from the patient page, not from the create / edit forms. The create form only asks for identity, enrolment and care team. Existing patients received a random split of their imported total (demo data).
 
 ```ts
 // src/lib/validation.ts
