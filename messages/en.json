@@ -42,7 +42,7 @@
     "subtitle": "Who needs a call, a screening or a clinician review — ranked by urgency.",
     "addPatient": "Add patient",
     "kpi": {
-      "active": "Active patients",
+      "active": "Enrolled patients",
       "ofTotal": "of {total} on register",
       "needsAttention": "Needs attention",
       "worsening": "Worsening",
@@ -116,8 +116,8 @@
       "severe": "Severe"
     },
     "status": {
-      "active": "Active",
-      "inactive": "Inactive"
+      "active": "Enrolled",
+      "inactive": "Unenrolled"
     },
     "priority": {
       "routine": "Routine",
@@ -225,6 +225,18 @@
       "title": "Individual goals",
       "subtitle": "Personal goals agreed with the patient, separate from the medical care plan.",
       "openCount": "{count, plural, =0 {no open goals} one {# open goal} other {# open goals}}"
+    },
+    "enrolment": {
+      "title": "Enrolment",
+      "enrolledOn": "Enrolled on",
+      "unenrolledOn": "Unenrolled on",
+      "reason": "Reason",
+      "unenrol": "Unenrol patient",
+      "unenrolHint": "Unenrolled patients stop raising alerts and leave the default list.",
+      "confirmUnenrol": "Confirm unenrolment",
+      "reenrol": "Re-enrol patient",
+      "reenrolHint": "Sets today as the new enrolment date and clears the unenrolment.",
+      "confirmReenrol": "Re-enrol this patient? The unenrolment date and reason will be cleared."
     }
   },
   "form": {
@@ -260,17 +272,29 @@
       "invalid": "Please check the highlighted fields.",
       "scoreRange": "Score must be a whole number between 0 and {max}.",
       "dateRequired": "Date is required.",
-      "dateFuture": "Date cannot be in the future."
+      "dateFuture": "Date cannot be in the future.",
+      "unenrolledAtRequired": "Unenrolment date is required.",
+      "unenrollReasonRequired": "Unenrolment reason is required.",
+      "unenrolledBeforeEnrolled": "Unenrolment date cannot be before the enrolment date."
     },
     "sections": {
       "identity": "Identity",
       "care": "Care team & plan",
       "attendance": "Attendance",
-      "followUp": "Follow-up"
+      "followUp": "Follow-up",
+      "enrolment": "Enrolment"
     },
     "noClinicians": "No clinicians in the catalogue yet — add them in Settings.",
     "noDiagnoses": "No diagnoses in the catalogue yet — add them in Settings.",
-    "noCarePlans": "No care plan options yet — add them in Settings."
+    "noCarePlans": "No care plan options yet — add them in Settings.",
+    "enrolledAt": "Enrolment date",
+    "unenrolledAt": "Unenrolment date",
+    "unenrollReason": "Unenrolment reason",
+    "chooseReason": "Choose a reason…",
+    "noUnenrollReasons": "No unenrolment reasons yet — add them in Settings.",
+    "psychologySessions": "Psychology sessions",
+    "psychiatrySessions": "Psychiatry sessions",
+    "sessionsTotal": "Sessions (total)"
   },
   "settings": {
     "title": "Settings",
@@ -325,7 +349,9 @@
       "carePlanTitle": "Care plan options",
       "carePlanSubtitle": "Pick-list for the care plan field. Several can be selected.",
       "goalCategoryTitle": "Goal categories",
-      "goalCategorySubtitle": "Optional categories for individual goals."
+      "goalCategorySubtitle": "Optional categories for individual goals.",
+      "unenrollReasonTitle": "Unenrolment reasons",
+      "unenrollReasonSubtitle": "Mandatory pick-list when a patient leaves the programme."
     }
   },
   "goals": {

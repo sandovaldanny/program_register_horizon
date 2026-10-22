@@ -42,7 +42,7 @@
     "subtitle": "Quién necesita una llamada, un tamizaje o revisión clínica — ordenado por urgencia.",
     "addPatient": "Nuevo paciente",
     "kpi": {
-      "active": "Pacientes activos",
+      "active": "Pacientes enrolados",
       "ofTotal": "de {total} en el registro",
       "needsAttention": "Requieren atención",
       "worsening": "Empeorando",
@@ -116,8 +116,8 @@
       "severe": "Severa"
     },
     "status": {
-      "active": "Activo",
-      "inactive": "Inactivo"
+      "active": "Enrolado",
+      "inactive": "Desenrolado"
     },
     "priority": {
       "routine": "Rutina",
@@ -225,6 +225,18 @@
       "title": "Metas individuales",
       "subtitle": "Metas personales acordadas con el paciente, aparte del plan de cuidado médico.",
       "openCount": "{count, plural, =0 {sin metas abiertas} one {# meta abierta} other {# metas abiertas}}"
+    },
+    "enrolment": {
+      "title": "Desenrolado",
+      "enrolledOn": "Enrolado el",
+      "unenrolledOn": "Desenrolado el",
+      "reason": "Causa",
+      "unenrol": "Desenrolar paciente",
+      "unenrolHint": "Un paciente desenrolado deja de generar alertas y sale de la lista por defecto.",
+      "confirmUnenrol": "Confirmar desenrolamiento",
+      "reenrol": "Re-enrolar paciente",
+      "reenrolHint": "Fija hoy como nueva fecha de enrolamiento y limpia el desenrolamiento.",
+      "confirmReenrol": "¿Re-enrolar a este paciente? Se borrarán la fecha y la causa de desenrolamiento."
     }
   },
   "form": {
@@ -260,17 +272,29 @@
       "invalid": "Revisa los campos marcados.",
       "scoreRange": "El puntaje debe ser un entero entre 0 y {max}.",
       "dateRequired": "La fecha es obligatoria.",
-      "dateFuture": "La fecha no puede ser futura."
+      "dateFuture": "La fecha no puede ser futura.",
+      "unenrolledAtRequired": "La fecha de desenrolamiento es obligatoria.",
+      "unenrollReasonRequired": "La causa de desenrolamiento es obligatoria.",
+      "unenrolledBeforeEnrolled": "La fecha de desenrolamiento no puede ser anterior al enrolamiento."
     },
     "sections": {
       "identity": "Identificación",
       "care": "Equipo y plan de cuidado",
       "attendance": "Asistencia",
-      "followUp": "Seguimiento"
+      "followUp": "Seguimiento",
+      "enrolment": "Enrolamiento"
     },
     "noClinicians": "No hay médicos en el catálogo — agrégalos en Configuración.",
     "noDiagnoses": "No hay diagnósticos en el catálogo — agrégalos en Configuración.",
-    "noCarePlans": "No hay opciones de plan de cuidado — agrégalas en Configuración."
+    "noCarePlans": "No hay opciones de plan de cuidado — agrégalas en Configuración.",
+    "enrolledAt": "Fecha de enrolamiento",
+    "unenrolledAt": "Fecha de desenrolamiento",
+    "unenrollReason": "Causa de desenrolamiento",
+    "chooseReason": "Elige una causa…",
+    "noUnenrollReasons": "Aún no hay causas de desenrolamiento — agrégalas en Configuración.",
+    "psychologySessions": "Sesiones de psicología",
+    "psychiatrySessions": "Sesiones de psiquiatría",
+    "sessionsTotal": "Sesiones (total)"
   },
   "settings": {
     "title": "Configuración",
@@ -325,7 +349,9 @@
       "carePlanTitle": "Opciones de plan de cuidado",
       "carePlanSubtitle": "Lista para el campo plan de cuidado. Se pueden elegir varias.",
       "goalCategoryTitle": "Categorías de metas",
-      "goalCategorySubtitle": "Categorías opcionales para las metas individuales."
+      "goalCategorySubtitle": "Categorías opcionales para las metas individuales.",
+      "unenrollReasonTitle": "Causas de desenrolamiento",
+      "unenrollReasonSubtitle": "Lista obligatoria cuando un paciente se retira del programa."
     }
   },
   "goals": {

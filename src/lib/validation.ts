@@ -29,13 +29,16 @@ const optionalDate = z
   .nullable()
   .optional();
 
-export const patientSchema = z.object({
+const patientBaseSchema = z.object({
   center: z.enum(["al_falah", "al_bateen"]),
   mrn: z.string().trim().min(1, "mrnRequired").max(64),
   displayName: optionalText,
   age: optionalInt(0, 120),
   gender: z.enum(["male", "female", "unknown"]).default("unknown"),
   status: z.enum(["active", "inactive"]).default("active"),
+  enrolledAt: notFuture,
+  unenrolledAt: optionalDate,
+  unenrollReason: optionalText,
   diagnosis: optionalText,
   carePlan: optionalText,
   therapyProgress: optionalText,
@@ -43,7 +46,8 @@ export const patientSchema = z.object({
   psychologist: optionalText,
   medication: z.enum(["yes", "no", "unknown"]).default("unknown"),
   medicationAdherence: optionalText,
-  sessionsCount: optionalInt(0, 10000),
+  psychologySessions: optionalInt(0, 10000),
+  psychiatrySessions: optionalInt(0, 10000),
   attendancePct: z
     .union([z.literal(""), z.coerce.number().min(0).max(100)])
     .transform((v) => (v === "" ? null : v.toFixed(2)))
@@ -65,7 +69,25 @@ export const patientSchema = z.object({
   ccAction: optionalText,
   outcome: optionalText,
 });
+
+/** Unenrolling requires a date and a reason; re-enrolling clears both. */
+export const patientSchema = patientBaseSchema
+  .superRefine((v, ctx) => {
+    if (v.status !== "inactive") return;
+    if (!v.unenrolledAt) ctx.addIssue({ code: "custom", path: ["unenrolledAt"], message: "unenrolledAtRequired" });
+    else if (v.unenrolledAt < v.enrolledAt) ctx.addIssue({ code: "custom", path: ["unenrolledAt"], message: "unenrolledBeforeEnrolled" });
+    if (!v.unenrollReason) ctx.addIssue({ code: "custom", path: ["unenrollReason"], message: "unenrollReasonRequired" });
+  })
+  .transform((v) => {
+    const sessionsCount = v.psychologySessions === null && v.psychiatrySessions === null ? null : (v.psychologySessions ?? 0) + (v.psychiatrySessions ?? 0);
+    return v.status === "active" ? { ...v, sessionsCount, unenrolledAt: null, unenrollReason: null } : { ...v, sessionsCount };
+  });
 export type PatientFormValues = z.infer<typeof patientSchema>;
+
+export const unenrollSchema = z.object({
+  unenrolledAt: notFuture,
+  unenrollReason: z.string().trim().min(1, "unenrollReasonRequired").max(200),
+});
 
 export const assessmentSchema = z
   .object({

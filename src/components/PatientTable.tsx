@@ -88,6 +88,11 @@ export async function PatientTable({
                 <Link href={`/patients/${patient.id}`} className="whitespace-nowrap font-semibold text-indigo hover:text-steel">
                   <span className="ltr-data">{patient.mrn}</span>
                 </Link>
+                {patient.status !== "active" ? (
+                  <Badge tone="neutral" className="ms-2">
+                    {tEnum(`status.${patient.status === "inactive" ? "inactive" : "active"}`)}
+                  </Badge>
+                ) : null}
                 <div className="text-xs text-bluegray">
                   {[patient.displayName, patient.age ? `${patient.age} ${t("yearsShort")}` : null, patient.psychiatrist]
                     .filter(Boolean)

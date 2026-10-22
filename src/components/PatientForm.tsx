@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { createPatientAction, updatePatientAction, type PatientFormState } from "@/actions/patients";
 import { ClinicianPicker } from "@/components/ClinicianPicker";
@@ -29,15 +29,19 @@ export function PatientForm({
   clinicians,
   diagnoses,
   carePlans,
+  unenrollReasons,
 }: {
   patient?: Patient;
   defaultCenter?: "al_falah" | "al_bateen";
   clinicians: Clinician[];
   diagnoses: CatalogItem[];
   carePlans: CatalogItem[];
+  unenrollReasons: CatalogItem[];
 }) {
   const diagnosisOptions = diagnoses.filter((d) => d.active).map((d) => d.label);
   const carePlanOptions = carePlans.filter((d) => d.active).map((d) => d.label);
+  const reasonOptions = unenrollReasons.filter((d) => d.active).map((d) => d.label);
+  const [status, setStatus] = useState<"active" | "inactive">(patient?.status === "inactive" ? "inactive" : "active");
   const t = useTranslations("form");
   const tEnum = useTranslations("enums");
   const tc = useTranslations("common");
@@ -77,8 +81,11 @@ export function PatientForm({
             ))}
           </Select>
         </Field>
+      </Section>
+
+      <Section title={t("sections.enrolment")}>
         <Field label={t("status")} htmlFor="p-status">
-          <Select id="p-status" name="status" defaultValue={patient?.status ?? "active"}>
+          <Select id="p-status" name="status" value={status} onChange={(e) => setStatus(e.target.value as "active" | "inactive")}>
             {(["active", "inactive"] as const).map((s) => (
               <option key={s} value={s}>
                 {tEnum(`status.${s}`)}
@@ -86,6 +93,26 @@ export function PatientForm({
             ))}
           </Select>
         </Field>
+        <Field label={t("enrolledAt")} htmlFor="p-enrolled" hint={err("enrolledAt") ? t(`errors.${err("enrolledAt")}`) : undefined}>
+          <Input id="p-enrolled" name="enrolledAt" type="date" required max={today} defaultValue={patient?.enrolledAt ?? today} className={cn("ltr-data", errCls("enrolledAt"))} />
+        </Field>
+        {status === "inactive" ? (
+          <>
+            <Field label={t("unenrolledAt")} htmlFor="p-unenrolled" hint={err("unenrolledAt") ? t(`errors.${err("unenrolledAt")}`) : undefined}>
+              <Input id="p-unenrolled" name="unenrolledAt" type="date" required max={today} defaultValue={patient?.unenrolledAt ?? today} className={cn("ltr-data", errCls("unenrolledAt"))} />
+            </Field>
+            <Field label={t("unenrollReason")} htmlFor="p-reason-un" className="md:col-span-3" hint={err("unenrollReason") ? t(`errors.${err("unenrollReason")}`) : reasonOptions.length === 0 ? t("noUnenrollReasons") : undefined}>
+              <Select id="p-reason-un" name="unenrollReason" required defaultValue={patient?.unenrollReason && reasonOptions.includes(patient.unenrollReason) ? patient.unenrollReason : ""} className={errCls("unenrollReason")}>
+                <option value="">{t("chooseReason")}</option>
+                {reasonOptions.map((r) => (
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+          </>
+        ) : null}
       </Section>
 
       <Section title={t("sections.care")}>
@@ -139,8 +166,11 @@ export function PatientForm({
         <Field label={t("lastSessionDate")} htmlFor="p-last">
           <Input id="p-last" name="lastSessionDate" type="date" max={today} defaultValue={patient?.lastSessionDate ?? ""} className={cn("ltr-data", errCls("lastSessionDate"))} />
         </Field>
-        <Field label={t("sessionsCount")} htmlFor="p-sessions">
-          <Input id="p-sessions" name="sessionsCount" type="number" min={0} defaultValue={patient?.sessionsCount ?? ""} className="ltr-data" />
+        <Field label={t("psychologySessions")} htmlFor="p-psy">
+          <Input id="p-psy" name="psychologySessions" type="number" min={0} defaultValue={patient?.psychologySessions ?? ""} className="ltr-data" />
+        </Field>
+        <Field label={t("psychiatrySessions")} htmlFor="p-psych">
+          <Input id="p-psych" name="psychiatrySessions" type="number" min={0} defaultValue={patient?.psychiatrySessions ?? ""} className="ltr-data" />
         </Field>
         <Field label={t("attendancePct")} htmlFor="p-pct">
           <Input id="p-pct" name="attendancePct" type="number" min={0} max={100} step="0.01" defaultValue={patient?.attendancePct ?? ""} className="ltr-data" />

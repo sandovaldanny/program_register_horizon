@@ -5,6 +5,7 @@ import { AssessmentChart } from "@/components/AssessmentChart";
 import { AssessmentList } from "@/components/AssessmentList";
 import { Badge, priorityTone, severityTone, trendTone } from "@/components/Badge";
 import { FlagChips } from "@/components/FlagChips";
+import { EnrolmentPanel } from "@/components/EnrolmentPanel";
 import { GoalsPanel } from "@/components/GoalsPanel";
 import { NotesLog } from "@/components/NotesLog";
 import { QuickAddScoreForm } from "@/components/QuickAddScoreForm";
@@ -18,7 +19,10 @@ export default async function PatientDetailPage({ params }: PageProps<"/patients
   const detail = await getPatientDetail(id);
   if (!detail) notFound();
   const { patient, derived, assessments, notes, goals } = detail;
-  const goalCategories = (await getCatalog("goal_category")).filter((c) => c.active).map((c) => c.label);
+  const [goalCategories, unenrollReasons] = await Promise.all([
+    getCatalog("goal_category").then((c) => c.filter((x) => x.active).map((x) => x.label)),
+    getCatalog("unenroll_reason").then((c) => c.filter((x) => x.active).map((x) => x.label)),
+  ]);
 
   const t = await getTranslations("detail");
   const tEnum = await getTranslations("enums");
@@ -35,8 +39,9 @@ export default async function PatientDetailPage({ params }: PageProps<"/patients
         </Link>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-bluegray">
-              {CENTER_LABELS[patient.center]} · {tEnum(`status.${patient.status}`)}
+            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-bluegray">
+              {CENTER_LABELS[patient.center]}
+              <Badge tone={patient.status === "active" ? "ok" : "warn"}>{tEnum(`status.${patient.status === "active" ? "active" : "inactive"}`)}</Badge>
             </p>
             <h1 className="mt-1 flex flex-wrap items-baseline gap-3 text-3xl font-medium text-indigo">
               <span className="ltr-data">{patient.mrn}</span>
@@ -149,8 +154,22 @@ export default async function PatientDetailPage({ params }: PageProps<"/patients
             <Info label={tForm("therapyProgress")} value={patient.therapyProgress} />
             <Info label={tForm("isHorizonPatient")} value={patient.isHorizonPatient === null ? null : patient.isHorizonPatient ? tc("yes") : tc("no")} />
           </InfoCard>
+          <EnrolmentPanel patient={patient} reasons={unenrollReasons} />
           <InfoCard title={t("info.attendance")}>
-            <Info label={tForm("sessionsCount")} value={patient.sessionsCount?.toString()} />
+            <div className="sm:col-span-2 flex flex-wrap items-end gap-6 rounded-card bg-surface-soft/60 px-4 py-3">
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-wide text-bluegray">{tForm("sessionsTotal")}</div>
+                <div className="ltr-data mt-0.5 text-2xl font-medium text-indigo">{patient.sessionsCount ?? "—"}</div>
+              </div>
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-wide text-bluegray">{tForm("psychologySessions")}</div>
+                <div className="ltr-data mt-0.5 text-lg font-medium text-turquoise-dark">{patient.psychologySessions ?? "—"}</div>
+              </div>
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-wide text-bluegray">{tForm("psychiatrySessions")}</div>
+                <div className="ltr-data mt-0.5 text-lg font-medium text-steel">{patient.psychiatrySessions ?? "—"}</div>
+              </div>
+            </div>
             <Info label={tForm("attendancePct")} value={patient.attendancePct ? `${Number(patient.attendancePct)}%` : null} />
             <Info label={tForm("attendancePattern")} value={patient.attendancePattern ? tEnum(`attendancePattern.${patient.attendancePattern}`) : null} />
             <Info label={tForm("reasonNotAttending")} value={patient.reasonNotAttending} />

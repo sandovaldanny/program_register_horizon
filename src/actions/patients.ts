@@ -7,7 +7,7 @@ import { getDb } from "@/db";
 import { mrnExists } from "@/db/queries";
 import { patients } from "@/db/schema";
 import { requireSession } from "@/lib/auth/require-session";
-import { fieldErrors, formEntries, patientSchema, type FieldErrors } from "@/lib/validation";
+import { fieldErrors, formEntries, patientSchema, unenrollSchema, type FieldErrors } from "@/lib/validation";
 
 export type PatientFormState = { errors: FieldErrors; ok?: boolean };
 
@@ -36,8 +36,32 @@ export async function updatePatientAction(id: string, _prev: PatientFormState, f
   redirect(`/patients/${id}`);
 }
 
-export async function setPatientStatusAction(id: string, status: "active" | "inactive" | "graduated" | "transferred"): Promise<void> {
+export type UnenrollFormState = { errors: FieldErrors; ok?: boolean };
+
+/** Mark the patient as unenrolled: date and reason are mandatory. */
+export async function unenrollPatientAction(id: string, _prev: UnenrollFormState, formData: FormData): Promise<UnenrollFormState> {
   await requireSession();
-  await getDb().update(patients).set({ status, updatedAt: new Date() }).where(eq(patients.id, id));
+  const parsed = unenrollSchema.safeParse(formEntries(formData));
+  if (!parsed.success) return { errors: fieldErrors(parsed.error) };
+  const [row] = await getDb().select({ enrolledAt: patients.enrolledAt }).from(patients).where(eq(patients.id, id)).limit(1);
+  if (!row) return { errors: { _: "invalid" } };
+  if (parsed.data.unenrolledAt < row.enrolledAt) return { errors: { unenrolledAt: "unenrolledBeforeEnrolled" } };
+
+  await getDb()
+    .update(patients)
+    .set({ status: "inactive", unenrolledAt: parsed.data.unenrolledAt, unenrollReason: parsed.data.unenrollReason, updatedAt: new Date() })
+    .where(eq(patients.id, id));
+  revalidatePath("/", "layout");
+  return { errors: {}, ok: true };
+}
+
+/** Back into the programme: new enrolment date, previous unenrolment cleared. */
+export async function reenrollPatientAction(id: string): Promise<void> {
+  await requireSession();
+  const today = new Date().toISOString().slice(0, 10);
+  await getDb()
+    .update(patients)
+    .set({ status: "active", enrolledAt: today, unenrolledAt: null, unenrollReason: null, updatedAt: new Date() })
+    .where(eq(patients.id, id));
   revalidatePath("/", "layout");
 }

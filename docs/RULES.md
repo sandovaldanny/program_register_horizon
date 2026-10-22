@@ -11,7 +11,7 @@ Every rule lives in `src/lib/metrics/` as a pure function (no database access) a
 1. **Every screening is kept.** Each PHQ-9 and GAD-7 is stored as its own dated row. Nothing is overwritten.
 2. **Delta is always baseline → latest.** Consecutive scores are never compared; the first recorded score is compared with the most recent one.
 3. **Everything derived is computed at read time.** Severity, trend, alerts and priority are never stored; they are recalculated with today's date and the current Settings.
-4. **Only Active patients generate work.** An Inactive patient triggers no rule and has priority 0.
+4. **Only Enrolled patients generate work.** An Unenrolled patient triggers no rule and has priority 0.
 5. **Exactly four alert rules.** Severity, "Improving" and "Graduation candidate" are information, not alerts.
 6. **The app is the source of truth.** The Excel import ran once; every correction is made in the app.
 
@@ -210,7 +210,7 @@ export function attendanceStatus(lastSessionDate: string | null, settings: Metri
 
 ## 8. The four alert rules
 
-Apply to **Active** patients only. A patient can have several at once.
+Apply to **Enrolled** patients only. A patient can have several at once.
 
 | # | Rule | Key | Condition | Weight |
 |---|---|---|---|---|
@@ -250,7 +250,7 @@ export function computeFlags(input: FlagInput): Flag[] {
 - Weights: Worsening 40 · No score 30 · No session 30 · No baseline 20.
 - **Manual bonus**: if the coordinator set `Follow-up priority = High`, +20. Applies only when at least one rule is active (it is not an alert on its own).
 - **Tie-breaker**: `min(daysPastDue, 90) / 100` → between 0.01 and 0.90. Between two patients with the same rules, the one overdue for longer floats up.
-- No active rules → priority **0** (shown as "—"). Inactive patient → 0.
+- No active rules → priority **0** (shown as "—"). Unenrolled patient → 0.
 - Maximum possible: Worsening + No score + No session + High bonus + tie-breaker = 40 + 30 + 30 + 20 + 0.90 = **120.90** (No baseline cannot coexist with Worsening or No score).
 
 **Examples (today 2026-10-22):**
@@ -356,11 +356,11 @@ export function derivePatient(patient: PatientInput, assessments: AssessmentPoin
 
 ## 12. Dashboard KPIs
 
-All count **Active patients only** in the selected center (or both).
+All count **Enrolled patients only** in the selected center (or both).
 
 | KPI | Counts |
 |---|---|
-| Active | status = active |
+| Enrolled | status = active (enrolled) |
 | Needs attention | ≥ 1 active rule |
 | Worsening | rule `worsening` |
 | No score > 1 month | rule `no_score` |
@@ -393,7 +393,7 @@ export function summarizeCaseload(rows: Array<{ status: PatientInput["status"]; 
 ## 13. Table filters and sorting
 
 - **Center scope**: cookie `horizon_center` = `all | al_falah | al_bateen`.
-- **Filters** (URL parameters, shareable): search `q` (MRN, name, diagnosis, psychiatrist, psychologist) · alert (`needs_attention | worsening | no_score | no_session | no_baseline`) · PHQ severity · GAD severity · clinician · manual priority · status (`active` by default, `inactive`, `all`). Hidden but reachable from the KPIs: `trend=improving`, `graduation=1`.
+- **Filters** (URL parameters, shareable): search `q` (MRN, name, diagnosis, psychiatrist, psychologist) · alert (`needs_attention | worsening | no_score | no_session | no_baseline`) · PHQ severity · GAD severity · clinician · manual priority · status (`active` = Enrolled by default, `inactive` = Unenrolled, `all`). Hidden but reachable from the KPIs: `trend=improving`, `graduation=1`.
 - **Sort by header**: priority (desc by default), MRN (asc), latest PHQ-9 (desc), latest GAD-7 (desc), last score (asc = oldest first), last session (asc).
 - **Tie-breaker**: always priority descending, then numeric MRN.
 - Missing scores sort as −∞ (they land at the bottom in descending order).
@@ -453,7 +453,35 @@ Patient forms only accept catalogue values; **there is no "Other"**. If a patien
 | Care plan options | label, active | Medical care plan field (Medication · Referred to psychology · Psychotherapy) |
 | Goal categories | label, active | Individual goals |
 
-Patient data: status is only **Active / Inactive**. Unique key `(center, MRN)`.
+| Unenrolment reasons | label, active | Mandatory reason when a patient leaves the programme |
+
+Patient data: unique key `(center, MRN)`.
+
+---
+
+## 15b. Enrolment and unenrolment
+
+- Every patient is either **Enrolled** or **Unenrolled** (stored as `active` / `inactive`).
+- Creating a patient records an **enrolment date** (defaults to today, editable, never in the future). Imported patients received the date of their first score, or the import date when they had none.
+- **Unenrolling** requires an **unenrolment date** (not before the enrolment date, not in the future) and a **reason** from the catalogue. The patient page has an "Unenrol patient" form; the edit form enforces the same rule when the status is switched.
+- Unenrolled patients raise no alerts, have priority 0, are excluded from every KPI and leave the default table (status filter: Enrolled by default · Unenrolled · All).
+- **Re-enrolling** sets today as the new enrolment date and clears the unenrolment date and reason.
+- **Sessions** are recorded as psychology sessions and psychiatry sessions; the total is always their sum. Existing patients received a random split of their imported total (demo data).
+
+```ts
+// src/lib/validation.ts
+export const patientSchema = patientBaseSchema
+  .superRefine((v, ctx) => {
+    if (v.status !== "inactive") return;
+    if (!v.unenrolledAt) ctx.addIssue({ code: "custom", path: ["unenrolledAt"], message: "unenrolledAtRequired" });
+    else if (v.unenrolledAt < v.enrolledAt) ctx.addIssue({ code: "custom", path: ["unenrolledAt"], message: "unenrolledBeforeEnrolled" });
+    if (!v.unenrollReason) ctx.addIssue({ code: "custom", path: ["unenrollReason"], message: "unenrollReasonRequired" });
+  })
+  .transform((v) => {
+    const sessionsCount = v.psychologySessions === null && v.psychiatrySessions === null ? null : (v.psychologySessions ?? 0) + (v.psychiatrySessions ?? 0);
+    return v.status === "active" ? { ...v, sessionsCount, unenrolledAt: null, unenrollReason: null } : { ...v, sessionsCount };
+  });
+```
 
 ---
 
@@ -493,7 +521,7 @@ Code: `src/lib/import/alFalah.ts`, `src/lib/import/alBateen.ts`, `src/lib/import
 
 ## 18. Export
 
-`GET /api/export?format=csv|xlsx` returns the currently filtered table with derived columns: baseline / latest / delta / severity per scale, trend, last score, next due, days past due, last session, alerts, priority, graduation candidate, worst severity, severe range.
+`GET /api/export?format=csv|xlsx` returns the currently filtered table with derived columns: baseline / latest / delta / severity per scale, trend, last score, next due, days past due, last session, alerts, priority, graduation candidate, worst severity, severe range, enrolment / unenrolment dates and reason, psychology / psychiatry / total sessions.
 
 ---
 

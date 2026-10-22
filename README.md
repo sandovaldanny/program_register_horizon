@@ -33,11 +33,12 @@ Built for Care Coordinators and Case Management: open the dashboard and immediat
 | **Dashboard** | Eight KPI tiles (Active, Needs attention, Worsening, No score, No session, No baseline, Improving, Graduation candidates) above a single caseload table. Each tile filters the table on click. |
 | **Caseload table** | Inline filters (search, alert, PHQ-9 / GAD-7 severity, clinician, manual priority, status), sortable headers, `baseline → latest` with delta chip and severity badge per scale, alert chips, priority with explanatory tooltip. Filters live in the URL and are shareable. |
 | **Center scope** | Switch between Al Falah, Al Bateen or both; persisted per user. |
-| **Patient page** | Timeline chart of every PHQ-9 / GAD-7 with severity bands, full screening history (editable score and date, estimated dates flagged), quick-add score, individual goals, notes log, clinical and attendance details. |
+| **Patient page** | Timeline chart of every PHQ-9 / GAD-7 with severity bands, full screening history (editable score and date, estimated dates flagged), quick-add score, individual goals, notes log, enrolment card, sessions split by psychology / psychiatry, clinical and attendance details. |
 | **Screenings** | Every score is kept as its own dated row. Delta and trend always compare baseline → latest. Dates are editable so imported estimates can be corrected. |
-| **Four alert rules** | Worsening · No score > 1 month · No session > 1 month · No baseline. Only Active patients raise alerts. |
+| **Four alert rules** | Worsening · No score > 1 month · No session > 1 month · No baseline. Only enrolled patients raise alerts. |
+| **Enrolment** | Every patient carries an enrolment date. Unenrolling requires a date and a reason from the catalogue; unenrolled patients drop out of alerts, KPIs and the default list, and can be re-enrolled. |
 | **Priority score** | Sum of rule weights (40 / 30 / 30 / 20) plus +20 for a manual "High" follow-up priority; ties go to the longest overdue. Zero when nothing is pending. |
-| **Settings** | Clinicians catalogue (name, specialty, center), diagnosis / care-plan / goal-category pick-lists, change thresholds, screening interval and no-session window. Patient forms are catalogue-only (no free text, no "Other"). |
+| **Settings** | Clinicians catalogue (name, specialty, center), diagnosis / care-plan / goal-category / unenrolment-reason pick-lists, change thresholds, screening interval and no-session window. Patient forms are catalogue-only (no free text, no "Other"). |
 | **Individual goals** | Per-patient goals with category, target date and open / achieved / dropped status, separate from the medical care plan. |
 | **Export** | CSV or Excel of the current filtered view with all derived columns. |
 | **Languages** | English, Spanish and Arabic (RTL) with a one-click toggle. |
@@ -63,7 +64,7 @@ Full detail, worked examples and source code in [docs/RULES.md](docs/RULES.md).
 
 **Trend** = latest − baseline against a configurable threshold (PHQ-9 ≥ 5, GAD-7 ≥ 4 by default): improving / stable / worsening per scale; `mixed` when the scales disagree.
 
-**The four rules (Active patients only)**
+**The four rules (enrolled patients only)**
 
 | Rule | Condition | Weight |
 |---|---|---|
@@ -124,7 +125,7 @@ npm run dev            # http://localhost:3000
 Quality checks:
 
 ```bash
-npm test               # vitest (92 cases)
+npm test               # vitest (100 cases)
 npm run lint           # eslint
 npm run build          # production build
 ```
@@ -137,12 +138,12 @@ Schema lives in `src/db/schema.ts`; migrations are generated into `drizzle/` and
 
 | Table | Purpose |
 |---|---|
-| `patients` | Union of both centers' fields; unique on `(center, mrn)`; status Active / Inactive |
+| `patients` | Union of both centers' fields; unique on `(center, mrn)`; enrolled / unenrolled with dates and reason; sessions split by specialty |
 | `assessments` | One row per PHQ-9 / GAD-7 score with date, `date_source` (recorded / estimated), note; range checks per scale |
 | `notes` | Notes, actions, MDT entries and import provenance |
 | `goals` | Individual goals per patient (title, category, target date, status) |
 | `clinicians` | Clinician catalogue (name, specialty, center, active) |
-| `catalog_items` | Diagnosis, care-plan and goal-category pick-lists |
+| `catalog_items` | Diagnosis, care-plan, goal-category and unenrolment-reason pick-lists |
 | `settings` | Single row: change thresholds, screening interval, no-session window |
 
 Workflow after a schema change:

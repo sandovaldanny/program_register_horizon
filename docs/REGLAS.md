@@ -11,7 +11,7 @@ Todas las reglas viven en `src/lib/metrics/` como funciones puras (sin base de d
 1. **Se guardan todos los screenings.** Cada PHQ-9 y GAD-7 se registra como una fila independiente con fecha. Nunca se sobreescribe.
 2. **El delta siempre es baseline → último.** No se comparan dos consecutivos; se compara el primer score registrado con el más reciente.
 3. **Todo lo derivado se calcula al leer.** Severidad, tendencia, alertas y prioridad nunca se almacenan; se recalculan con la fecha de hoy y los parámetros vigentes en Configuración.
-4. **Solo pacientes Activos generan trabajo.** Un paciente Inactivo no dispara ninguna regla y tiene prioridad 0.
+4. **Solo pacientes Enrolados generan trabajo.** Un paciente Desenrolado no dispara ninguna regla y tiene prioridad 0.
 5. **Exactamente cuatro reglas de alerta.** Severidad, "Mejorando" y "Candidato a alta" son información, no alertas.
 6. **La app es la fuente de verdad.** La importación desde Excel fue única; cualquier corrección se hace en la app.
 
@@ -210,7 +210,7 @@ export function attendanceStatus(lastSessionDate: string | null, settings: Metri
 
 ## 8. Las cuatro reglas de alerta
 
-Solo aplican a pacientes **Activos**. Un paciente puede tener varias a la vez.
+Solo aplican a pacientes **Enrolados**. Un paciente puede tener varias a la vez.
 
 | # | Regla (ES) | Clave | Condición | Peso |
 |---|---|---|---|---|
@@ -250,7 +250,7 @@ export function computeFlags(input: FlagInput): Flag[] {
 - Pesos: Empeorando 40 · Sin score 30 · Sin cita 30 · Sin baseline 20.
 - **Bono manual**: si el coordinador marcó `Prioridad de seguimiento = Alta`, +20. Solo aplica si hay al menos una regla activa (no es una alerta por sí sola).
 - **Desempate**: `min(díasVencidos, 90) / 100` → entre 0.01 y 0.90. Entre dos pacientes con las mismas reglas, sube el que lleva más tiempo vencido.
-- Sin reglas activas → prioridad **0** (se muestra "—"). Paciente Inactivo → 0.
+- Sin reglas activas → prioridad **0** (se muestra "—"). Paciente Desenrolado → 0.
 - Máximo posible: Empeorando + Sin score + Sin cita + bono Alta + desempate = 40 + 30 + 30 + 20 + 0.90 = **120.90** (Sin baseline no puede coexistir con Empeorando ni con Sin score).
 
 **Ejemplos (hoy 2026-10-22):**
@@ -356,11 +356,11 @@ export function derivePatient(patient: PatientInput, assessments: AssessmentPoin
 
 ## 12. KPIs del panel
 
-Todos cuentan **solo pacientes Activos** del centro seleccionado (o ambos).
+Todos cuentan **solo pacientes Enrolados** del centro seleccionado (o ambos).
 
 | KPI | Cuenta |
 |---|---|
-| Activos | status = active |
+| Enrolados | status = active (enrolado) |
 | Necesitan atención | ≥ 1 regla activa |
 | Empeorando | regla `worsening` |
 | Sin score > 1 mes | regla `no_score` |
@@ -393,7 +393,7 @@ export function summarizeCaseload(rows: Array<{ status: PatientInput["status"]; 
 ## 13. Filtros y orden de la tabla
 
 - **Ámbito de centro**: cookie `horizon_center` = `all | al_falah | al_bateen`.
-- **Filtros** (parámetros de URL, compartibles): búsqueda `q` (MRN, nombre, diagnóstico, psiquiatra, psicólogo) · alerta (`needs_attention | worsening | no_score | no_session | no_baseline`) · severidad PHQ · severidad GAD · clínico · prioridad manual · estado (`active` por defecto, `inactive`, `all`). Ocultos pero alcanzables desde los KPIs: `trend=improving`, `graduation=1`.
+- **Filtros** (parámetros de URL, compartibles): búsqueda `q` (MRN, nombre, diagnóstico, psiquiatra, psicólogo) · alerta (`needs_attention | worsening | no_score | no_session | no_baseline`) · severidad PHQ · severidad GAD · clínico · prioridad manual · estado (`active` = Enrolado por defecto, `inactive` = Desenrolado, `all`). Ocultos pero alcanzables desde los KPIs: `trend=improving`, `graduation=1`.
 - **Orden por cabecera**: prioridad (desc por defecto), MRN (asc), PHQ-9 último (desc), GAD-7 último (desc), último score (asc = el más antiguo primero), última cita (asc).
 - **Desempate**: siempre prioridad descendente, luego MRN numérico.
 - Scores ausentes se tratan como −∞ al ordenar (quedan al final en orden descendente).
@@ -453,7 +453,35 @@ Los formularios de paciente solo permiten valores del catálogo; **no hay opció
 | Opciones de plan de cuidado | etiqueta, activo | Campo Plan de cuidado médico (Medicación · Referido a psicología · Psicoterapia) |
 | Categorías de meta | etiqueta, activo | Metas individuales |
 
-Datos del paciente: estado solo **Activo / Inactivo**. Clave única por `(centro, MRN)`.
+| Causas de desenrolamiento | etiqueta, activo | Causa obligatoria cuando un paciente se retira del programa |
+
+Datos del paciente: clave única por `(centro, MRN)`.
+
+---
+
+## 15b. Enrolamiento y desenrolamiento
+
+- Todo paciente está **Enrolado** o **Desenrolado** (en BD `active` / `inactive`).
+- Al crear un paciente se registra la **fecha de enrolamiento** (por defecto hoy, editable, nunca futura). Los importados recibieron la fecha de su primer score, o la de importación si no tenían.
+- **Desenrolar** exige **fecha de desenrolamiento** (no anterior al enrolamiento, no futura) y **causa** del catálogo. La ficha del paciente tiene el formulario "Desenrolar paciente"; el formulario de edición aplica la misma regla al cambiar el estado.
+- Un paciente desenrolado no genera alertas, tiene prioridad 0, queda fuera de todos los KPIs y sale de la tabla por defecto (filtro de estado: Enrolado por defecto · Desenrolado · Todos).
+- **Re-enrolar** fija hoy como nueva fecha de enrolamiento y limpia fecha y causa de desenrolamiento.
+- **Sesiones**: se registran sesiones de psicología y de psiquiatría; el total siempre es la suma. A los pacientes existentes se les repartió el total importado de forma aleatoria (datos demo).
+
+```ts
+// src/lib/validation.ts
+export const patientSchema = patientBaseSchema
+  .superRefine((v, ctx) => {
+    if (v.status !== "inactive") return;
+    if (!v.unenrolledAt) ctx.addIssue({ code: "custom", path: ["unenrolledAt"], message: "unenrolledAtRequired" });
+    else if (v.unenrolledAt < v.enrolledAt) ctx.addIssue({ code: "custom", path: ["unenrolledAt"], message: "unenrolledBeforeEnrolled" });
+    if (!v.unenrollReason) ctx.addIssue({ code: "custom", path: ["unenrollReason"], message: "unenrollReasonRequired" });
+  })
+  .transform((v) => {
+    const sessionsCount = v.psychologySessions === null && v.psychiatrySessions === null ? null : (v.psychologySessions ?? 0) + (v.psychiatrySessions ?? 0);
+    return v.status === "active" ? { ...v, sessionsCount, unenrolledAt: null, unenrollReason: null } : { ...v, sessionsCount };
+  });
+```
 
 ---
 
@@ -493,7 +521,7 @@ Código: `src/lib/import/alFalah.ts`, `src/lib/import/alBateen.ts`, `src/lib/imp
 
 ## 18. Export
 
-`GET /api/export?format=csv|xlsx` devuelve la tabla filtrada actual con columnas derivadas: baseline / último / delta / severidad por escala, tendencia, último score, próximo vencimiento, días vencidos, última cita, alertas, prioridad, candidato a alta, peor severidad, rango severo.
+`GET /api/export?format=csv|xlsx` devuelve la tabla filtrada actual con columnas derivadas: baseline / último / delta / severidad por escala, tendencia, último score, próximo vencimiento, días vencidos, última cita, alertas, prioridad, candidato a alta, peor severidad, rango severo, fechas y causa de enrolamiento / desenrolamiento, sesiones de psicología / psiquiatría / total.
 
 ---
 

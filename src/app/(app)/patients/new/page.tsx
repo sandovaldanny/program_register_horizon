@@ -9,7 +9,7 @@ export default async function NewPatientPage() {
   const t = await getTranslations("form");
   const td = await getTranslations("detail");
   const scope = await getCenterScope();
-  const [clinicians, diagnoses, carePlans] = await Promise.all([getClinicians(), getCatalog("diagnosis"), getCatalog("care_plan")]);
+  const [clinicians, diagnoses, carePlans, unenrollReasons] = await Promise.all([getClinicians(), getCatalog("diagnosis"), getCatalog("care_plan"), getCatalog("unenroll_reason")]);
   return (
     <div className="flex max-w-5xl flex-col gap-8">
       <header>
@@ -18,7 +18,7 @@ export default async function NewPatientPage() {
         </Link>
         <h1 className="mt-2 text-3xl font-medium text-indigo">{t("newTitle")}</h1>
       </header>
-      <PatientForm defaultCenter={scopeToCenter(scope) ?? undefined} clinicians={clinicians} diagnoses={diagnoses} carePlans={carePlans} />
+      <PatientForm defaultCenter={scopeToCenter(scope) ?? undefined} clinicians={clinicians} diagnoses={diagnoses} carePlans={carePlans} unenrollReasons={unenrollReasons} />
     </div>
   );
 }

@@ -69,7 +69,7 @@ export const catalogItems = pgTable(
 );
 
 export type CatalogItem = typeof catalogItems.$inferSelect;
-export type CatalogKind = "diagnosis" | "care_plan" | "goal_category";
+export type CatalogKind = "diagnosis" | "care_plan" | "goal_category" | "unenroll_reason";
 
 export const goalStatusEnum = pgEnum("goal_status", ["open", "achieved", "dropped"]);
 
@@ -108,7 +108,11 @@ export const patients = pgTable(
     displayName: text("display_name"),
     age: integer("age"),
     gender: genderEnum("gender").notNull().default("unknown"),
+    /** `active` = enrolled, `inactive` = unenrolled (reason + date required). */
     status: patientStatusEnum("status").notNull().default("active"),
+    enrolledAt: date("enrolled_at").notNull().default(sql`CURRENT_DATE`),
+    unenrolledAt: date("unenrolled_at"),
+    unenrollReason: text("unenroll_reason"),
 
     diagnosis: text("diagnosis"),
     carePlan: text("care_plan"),
@@ -120,7 +124,10 @@ export const patients = pgTable(
     medication: yesNoUnknownEnum("medication").notNull().default("unknown"),
     medicationAdherence: text("medication_adherence"),
 
+    /** Total = psychology + psychiatry when the split is known. */
     sessionsCount: integer("sessions_count"),
+    psychologySessions: integer("psychology_sessions"),
+    psychiatrySessions: integer("psychiatry_sessions"),
     attendancePct: numeric("attendance_pct", { precision: 5, scale: 2 }),
     attendancePattern: attendancePatternEnum("attendance_pattern"),
     lastSessionDate: date("last_session_date"),
